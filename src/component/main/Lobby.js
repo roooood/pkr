@@ -14,9 +14,9 @@ import TableRow from '@material-ui/core/TableRow';
 import request from 'library/Fetch';
 import ArrowRight from '@material-ui/icons/ArrowRight';
 import ArrowLeft from '@material-ui/icons/ArrowLeft';
-import Visibility from '@material-ui/icons/Visibility';
 import { connect } from 'react-redux';
 import { TabbarAdd } from 'redux/action/tab';
+import Typography from '@material-ui/core/Typography';
 
 const StyledTableCell = withStyles(theme => ({
     head: {
@@ -48,22 +48,25 @@ const StyledTableRow = withStyles(theme => ({
 
 
 const columns = [
-    { id: 'name', label: 'Name' },
-    { id: 'type', label: 'Type' },
+    { id: 'name', label: t('name') },
+    { id: 'type', label: t('type') },
+    { id: 'player', label: t('player') },
     {
-        id: 'player',
-        label: 'Player',
+        id: 'ready',
+        label: t('ready'),
+        format: value => value == null ? 0 : value,
     },
     {
         id: 'min',
-        label: 'Min Bet',
+        label: t('min'),
         format: value => <div style={styles.center}><ArrowRight style={{ color: 'rgb(219, 110, 110)' }} />{toMoney(value)}</div>,
     },
     {
         id: 'max',
-        label: 'Max Bet',
+        label: t('max'),
         format: value => <div style={styles.center}><ArrowLeft style={{ color: 'rgb(116, 219, 110)' }} />{toMoney(value)} </div>,
     },
+
 
 ];
 
@@ -170,17 +173,7 @@ class ListTable extends Component {
     render() {
         return (
             <div style={styles.root} >
-                {/* <Grid container>
-                    <Grid container xs={6} justify="center" alignItems="center"  >
-                        <Typography style={styles.text} display="inline">{t('tableCount')} :</Typography>
-                        <Typography style={styles.xtext} display="inline">{this.state.rooms.length}</Typography>
-                    </Grid>
-                    <Grid container xs={6} justify="center" alignItems="center">
-                        <Typography style={styles.text} display="inline">{t('users')} :</Typography>
-                        <Typography style={styles.xtext} display="inline">{this.context.state.onlines}</Typography>
-                    </Grid>
-                </Grid> */}
-                <Scrollbars style={{ direction: 'ltr', height: '100%' }} ref="scroll">
+                <Scrollbars style={{ direction: 'ltr', height: '82vh' }} ref="scroll">
                     <Table stickyHeader style={styles.table}>
                         <TableHead>
                             <StyledTableRow>
@@ -200,10 +193,10 @@ class ListTable extends Component {
                                 return (
                                     <StyledTableRow hover onClick={() => this.addTab(row)} tabIndex={-1} key={row.id}>
                                         {columns.map(column => {
-                                            const value = row[column.id];
+                                            const value = row[column.id] || null;
                                             return (
                                                 <StyledTableCell key={column.id} align={column.align}>
-                                                    {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                    {column.format ? column.format(value) : value}
                                                 </StyledTableCell>
                                             );
                                         })}
@@ -212,59 +205,17 @@ class ListTable extends Component {
                             })}
                         </TableBody>
                     </Table>
-                    {/* <Scrollbars style={{ direction: 'ltr', height: '100%' }} ref="scroll">
-                        <List style={{ direction: this.context.state.dir }}>
-                            {this.state.rooms.map((room, i) => {
-                                let { name, player, min, max, ready } = room;
-                                return (
-                                    <ListItem key={i} style={styles.item}>
-                                        <ListItemAvatar style={styles.avatarItem}>
-                                            <Avatar style={styles.avatar}>
-                                                A
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText style={styles.listItem} primary={
-                                            <>
-                                                <Typography style={styles.itemText} >{name}</Typography>
-                                                <Typography style={styles.subText} >owner</Typography>
-                                            </>
-                                        } />
-                                        <ListItemText style={styles.listItem} primary={
-                                            <div style={{ display: 'flex' }}>
-                                                <PeopleOutline style={styles.icon} />
-                                                <Typography style={styles.itemText} >{player}/{ready}</Typography>
-                                                <Stop style={{ ...styles.icon, color: ready != player ? green[500] : pink[500], transform: 'rotate(45deg)' }} />
-                                            </div>
-                                        } />
-                                        <ListItemText style={styles.listItem} primary={
-                                            <>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <ArrowRight style={{ color: 'rgb(219, 110, 110)' }} />
-                                                    <Typography style={styles.subText} >{toMoney(min)}</Typography>
-                                                </div>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <ArrowLeft style={{ color: 'rgb(116, 219, 110)' }} />
-                                                    <Typography style={styles.subText} >{toMoney(max)}</Typography>
-                                                </div>
-                                            </>
-                                        } />
-                                        <ListItemText style={{ justifyContent: 'flex-end', display: 'flex' }} primary={
-                                            ready != player
-                                                ? < Button onClick={() => this.join(room.roomId)} style={{ ...styles.btn, ...styles.start }} >
-                                                    {t('start')}
-                                                </Button>
-                                                : < Button onClick={() => this.join(room.roomId)} style={{ ...styles.btn, ...styles.view }} >
-                                                    <Visibility style={styles.viewIcon} />
-                                                </Button>
-                                        } />
-                                    </ListItem>
-                                )
-                            })
-                            }
-                        </List>
-                    </Scrollbars>
-                 */}
                 </Scrollbars>
+                <div container style={styles.bottom}>
+                    <div style={styles.space}>
+                        <Typography style={styles.text} display="inline">{t('tableCount')} :</Typography>
+                        <Typography style={styles.xtext} display="inline">{this.state.rooms.length}</Typography>
+                    </div>
+                    <div style={styles.space}>
+                        <Typography style={styles.text} display="inline">{t('users')} :</Typography>
+                        <Typography style={styles.xtext} display="inline">{this.context.state.onlines || 0}</Typography>
+                    </div>
+                </div>
             </div >
         );
     }
@@ -284,6 +235,24 @@ const styles = {
     center: {
         display: 'flex',
         alignItems: 'center',
+    },
+    bottom: {
+        display: 'flex',
+        background: 'rgb(17, 17, 17)',
+        marginTop: 10,
+        borderRadius: 5,
+        padding: 10
+    },
+    space: {
+        flex: 1
+    },
+    text: {
+        fontSize: '.9rem'
+    },
+    xtext: {
+        color: 'rgb(116, 219, 110)',
+        marginRight: 10,
+        marginLeft: 10
     }
 }
 export default connect(state => state)(ListTable);

@@ -35,9 +35,9 @@ const StyledTab = withStyles(theme => ({
         color: '#b5b5b5',
         fontSize: theme.typography.pxToRem(13),
         minWidth: 30,
-        minHeight: 60,
-        height: 60,
-        marginTop: 5,
+        minHeight: 50,
+        height: 50,
+        marginTop: 15,
         marginRight: 5,
         marginLeft: 5,
         borderRadius: 0,
@@ -49,6 +49,7 @@ const StyledTab = withStyles(theme => ({
             opacity: .7,
         },
         '&$selected': {
+            boxShadow: '0px 0px 5px #111',
             backgroundColor: '#212334',
             color: '#dbb316'
         }

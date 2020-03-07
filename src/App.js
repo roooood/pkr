@@ -25,7 +25,7 @@ class App extends Component {
       setting: {},
       menu: false
     };
-    this.game = new GameServer('trade');
+    this.game = new GameServer('poker');
     autoBind(this);
   }
   componentDidMount() {
