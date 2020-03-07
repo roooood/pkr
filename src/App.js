@@ -5,13 +5,15 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./redux/store";
 
+import { getQuery } from './library/Helper';
 import GameServer from './library/Game';
 import Context from './library/Context';
 import Route from './Route';
-import Snack from './component/Snack'
-import Modal from './component/Modal';
+import Snack from './component/component/Snack';
+import Modal from './component/component/Modal';
 
 import './assets/css/app.css';
+import './assets/css/cards.css';
 
 let EventEmitter = require('events')
 window.ee = new EventEmitter();
@@ -20,22 +22,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userKey: getQuery('token') || '-',
       isMobile: window.innerWidth <= 900,
-      isPortrait: window.matchMedia("(orientation: portrait)").matches,
-      setting: {},
-      menu: false
     };
     this.game = new GameServer('poker');
     autoBind(this);
-  }
-  componentDidMount() {
-    window.addEventListener("orientationchange", this.orientationchange);
-  }
-  componentWillUnmoun() {
-    window.removeEventListener("orientationchange", this.orientationchange);
-  }
-  orientationchange() {
-    this.setState({ isPortrait: window.matchMedia("(orientation: portrait)").matches })
   }
   changeState(obj) {
     this.setState(obj)

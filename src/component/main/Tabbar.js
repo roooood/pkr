@@ -5,7 +5,7 @@ import Context from 'library/Context';
 import Typography from '@material-ui/core/Typography';
 
 import Lobby from './Lobby';
-import Game from './Lobby';
+import Game from './game/Table';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -36,7 +36,7 @@ class Tabbar extends Component {
                             <div style={styles.root} >
                                 {item == 'lobby'
                                     ? <Lobby />
-                                    : null// <Game parent={tab[item]} inView={this.props.tab.active == item} />
+                                    : <Game parent={tab[item]} inView={this.props.tab.active == item} />
                                 }
                             </div>
                         </TabPanel>

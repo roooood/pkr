@@ -94,21 +94,17 @@ body {
 .MuiButton-root {
     text-transform: inherit!important;
 }
-
+.scrollbar > div{
+  overflow-x: hidden!important;
+}
+.lobby{
+  width:70%;
+}
+.preview{
+  width:29%;
+}
 @media only screen and (orientation:portrait) {
-  .top{
-    height: 56px;
-  }
-  .top .item2 { 
-    overflow: hidden;
-    padding-right:0px;
-    width: auto;
-    min-width: auto;
-  }
-  .center{
-    height:100% ;
-    width:100%;
-  }
+
 }
 @media only screen and (max-width: 900px) and (orientation:landscape) {
   .top{
@@ -117,6 +113,12 @@ body {
   .center{
     height:calc(100% - 95px);
     width:100%;
+  }
+  .lobby{
+    width:100%;
+  }
+  .preview{
+    display: none;
   }
 }
 .swing-in-top-fwd{-webkit-animation:swing-in-top-fwd .5s cubic-bezier(.175,.885,.32,1.275) both;animation:swing-in-top-fwd .5s cubic-bezier(.175,.885,.32,1.275) both}

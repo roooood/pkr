@@ -17,6 +17,31 @@ import ArrowLeft from '@material-ui/icons/ArrowLeft';
 import { connect } from 'react-redux';
 import { TabbarAdd } from 'redux/action/tab';
 import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+
+const StyledCard = withStyles(theme => ({
+    root: {
+        backgroundColor: 'rgba(0,0,0,.3)',
+        width: '100%',
+        height: '97%'
+    },
+}))(Card);
+const StyledCardHeader = withStyles(theme => ({
+    root: {
+        color: '#fff',
+        textAlign: 'center',
+        backgroundColor: '#2c3e62',
+    },
+    title: {
+        fontSize: '1.1rem',
+    },
+    subheader: {
+        color: '#999',
+    }
+}))(CardHeader);
 
 const StyledTableCell = withStyles(theme => ({
     head: {
@@ -75,87 +100,52 @@ class ListTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rooms: []
+            rooms: [],
+            active: {}
         };
         autoBind(this);
         this.timer = null;
-        this.inGame = false;
-        this.getedList = false;
     }
     componentDidMount() {
-        this.context.game.register('leave', this.leave);
-        this.context.game.register('welcome', this.welcome);
-        this.context.game.register('connect', this.connected);
-
+        this.getTableList();
+        // this.context.game.join('xxx', { create: true }); 
+    }
+    getTableList() {
         request('tableList', rooms => {
-            this.setState({ rooms: [...rooms, ...rooms, ...rooms, ...rooms, ...rooms, ...rooms, ...rooms, ...rooms, ...rooms, ...rooms] })
+            this.connectToGame()
+            this.setState({
+                rooms: rooms,
+                active: rooms[0]
+            })
         });
     }
-    connected() {
-        this.getList()
-        this.timer = setInterval(() => {
-            this.getList()
-        }, 5000);
-    }
-    welcome() {
-        this.inGame = true;
-        setTimeout(() => {
-            this.getList();
-        }, 500);
-    }
-    leave() {
-        this.inGame = false;
-        this.refresh();
+    connectToGame() {
+        if (!this.context.game.isConnect) {
+            this.context.game.connect(
+                () => {
+                    this.getList();
+                },
+                () => setTimeout(() => { this.connectToGame() }, 5000)
+            );
+        }
     }
     refresh() {
         this.getList();
     }
     getList() {
         this.context.game.getAvailableRooms((rooms) => {
-            this.getedList = true;
-            this.setState({ rooms })
+            console.log(rooms)
+            // this.setState({ rooms })
         });
     }
-    have(arr, prop, id) {
-        let i;
-        for (i in arr) {
-            if (typeof arr[i].metadata == 'object' && arr[i].metadata[prop] == id)
-                return true;
-        }
-        return false
-    }
-    create() {
-        let xalert = this.context.app('alert');
-        if (!this.getedList) {
-            xalert.show({ message: t('pleaseWait'), type: 'warning' });
-        }
-        else if (!('id' in this.context.state)) {
-            xalert.show({ message: t('guestLimit'), type: 'warning' });
-        }
-        else if (this.have(this.state.rooms, 'ownerId', this.context.state.id)) {
-            xalert.show({ message: t('cantCreate'), type: 'error' });
-        }
-        else if (this.inGame) {
-            xalert.show({ message: t('inGameLimit'), type: 'error' });
-        }
-        else if (this.state.rooms.length >= this.context.state.setting.tableLimit) {
-            xalert.show({ message: t('tableCreateLimit'), type: 'error' });
-        }
-        else if (this.context.state.balance < this.context.state.setting.minbet) {
-            xalert.show({ message: t('balanceLimit'), type: 'error' });
-        }
-        else {
-            this.modal.show();
-        }
 
-    }
     join(id) {
         if (this.inGame) {
             let xalert = this.context.app('alert');
             xalert.show({ message: t('inGameLimit'), type: 'error' });
         }
         else {
-            const key = this.context.state.userKey;
+            const key = this.context.state.userKey || '';
             this.context.game.join(id, { key });
         }
 
@@ -170,52 +160,80 @@ class ListTable extends Component {
             }
         }));
     }
+    setActive(active) {
+        this.setState({ active })
+    }
     render() {
+        const { rooms, active } = this.state;
         return (
             <div style={styles.root} >
-                <Scrollbars style={{ direction: 'ltr', height: '82vh' }} ref="scroll">
-                    <Table stickyHeader style={styles.table}>
-                        <TableHead>
-                            <StyledTableRow>
-                                {columns.map(column => (
-                                    <StyledTableCell
-                                        key={column.id}
-                                        // align={column.align}
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </StyledTableCell>
-                                ))}
-                            </StyledTableRow>
-                        </TableHead>
-                        <TableBody>
-                            {this.state.rooms.map(row => {
-                                return (
-                                    <StyledTableRow hover onClick={() => this.addTab(row)} tabIndex={-1} key={row.id}>
-                                        {columns.map(column => {
-                                            const value = row[column.id] || null;
-                                            return (
-                                                <StyledTableCell key={column.id} align={column.align}>
-                                                    {column.format ? column.format(value) : value}
-                                                </StyledTableCell>
-                                            );
-                                        })}
-                                    </StyledTableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </Scrollbars>
-                <div container style={styles.bottom}>
-                    <div style={styles.space}>
-                        <Typography style={styles.text} display="inline">{t('tableCount')} :</Typography>
-                        <Typography style={styles.xtext} display="inline">{this.state.rooms.length}</Typography>
-                    </div>
-                    <div style={styles.space}>
-                        <Typography style={styles.text} display="inline">{t('users')} :</Typography>
-                        <Typography style={styles.xtext} display="inline">{this.context.state.onlines || 0}</Typography>
+                <div style={styles.lobby} className="lobby">
+                    <Scrollbars style={{ direction: 'ltr', height: '82vh', overflow: 'hidden' }} ref="scroll" className="scrollbar">
+                        <Table stickyHeader style={styles.table}>
+                            <TableHead>
+                                <StyledTableRow>
+                                    {columns.map(column => (
+                                        <StyledTableCell
+                                            key={column.id}
+                                            // align={column.align}
+                                            style={{ minWidth: column.minWidth }}
+                                        >
+                                            {column.label}
+                                        </StyledTableCell>
+                                    ))}
+                                </StyledTableRow>
+                            </TableHead>
+                            <TableBody>
+                                {rooms.map(row => {
+                                    return (
+                                        <StyledTableRow
+                                            hover
+                                            onDoubleClick={() => this.addTab(row)}
+                                            onClick={() => this.setActive(row)}
+                                            tabIndex={-1}
+                                            style={row.id == active.id ? styles.active : {}}
+                                            key={row.id}>
+                                            {columns.map(column => {
+                                                const value = row[column.id] || null;
+                                                return (
+                                                    <StyledTableCell key={column.id} align={column.align}>
+                                                        {column.format ? column.format(value) : value}
+                                                    </StyledTableCell>
+                                                );
+                                            })}
+                                        </StyledTableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </Scrollbars>
+                    <div container style={styles.bottom}>
+                        <div style={styles.space}>
+                            <Typography style={styles.text} display="inline">{t('tableCount')} :</Typography>
+                            <Typography style={styles.xtext} display="inline">{this.state.rooms.length}</Typography>
+                        </div>
+                        <div style={styles.space}>
+                            <Typography style={styles.text} display="inline">{t('onlineUsers')} :</Typography>
+                            <Typography style={styles.xtext} display="inline">{this.context.state.onlines || 0}</Typography>
+                        </div>
                     </div>
                 </div>
+                <div style={styles.preview} className="preview">
+                    <StyledCard >
+                        <StyledCardHeader
+                            title={active.name}
+                        // subheader={active.type}
+                        />
+
+                        <CardContent>
+
+                        </CardContent>
+                        <CardActions disableSpacing>
+
+                        </CardActions>
+
+                    </StyledCard>
+                </div >
             </div >
         );
     }
@@ -224,13 +242,22 @@ const styles = {
     root: {
         width: '100%',
         display: 'flex',
-        height: '98%',
+        height: '100%',
+        padding: 20,
+        justifyContent: 'space-between',
+    },
+    lobby: {
+        display: 'flex',
+        height: '100%',
         flexDirection: 'column',
-        padding: 20
+    },
+    preview: {
+        display: 'flex',
+        height: '100%',
     },
     table: {
         borderRadius: 5,
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     center: {
         display: 'flex',
@@ -238,7 +265,7 @@ const styles = {
     },
     bottom: {
         display: 'flex',
-        background: 'rgb(17, 17, 17)',
+        background: 'rgba(0,0,0,.3)',
         marginTop: 10,
         borderRadius: 5,
         padding: 10
@@ -253,6 +280,9 @@ const styles = {
         color: 'rgb(116, 219, 110)',
         marginRight: 10,
         marginLeft: 10
+    },
+    active: {
+        background: 'rgba(100, 99, 94, 0.19)'
     }
 }
 export default connect(state => state)(ListTable);

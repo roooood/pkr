@@ -5,9 +5,7 @@ class Game {
     constructor(type) {
         this.Socket = serverUrl;
         this.Client = null;
-        this.Room = null;
         this.isConnect = false;
-        this.inRoom = false;
         this.Listen = [];
         this.type = type;
         this.error = this.error.bind(this)
@@ -30,7 +28,12 @@ class Game {
 
         });
         this.Client.onClose.add(() => {
-            console.log("connection closed");
+            this.isConnect = false;
+            if (this.Listen['disconnect'] != null) {
+                for (let cb of this.Listen['disconnect']) {
+                    cb();
+                }
+            }
         });
         this.Client.onOpen.add(() => {
             this.isConnect = true;
@@ -44,14 +47,10 @@ class Game {
     }
     close() {
         this.Client.close();
-        localStorage.clear();
     }
-    leave() {
-        localStorage.clear();
-        if (this.inRoom)
-            this.Room.leave();
-        this.inRoom = false;
-
+    leave(Room) {
+        if ('inRoom' in Room && Room.inRoom == true)
+            Room.leave();
     }
     getAvailableRooms(callback, type = this.type) {
         if (this.isConnect) {
@@ -61,61 +60,61 @@ class Game {
         }
 
     }
-    onState(callback) {
-        this.Room.onStateChange.add((state) => {
+    onState(Room, callback) {
+        Room.onStateChange.add((state) => {
             callback(state);
         });
     }
-    send(data) {
-        if (this.Room != null)
-            this.Room.send(data);
+    send(Room, data) {
+        if (Room != null)
+            Room.send(data);
     }
-    register(key, callback, listen) {
-        if (this.Listen[key] == null) {
-            this.Listen[key] = [];
+    register(Room, key, callback, listen) {
+        if (Room.Listen[key] == null) {
+            Room.Listen[key] = [];
         }
-        this.Listen[key].push(callback);
+        Room.Listen[key].push(callback);
 
         if (listen == true) {
-            this.Room.listen(key, (state) => {
+            Room.listen(key, (state) => {
                 callback(state.value, state);
             });
         }
     }
-    listen(key, callback) {
-        this.Room.listen(key, (state) => {
+    on(key, callback) {
+        if (this.Listen[key] == null) {
+            this.Listen[key] = [];
+        }
+        this.Listen[key].push(callback);
+    }
+    listen(Room, key, callback) {
+        Room.listen(key, (state) => {
             callback(state);
         });
     }
-    reset() {
-        if (this.Room != undefined) {
-            this.Listen = [];
-            this.Room.removeAllListeners()
-        }
-    }
 
     join(roomId, option) {
-        this.Room = this.Client.join(roomId, option);
-        this.addListner();
+        let Room = this.Client.join(roomId, option);
+        this.addListner(Room);
+        Room.Listen = [];
+        return Room;
     }
-    addListner() {
-        this.Room.onJoin.add(() => {
-            localStorage.setItem('roomId', this.Room.id);
-            // localStorage.setItem('roomSession', this.Room.sessionId);
-            this.inRoom = true;
+    addListner(Room) {
+        Room.onJoin.add(() => {
+            Room.inRoom = true;
         });
-        this.Room.onLeave.add(() => {
-            this.inRoom = false;
-            if (this.Listen['leave'] != null) {
-                for (let cb of this.Listen['leave']) {
+        Room.onLeave.add(() => {
+            Room.inRoom = false;
+            if (Room.Listen['leave'] != null) {
+                for (let cb of Room.Listen['leave']) {
                     cb();
                 }
             }
         });
-        this.Room.onMessage.add((data) => {
+        Room.onMessage.add((data) => {
             let key = Object.keys(data)[0];
-            if (this.Listen[key] != null) {
-                for (let cb of this.Listen[key]) {
+            if (Room.Listen[key] != null) {
+                for (let cb of Room.Listen[key]) {
                     cb(data[key]);
                 }
             }
