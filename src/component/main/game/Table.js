@@ -23,7 +23,11 @@ class Table extends Component {
         this.roomId = this.props.parent.id;
         autoBind(this);
     }
-
+    afterConnect() {
+        return {
+            welcome: [this.welcome]
+        }
+    }
     componentDidMount() {
         this.context.game.on('connect', this.connected);
         this.context.game.on('disconnect', this.disconnected);
@@ -40,7 +44,7 @@ class Table extends Component {
     join() {
         this.context.game.getAvailableRooms((rooms) => {
             let roomId = 'poker';
-            for (item of rooms) {
+            for (let item of rooms) {
                 if (!('metadata' in item))
                     continue;
                 if (item.metadata.id == this.roomId) {
@@ -48,18 +52,27 @@ class Table extends Component {
                     break;
                 }
             }
-            this.Room = this.context.game.join(roomId, { create: roomId == 'poker', key: this.context.state.userKey });
+            this.Room =
+                this.context.game.join(
+                    roomId,
+                    { create: roomId == 'poker', ...this.props.parent, key: this.context.state.userKey },
+                    this.afterConnect()
+                );
         });
     }
+    welcome(data) {
+        this.Room.data = data;
+        this.setState({ loading: false })
+        this.context.game.onState(this.Room, (state) => {
+            this.setState(state);
+        });
+    }
+
     standUp() {
-        this.context.game.send({ stand: true });
+        this.context.game.send(this.Room, { stand: true });
     }
     leave() {
-        this.context.game.leave();
-    }
-    balanceLimit() {
-        let xalert = this.context.app('alert');
-        xalert.show({ message: t('balanceLimit'), type: 'error' });
+        this.context.game.leave(this.Room);
     }
     toggleSound() {
         let act = ('mute' in this.context.state) && this.context.state.mute ? false : true;
@@ -84,8 +97,8 @@ class Table extends Component {
                         </IconButton>
                     </div>
                 </div>
-                <Position />
-                <Action />
+                <Position state={this.state} Room={this.Room} />
+                <Action state={this.state} Room={this.Room} />
             </div>
         )
     }

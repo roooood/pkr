@@ -19,6 +19,7 @@ class Item extends Component {
     static contextType = Context;
     constructor(props) {
         super(props);
+        this.Room = this.props.Room;
         this.state = {
             cards: [],
             mySit: 0,
@@ -56,12 +57,12 @@ class Item extends Component {
         });
     }
     componentDidMount() {
-        this.context.game.register('mySit', this.mySit);
-        this.context.game.register('myCards', this.myCards);
-        this.context.game.register('takeAction', this.takeAction);
-        this.context.game.register('actionResult', this.actionResult);
-        this.context.game.register('gameResult', this.gameResult);
-        this.context.game.register('reset', this.reset);
+        this.context.game.register(this.Room, 'mySit', this.mySit);
+        this.context.game.register(this.Room, 'myCards', this.myCards);
+        this.context.game.register(this.Room, 'takeAction', this.takeAction);
+        this.context.game.register(this.Room, 'actionResult', this.actionResult);
+        this.context.game.register(this.Room, 'gameResult', this.gameResult);
+        this.context.game.register(this.Room, 'reset', this.reset);
     }
     mySit(mySit) {
         this.setState({
@@ -128,7 +129,7 @@ class Item extends Component {
         }
     }
     sit() {
-        this.context.game.send({ sit: this.props.sit })
+        this.context.game.send(this.Room, { sit: this.props.sit })
     }
     render() {
         const { align, sit } = this.props;

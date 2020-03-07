@@ -16,10 +16,11 @@ import Milf from 'assets/img/milf.png';
 
 class Position extends Component {
     static contextType = Context;
-    constructor(props, context) {
+    constructor(props) {
         super(props);
+        this.Room = this.props.Room;
         this.state = {
-            sit: context.state.table.player,
+            sit: this.Room.data.player,
             mySit: 0,
             start: 0,
             end: 0,
@@ -27,10 +28,10 @@ class Position extends Component {
         autoBind(this);
     }
     componentDidMount() {
-        this.context.game.register('mySit', this.mySit);
-        this.context.game.register('actionResult', this.actionResult);
-        this.context.game.register('gameResult', this.result);
-        this.context.game.register('reset', this.reset);
+        this.context.game.register(this.Room, 'mySit', this.mySit);
+        this.context.game.register(this.Room, 'actionResult', this.actionResult);
+        this.context.game.register(this.Room, 'gameResult', this.result);
+        this.context.game.register(this.Room, 'reset', this.reset);
 
     }
     mySit(mySit) {
@@ -89,20 +90,20 @@ class Position extends Component {
                     <div class="leather">
                         <div class="wood">
                             <div class="top positions">
-                                <Item align="up" sit={1} />
+                                <Item align="up" Room={this.Room} sit={1} />
                                 <img src={Milf} style={styles.milf} />
-                                <Item align="up" sit={7} />
+                                <Item align="up" Room={this.Room} sit={7} />
                             </div>
                             <div class="left positions">
-                                <Item align="left" sit={6} />
+                                <Item align="left" Room={this.Room} sit={6} />
                             </div>
                             <div class="bottom positions">
-                                <Item align="down" sit={5} />
-                                <Item align="down" sit={4} />
-                                <Item align="down" sit={3} />
+                                <Item align="down" Room={this.Room} sit={5} />
+                                <Item align="down" Room={this.Room} sit={4} />
+                                <Item align="down" Room={this.Room} sit={3} />
                             </div>
                             <div class="right positions">
-                                <Item align="right" sit={2} />
+                                <Item align="right" Room={this.Room} sit={2} />
                             </div>
                             <div class="board">
                                 <div class="board-line">

@@ -120,17 +120,18 @@ class Action extends Component {
     static contextType = Context;
     constructor(props, context) {
         super(props);
+        this.Room = this.props.Room;
         this.state = {
             mySit: 0,
             timer: false,
             canTake: false,
-            bet: context.state.table.min,
+            bet: this.Room.data.min,
         };
         autoBind(this);
     }
     componentDidMount() {
-        this.context.game.register('mySit', this.mySit);
-        this.context.game.register('action', this.takeAction);
+        this.context.game.register(this.Room, 'mySit', this.mySit);
+        this.context.game.register(this.Room, 'action', this.takeAction);
     }
     mySit(mySit) {
         this.setState({
@@ -158,9 +159,9 @@ class Action extends Component {
                     onChange={this.changeBet}
                     valueLabelDisplay="on"
                     aria-labelledby="range-slider"
-                    min={'bet' in this.context.state ? this.context.state.bet : this.context.state.table.min}
-                    max={this.context.state.balance > this.context.state.table.max ? this.context.state.table.max : this.context.state.balance}
-                    step={this.context.state.setting.step}
+                    min={'bet' in this.props.state ? this.props.state.bet : this.Room.data.min}
+                    max={this.context.state.balance > this.Room.data.max ? this.Room.data.max : this.context.state.balance}
+                    step={this.Room.data.setting.step}
                     valueLabelFormat={this.valuetext}
                 />
                 <CallBtn onClick={() => null}>

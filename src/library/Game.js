@@ -93,10 +93,10 @@ class Game {
         });
     }
 
-    join(roomId, option) {
+    join(roomId, option, cb = []) {
         let Room = this.Client.join(roomId, option);
+        Room.Listen = cb;
         this.addListner(Room);
-        Room.Listen = [];
         return Room;
     }
     addListner(Room) {
