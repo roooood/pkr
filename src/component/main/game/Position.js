@@ -90,20 +90,20 @@ class Position extends Component {
                     <div class="leather">
                         <div class="wood">
                             <div class="top positions">
-                                <Item align="up" Room={this.Room} sit={1} />
+                                <Item align="up" Room={this.Room} state={this.props.state} sit={1} />
                                 <img src={Milf} style={styles.milf} />
-                                <Item align="up" Room={this.Room} sit={7} />
+                                <Item align="up" Room={this.Room} state={this.props.state} sit={7} />
                             </div>
                             <div class="left positions">
-                                <Item align="left" Room={this.Room} sit={6} />
+                                <Item align="left" Room={this.Room} state={this.props.state} sit={6} />
                             </div>
                             <div class="bottom positions">
-                                <Item align="down" Room={this.Room} sit={5} />
-                                <Item align="down" Room={this.Room} sit={4} />
-                                <Item align="down" Room={this.Room} sit={3} />
+                                <Item align="down" Room={this.Room} state={this.props.state} sit={5} />
+                                <Item align="down" Room={this.Room} state={this.props.state} sit={4} />
+                                <Item align="down" Room={this.Room} state={this.props.state} sit={3} />
                             </div>
                             <div class="right positions">
-                                <Item align="right" Room={this.Room} sit={2} />
+                                <Item align="right" Room={this.Room} state={this.props.state} sit={2} />
                             </div>
                             <div class="board">
                                 <div class="board-line">

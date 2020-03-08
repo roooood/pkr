@@ -123,7 +123,7 @@ class ListTable extends Component {
         if (!this.context.game.isConnect) {
             this.context.game.connect(
                 () => {
-                    this.getList();
+                    this.conected();
                 },
                 () => setTimeout(() => { this.connectToGame() }, 5000)
             );
@@ -132,10 +132,31 @@ class ListTable extends Component {
     refresh() {
         this.getList();
     }
+    conected() {
+        this.timer = setInterval(() => {
+            this.getList()
+        }, 5000);
+    }
     getList() {
         this.context.game.getAvailableRooms((rooms) => {
-            console.log(rooms)
-            // this.setState({ rooms })
+            for (let room of this.state.rooms) {
+                room.live = false;
+                room.ready = 0;
+                room.clients = 0;
+            }
+            for (let item of rooms) {
+                if (!('metadata' in item))
+                    continue;
+                let id = item.metadata.id;
+                for (let room of this.state.rooms) {
+                    if (room.id == id) {
+                        room.ready = item.metadata.ready;
+                        room.clients = item.metadata.clients;
+                        room.live = true;
+                        break;
+                    }
+                }
+            }
         });
     }
 
@@ -153,11 +174,7 @@ class ListTable extends Component {
     addTab({ id, name, type }) {
         this.props.dispatch(TabbarAdd({
             key: 't' + id,
-            value: {
-                id,
-                name,
-                type,
-            }
+            value: { id, name, type, }
         }));
     }
     setActive(active) {

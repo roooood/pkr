@@ -13,6 +13,7 @@ import FilterList from '@material-ui/icons/FilterList';
 import { t } from 'locales';
 import { connect } from 'react-redux';
 import Context from 'library/Context';
+import play from 'library/Sound';
 
 class Setting extends Component {
     static contextType = Context;
@@ -43,6 +44,11 @@ class Setting extends Component {
             }
         }
     }
+    toggleSound() {
+        let act = ('mute' in this.context.state) && this.context.state.mute ? false : true;
+        play(!act);
+        this.context.setState({ mute: act });
+    }
     render() {
         return (
             <div>
@@ -67,14 +73,14 @@ class Setting extends Component {
                                 ? <VolumeOff style={styles.icon} />
                                 : <VolumeUp style={styles.icon} />}
                         </IconButton>
-                        <IconButton size="medium" onClick={this.changeScreen}>
-                            {this.state.fullscreen
-                                ? <FullscreenIcon style={styles.icon} />
-                                : <FullscreenExitIcon style={styles.icon} />
-                            }
-                        </IconButton>
                     </>
                 }
+                <IconButton size="medium" onClick={this.changeScreen}>
+                    {this.state.fullscreen
+                        ? <FullscreenIcon style={styles.icon} />
+                        : <FullscreenExitIcon style={styles.icon} />
+                    }
+                </IconButton>
             </div>
         );
     }

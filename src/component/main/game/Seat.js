@@ -65,11 +65,13 @@ class Item extends Component {
         this.context.game.register(this.Room, 'reset', this.reset);
     }
     mySit(mySit) {
-        this.setState({
-            mySit,
-            timer: false,
-            canTake: false,
-        })
+        if (this.props.sit == mySit) {
+            this.setState({
+                mySit,
+                timer: false,
+                canTake: false,
+            })
+        }
     }
     myCards(cards) {
         this.setState({ cards })
@@ -134,7 +136,7 @@ class Item extends Component {
     render() {
         const { align, sit } = this.props;
         const { winner, loser, cards, mySit } = this.state;
-        const { players } = this.context.state;
+        const { players } = this.props.state;
 
         if (players != undefined) {
             if (sit in players) {

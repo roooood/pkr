@@ -32,7 +32,7 @@ class Tabbar extends Component {
             <>
                 {Object.keys(tab).map((item) => {
                     return (
-                        <TabPanel key={item} className="swing-in-top-fwd" value={this.props.tab.active} index={item}>
+                        <TabPanel key={item} className="puff-in-center" value={this.props.tab.active} index={item}>
                             <div style={styles.root} >
                                 {item == 'lobby'
                                     ? <Lobby />

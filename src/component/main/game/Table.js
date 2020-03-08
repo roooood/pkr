@@ -4,11 +4,8 @@ import Context from 'library/Context';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import Close from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
-import VolumeOff from '@material-ui/icons/VolumeOff';
-import VolumeUp from '@material-ui/icons/VolumeUp';
 import Position from './Position';
 import Action from './Action';
-import play from 'library/Sound';
 import { t } from 'locales';
 import './table.css';
 
@@ -74,11 +71,7 @@ class Table extends Component {
     leave() {
         this.context.game.leave(this.Room);
     }
-    toggleSound() {
-        let act = ('mute' in this.context.state) && this.context.state.mute ? false : true;
-        play(!act);
-        this.context.setState({ mute: act });
-    }
+
     render() {
         if (this.state.loading)
             return (<div>Loading</div>)
@@ -91,9 +84,6 @@ class Table extends Component {
                         </IconButton>
                         <IconButton onClick={this.standUp} style={{ color: '#fff' }} >
                             <ArrowUpward />
-                        </IconButton>
-                        <IconButton onClick={this.toggleSound} style={{ color: '#fff' }}>
-                            {('mute' in this.context.state) && this.context.state.mute ? <VolumeOff /> : <VolumeUp />}
                         </IconButton>
                     </div>
                 </div>
