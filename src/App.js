@@ -13,6 +13,7 @@ import Snack from './component/component/Snack';
 import Modal from './component/component/Modal';
 
 import './assets/css/app.css';
+import './assets/css/table.css';
 import './assets/css/cards.css';
 
 let EventEmitter = require('events')

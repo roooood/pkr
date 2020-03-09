@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import Context from 'library/Context';
 import Typography from '@material-ui/core/Typography';
 
-import Lobby from './Lobby';
-import Game from './game/Table';
+import Lobby from './lobby/Lobby';
+import Game from './game/Game';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;

@@ -7,7 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Position from './Position';
 import Action from './Action';
 import { t } from 'locales';
-import './table.css';
 
 class Table extends Component {
     static contextType = Context;
@@ -19,6 +18,8 @@ class Table extends Component {
         this.Room = null;
         this.roomId = this.props.parent.id;
         autoBind(this);
+        window.ee.on('standUpt' + this.roomId, this.standUp)
+        window.ee.on('leavet' + this.roomId, this.leave)
     }
     afterConnect() {
         return {
@@ -77,16 +78,6 @@ class Table extends Component {
             return (<div>Loading</div>)
         return (
             <div style={styles.root}>
-                <div style={styles.action}>
-                    <div>
-                        <IconButton onClick={this.leave} color="secondary" >
-                            <Close />
-                        </IconButton>
-                        <IconButton onClick={this.standUp} style={{ color: '#fff' }} >
-                            <ArrowUpward />
-                        </IconButton>
-                    </div>
-                </div>
                 <Position state={this.state} Room={this.Room} />
                 <Action state={this.state} Room={this.Room} />
             </div>

@@ -23,6 +23,13 @@ class Setting extends Component {
         };
         autoBind(this);
     }
+    leave() {
+        window.ee.emit('leave' + this.props.tab.active)
+        window.ee.emit('removeTab', this.props.tab.active)
+    }
+    standUp() {
+        window.ee.emit('standUp' + this.props.tab.active)
+    }
     changeScreen() {
         this.setState({ fullscreen: !this.state.fullscreen })
         if ((document.fullScreenElement && document.fullScreenElement !== null) ||
@@ -54,10 +61,10 @@ class Setting extends Component {
             <div>
                 {this.props.tab.active == 'lobby'
                     ? <>
-                        < IconButton onClick={this.leave}  >
+                        < IconButton onClick={() => null}  >
                             <Refresh style={styles.icon} />
                         </IconButton>
-                        < IconButton onClick={this.leave}  >
+                        < IconButton onClick={() => null}  >
                             <FilterList style={styles.icon} />
                         </IconButton>
                     </>

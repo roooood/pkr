@@ -87,6 +87,7 @@ class Appbar extends Component {
         this.state = {
         };
         autoBind(this);
+        window.ee.on('removeTab', this.removeTab)
     }
     componentDidMount() {
 
@@ -111,7 +112,7 @@ class Appbar extends Component {
                 this.props.dispatch(TabbarActive(tab));
         }
     }
-    onRemove(id) {
+    removeTab(id) {
         this.props.dispatch(TabbarRemove(id));
         let keys = Object.keys(this.props.tab.data);
         let index = keys.indexOf(id);

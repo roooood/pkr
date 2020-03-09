@@ -22,7 +22,13 @@
   border-top: 5px solid#293242;
   box-sizing: border-box;
 }
-
+.mini-table .leather {
+  box-shadow:0 0 5px #000;
+  border-left: 5px solid#293242;
+  border-right: 5px solid#293242;
+  border-bottom: 2px solid#293242;
+  border-top: 2px solid#293242;
+}
 .wood {
   width: 100%;
   height: 100%;
@@ -34,6 +40,12 @@
   border-top: 7px solid#a37138;
   box-sizing: border-box;
   position: relative;
+}
+.mini-table .wood {
+  border-left: 10px solid#b37e43;
+  border-right: 10px solid#b37e43;
+  border-bottom: 3px solid#a37138;
+  border-top: 3px solid#a37138;
 }
 .wood .positions{
   position: absolute;
@@ -63,6 +75,9 @@
   top: 0;
   bottom: 0;
 }
+.mini-table .wood .right{
+  right: -105px;
+}
 .wood .left{
   height: 100%;
   width: 100px;
@@ -70,7 +85,9 @@
   top: 0;
   bottom: 0;
 }
-
+.mini-table .wood .left{
+  left: -105px;
+}
 .board {
   width: 100%;
   height: 100%;

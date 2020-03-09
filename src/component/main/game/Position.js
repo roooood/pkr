@@ -84,6 +84,8 @@ class Position extends Component {
     }
     render() {
         const { sit, mySit } = this.state;
+        console.log(this.props.state);
+        const { deck } = this.props.state;
         return (
             <div style={styles.root}>
                 <div class="pocker-desc">
@@ -111,11 +113,11 @@ class Position extends Component {
                                     <div class="bet-value">1,000</div>
                                 </div>
                                 <div class="board-cards">
-                                    <div class="card anim _2h"></div>
-                                    <div class="card anim _2c"></div>
-                                    <div class="card anim _Ah"></div>
-                                    <div class="card"></div>
-                                    <div class="card"></div>
+                                    {
+                                        (deck || []).map((card, i) => (
+                                            <div key={i} class={"card anim _" + card}></div>
+                                        ))
+                                    }
                                 </div>
                                 <div></div>
                             </div>

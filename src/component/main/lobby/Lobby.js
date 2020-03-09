@@ -21,6 +21,7 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import Position from './Position';
 
 const StyledCard = withStyles(theme => ({
     root: {
@@ -101,10 +102,12 @@ class ListTable extends Component {
         super(props);
         this.state = {
             rooms: [],
-            active: {}
+            active: {},
+            table: {},
         };
         autoBind(this);
         this.timer = null;
+        this.Room = {};
     }
     componentDidMount() {
         this.getTableList();
@@ -143,6 +146,8 @@ class ListTable extends Component {
                 room.live = false;
                 room.ready = 0;
                 room.clients = 0;
+                room.roomId = '';
+                room.users = {};
             }
             for (let item of rooms) {
                 if (!('metadata' in item))
@@ -152,7 +157,9 @@ class ListTable extends Component {
                     if (room.id == id) {
                         room.ready = item.metadata.ready;
                         room.clients = item.metadata.clients;
+                        room.users = item.metadata.users;
                         room.live = true;
+                        room.roomId = item.roomId;
                         break;
                     }
                 }
@@ -241,9 +248,8 @@ class ListTable extends Component {
                             title={active.name}
                         // subheader={active.type}
                         />
-
-                        <CardContent>
-
+                        <CardContent style={styles.prew}>
+                            <Position state={this.state.active} />
                         </CardContent>
                         <CardActions disableSpacing>
 
@@ -267,6 +273,9 @@ const styles = {
         display: 'flex',
         height: '100%',
         flexDirection: 'column',
+    },
+    prew: {
+        paddingTop: '25%'
     },
     preview: {
         display: 'flex',
