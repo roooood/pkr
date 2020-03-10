@@ -12,6 +12,7 @@ import Route from './Route';
 import Snack from 'component/component/Snack';
 import Modal from 'component/component/Modal';
 import request from 'library/Fetch';
+import Avatar from 'component/component/Avatar';
 
 import 'assets/css/app.css';
 import 'assets/css/table.css';
@@ -48,6 +49,10 @@ class App extends Component {
         }
       });
     }
+    setTimeout(() => {
+      // let Avatar = React.lazy(() => import('component/component/Avatar'));
+      this.modal.show(<Avatar />)
+    }, 2000);
   }
   changeState(obj) {
     this.setState(obj)

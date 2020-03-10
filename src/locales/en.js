@@ -8,6 +8,7 @@ export default {
     writeSomething: 'Write something',
     delete: 'Delete',
     mute: 'Mute',
+    pickavatar: 'Pick your favorites avatar',
 
     lobby: 'LOBBY',
     name: 'Name',
