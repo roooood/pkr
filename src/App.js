@@ -3,18 +3,19 @@ import autoBind from 'react-autobind';
 
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "./redux/store";
+import { store, persistor } from "redux/store";
 
-import { getQuery } from './library/Helper';
-import GameServer from './library/Game';
-import Context from './library/Context';
+import { getQuery } from 'library/Helper';
+import GameServer from 'library/Game';
+import Context from 'library/Context';
 import Route from './Route';
-import Snack from './component/component/Snack';
-import Modal from './component/component/Modal';
+import Snack from 'component/component/Snack';
+import Modal from 'component/component/Modal';
+import request from 'library/Fetch';
 
-import './assets/css/app.css';
-import './assets/css/table.css';
-import './assets/css/cards.css';
+import 'assets/css/app.css';
+import 'assets/css/table.css';
+import 'assets/css/cards.css';
 
 let EventEmitter = require('events')
 window.ee = new EventEmitter();
@@ -24,10 +25,22 @@ class App extends Component {
     super(props);
     this.state = {
       userKey: getQuery('token') || '-',
+      user: {},
       isMobile: window.innerWidth <= 900,
     };
     this.game = new GameServer('poker');
     autoBind(this);
+  }
+  componentDidMount() {
+    if (this.state.userKey != '-') {
+      request('info/' + this.state.userKey, res => {
+        if (typeof res == 'object') {
+          if (res.result == 'ok') {
+            this.setState({ user: res.data })
+          }
+        }
+      });
+    }
   }
   changeState(obj) {
     this.setState(obj)

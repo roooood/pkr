@@ -10,10 +10,10 @@ import autoBind from 'react-autobind';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 import AttachMoney from '@material-ui/icons/AttachMoney';
 import Timer from './Timer';
-import { toMoney, getOffset } from 'library/Helper';
 import { t } from 'locales';
 import play from 'library/Sound';
-
+import CountUp from 'react-countup';
+import { toMoney, getOffset, amountLen, isFloat, add } from 'library/Helper';
 
 class Item extends Component {
     static contextType = Context;
@@ -24,7 +24,6 @@ class Item extends Component {
             cards: [],
             mySit: 0,
             timer: false,
-            canTake: false,
             winner: [],
             loser: []
         };
@@ -53,14 +52,15 @@ class Item extends Component {
         this.setState({
             timer: false,
             winner: [],
-            loser: []
+            loser: [],
+            cards: []
         });
     }
     componentDidMount() {
         this.context.game.register(this.Room, 'mySit', this.mySit);
         this.context.game.register(this.Room, 'myCards', this.myCards);
         this.context.game.register(this.Room, 'takeAction', this.takeAction);
-        this.context.game.register(this.Room, 'actionResult', this.actionResult);
+        this.context.game.register(this.Room, 'newLevel', this.newLevel);
         this.context.game.register(this.Room, 'gameResult', this.gameResult);
         this.context.game.register(this.Room, 'reset', this.reset);
     }
@@ -69,12 +69,18 @@ class Item extends Component {
             this.setState({
                 mySit,
                 timer: false,
-                canTake: false,
             })
         }
     }
     myCards(cards) {
-        this.setState({ cards })
+        if (this.state.mySit == this.props.sit)
+            this.setState({ cards })
+        else
+            this.setState({ cards: ['back', 'back'] })
+    }
+    newLevel(level) {
+        this.hideTimer();
+        clearTimeout(this.timer);
     }
     takeAction(sit) {
         this.hideTimer();
@@ -82,18 +88,11 @@ class Item extends Component {
         if (this.props.sit == sit) {
             this.showTimer();
         }
-        setTimeout(() => {
-            this.setState({ canTake: true });
-        }, 500);
-        this.timer = setTimeout(() => {
-            this.setState({ canTake: false });
-        }, this.context.state.setting.timer + 1000);
-
     }
     gameResult(res) {
         let winner = res.win;
         let loser = res.lose;
-        this.setState({ winner, loser, canTake: false });
+        this.setState({ winner, loser });
         setTimeout(() => {
             this.setState({ winner: [], loser: [] });
         }, 4900)
@@ -131,6 +130,7 @@ class Item extends Component {
         }
     }
     sit() {
+        play('click');
         this.context.game.send(this.Room, { sit: this.props.sit })
     }
     render() {
@@ -141,7 +141,7 @@ class Item extends Component {
         if (players != undefined) {
             if (sit in players) {
                 return (
-                    <Grid className="scale-in-center" style={styles.info} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
+                    <Grid className={"scale-in-center " + players[sit].state} style={styles.info} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
                         <div style={styles.xinfo}>
                             <Typography variant="body2" className="focus-in-expand" style={styles.name}>{players[sit].name}</Typography>
                             <Box style={styles.balance} display="flex" alignItems="center" className="focus-in-expand">
@@ -151,27 +151,39 @@ class Item extends Component {
                         </div>
                         <div style={styles.dAvatar} className={winner.includes(sit) ? "pulsate-fwd" : ""}>
                             <div style={styles.cinfo}>
-                                {(this.state.timer || (this.state.rolling && !('dice' in players[sit]))) &&
-                                    <Timer border time={this.context.state.setting.timer + 1000} />
+                                {this.state.timer &&
+                                    <Timer border time={this.Room.data.setting.timer} big={mySit == sit} />
                                 }
                                 <Avatar style={{ ...(mySit == sit ? styles.myAvatar : styles.avatar), backgroundColor: 'rgb(27, 26, 30)' }} >
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
-                                {cards.length > 0 &&
+                                {(cards.length > 0 && players[sit].state != 'fold') &&
                                     <div class="hand-card" style={this.cdir[align]} >
                                         {
                                             cards.map((card, i) => (
                                                 <div key={card}>
-                                                    <div class={'card hand _' + card + ' card-anim' + (i + 1)} />
+                                                    <div class={'card hand _' + card + ' card-anim' + (i + 1) + (mySit == sit ? '  my-hand' : '')} />
                                                 </div>
                                             ))
                                         }
                                     </div>
                                 }
-                                <Box style={{ ...styles.amount, ...this.adir[align] }} display="flex" alignItems="center" className="focus-in-expand">
-                                    <div class="bet-chip">&nbsp;</div>
-                                    <Typography variant="body2" style={styles.amountText}>{toMoney(players[sit].balance)}</Typography>
-                                </Box>
+                                {('bet' in players[sit] && players[sit].state != 'fold') &&
+                                    <Box style={{ ...styles.amount, ...this.adir[align] }} display="flex" alignItems="center" className="focus-in-expand">
+                                        <div class="bet-chip">&nbsp;</div>
+                                        <Typography variant="body2" style={styles.amountText}>
+                                            {players[sit].bet > 0
+                                                ? <CountUp
+                                                    start={0}
+                                                    end={players[sit].bet}
+                                                    decimals={amountLen(players[sit].bet)}
+                                                    {...(isFloat(players[sit].bet) ? undefined : { formattingFn: e => toMoney(e) })}
+                                                />
+                                                : 0
+                                            }
+                                        </Typography>
+                                    </Box>
+                                }
                             </div>
                         </div>
                     </Grid >
@@ -179,7 +191,7 @@ class Item extends Component {
             }
         }
         return (
-            <Grid className="scale-in-center" style={{ animationDelay: '.' + sit + 's' }} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
+            <Grid className="scale-in-center" style={{ animationDelay: '.' + sit/3 + 's' }} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
                 <Grid item style={styles.info} direction={this.dir[align]} >
                     <div style={styles.xinfo}>
                         <Typography style={styles.name}>&nbsp;</Typography>

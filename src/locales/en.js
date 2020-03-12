@@ -1,4 +1,8 @@
 export default {
+    needLogin: 'For joining the game you should login the system.',
+    networkError: 'Network Error ! please check your connection',
+    guest: 'Guest',
+
     lobby: 'LOBBY',
     name: 'Name',
     type: 'Type',
@@ -11,4 +15,5 @@ export default {
     fold: 'FOLD',
     call: 'CALL',
     raise: 'RAISE',
+    check: 'Check',
 }

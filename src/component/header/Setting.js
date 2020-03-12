@@ -10,10 +10,28 @@ import VolumeOff from '@material-ui/icons/VolumeOff';
 import VolumeUp from '@material-ui/icons/VolumeUp';
 import Refresh from '@material-ui/icons/Refresh';
 import FilterList from '@material-ui/icons/FilterList';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { toMoney } from 'library/Helper';
 import { t } from 'locales';
 import { connect } from 'react-redux';
 import Context from 'library/Context';
 import play from 'library/Sound';
+
+const ColorButton = withStyles(theme => ({
+    root: {
+        background: 'transparent',
+        border: '1px solid rgba(185, 183, 183, 0.2)',
+        padding: ' 1px 10px',
+        marginTop: 3,
+        borderRadius: 5,
+        minWidth: 60,
+        boxShadow: 'none',
+        '&:hover': {
+            background: 'transparent',
+        },
+    },
+}))(Button);
 
 class Setting extends Component {
     static contextType = Context;
@@ -58,7 +76,7 @@ class Setting extends Component {
     }
     render() {
         return (
-            <div>
+            <>
                 {this.props.tab.active == 'lobby'
                     ? <>
                         < IconButton onClick={() => null}  >
@@ -88,13 +106,33 @@ class Setting extends Component {
                         : <FullscreenExitIcon style={styles.icon} />
                     }
                 </IconButton>
-            </div>
+                {'name' in this.context.state.user &&
+                    <ColorButton disabled onClick={this.openMenu} variant="contained" color="primary" >
+                        <Typography component="div" style={styles.account}>
+                            {this.context.state.user.name}
+                            <Typography component="div" align="left" style={styles.accountSub}  >
+                                $ {toMoney(this.context.state.user.balance * 10000000 / 10000000)}
+                            </Typography>
+                        </Typography>
+                    </ColorButton>
+                }
+            </>
         );
     }
 }
 const styles = {
     icon: {
         color: '#fff'
+    },
+    account: {
+        fontSize: 13,
+        whiteSpace: 'nowrap',
+        color: '#fff'
+    },
+    accountSub: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: '#dbb316',
     },
 }
 

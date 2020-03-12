@@ -24,24 +24,17 @@ class Item extends Component {
             down: { right: -80 },
             left: { bottom: -60 }
         }
-        this.adir = {
-            right: { left: -80 },
-            up: { bottom: -40 },
-            down: { top: -40 },
-            left: { right: -80 }
-        }
         this.dir = {
-            left: 'row',
+            right: 'row',
             up: 'column',
             down: 'column-reverse',
-            right: 'row-reverse'
+            left: 'row-reverse'
         }
         autoBind(this);
     }
     render() {
         const { align, sit } = this.props;
         const players = this.props.state.users;
-        console.log(this.props.state)
         if (players != undefined) {
             if (sit in players) {
                 return (
@@ -65,7 +58,7 @@ class Item extends Component {
             }
         }
         return (
-            <Grid className="scale-in-center" style={{ animationDelay: '.' + sit + 's' }} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
+            <Grid className="scale-in-center" style={{ animationDelay: '.' + sit/2 + 's' }} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
                 <Grid item style={styles.info} direction={this.dir[align]} >
                     <div style={styles.xinfo}>
                         <Typography style={styles.name}>&nbsp;</Typography>

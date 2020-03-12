@@ -2,7 +2,7 @@
 .pocker-desc {
   position: relative;
   width: 80%;
-  height: 60%;
+  height: 65%;
   max-width: 1000px;
   position: absolute;
   left: 50%;
@@ -74,9 +74,14 @@
   right: -135px;
   top: 0;
   bottom: 0;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.wood.p9 .right{
+  right: -115px;
 }
 .mini-table .wood .right{
-  right: -105px;
+  right: -25px;
 }
 .wood .left{
   height: 100%;
@@ -84,9 +89,14 @@
   left: -135px;
   top: 0;
   bottom: 0;
+  flex-direction: column-reverse;
+  justify-content: space-around;
+}
+.wood.p9 .left{
+  left: -115px;
 }
 .mini-table .wood .left{
-  left: -105px;
+  left: -25px;
 }
 .board {
   width: 100%;
@@ -147,6 +157,10 @@
 .hand{
   width: 40px;
   height: 54px;
+}
+.my-hand{
+  width: 46px;
+  height: 65px;
 }
 .card.anim{
   animation: cardshowing 0.2s linear;

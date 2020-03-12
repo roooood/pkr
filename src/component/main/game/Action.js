@@ -17,7 +17,7 @@ const IOSSlider = withStyles({
     root: {
         color: '#d58328',
         height: 4,
-        margin: '20px 2% 0 5%',
+        margin: '20px 1% 0 3%',
         width: 300,
         padding: 0
     },
@@ -123,7 +123,6 @@ class Action extends Component {
         this.Room = this.props.Room;
         this.state = {
             mySit: 0,
-            timer: false,
             canTake: false,
             bet: this.Room.data.min,
         };
@@ -131,12 +130,18 @@ class Action extends Component {
     }
     componentDidMount() {
         this.context.game.register(this.Room, 'mySit', this.mySit);
-        this.context.game.register(this.Room, 'action', this.takeAction);
+        this.context.game.register(this.Room, 'takeAction', this.takeAction);
+        this.context.game.register(this.Room, 'newLevel', this.newLevel);
+        this.context.game.register(this.Room, 'reset', this.reset);
+    }
+    reset() {
+        this.setState({
+            canTake: false,
+        });
     }
     mySit(mySit) {
         this.setState({
             mySit,
-            timer: false,
             canTake: false,
         })
     }
@@ -146,33 +151,55 @@ class Action extends Component {
     valuetext(value) {
         return toMoney(value);
     }
+    newLevel(level) {
+        this.setState({ canTake: false });
+    }
+    takeAction(sit) {
+        if (this.state.mySit == sit) {
+            play('turn')
+            setTimeout(() => {
+                this.setState({ canTake: true });
+            }, 500);
+            this.timer = setTimeout(() => {
+                this.setState({ canTake: false });
+            }, this.Room.data.setting.timer + 1000);
+        }
+        else {
+            this.setState({ canTake: false });
+        }
+    }
+    actionIs(type) {
+        play('click')
+        this.context.game.send(this.Room, { action: [type, this.state.bet] })
+    }
     render() {
+        const { players } = this.props.state;
+        if (this.state.canTake == false)
+            return null;
         return (
             <Grid className="scale-in-center" style={styles.box} container >
-                <RaiseBtn onClick={() => null}>
-                    <Typography style={styles.text}>{t('raise')}</Typography>
-                    <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
-                </RaiseBtn>
+                <CallBtn onClick={() => this.actionIs('call')}>
+                    <Typography style={styles.text}>{this.props.state.bet == players[this.state.mySit].bet ? t('check') : t('call')}</Typography>
+                    <Typography style={styles.sub}>{toMoney(this.props.state.bet)}</Typography>
+                </CallBtn>
+                <FoldBtn onClick={() => this.actionIs('fold')}>
+                    <Typography style={styles.text}>{t('fold')}</Typography>
+                    <Typography style={styles.sub}>X</Typography>
+                </FoldBtn>
                 <IOSSlider
                     track={false}
                     value={this.state.bet}
                     onChange={this.changeBet}
                     valueLabelDisplay="on"
-                    aria-labelledby="range-slider"
                     min={'bet' in this.props.state ? this.props.state.bet : this.Room.data.min}
-                    max={this.context.state.balance > this.Room.data.max ? this.Room.data.max : this.context.state.balance}
+                    max={this.context.state.user.balance > this.Room.data.max ? this.Room.data.max : this.context.state.user.balance}
                     step={this.Room.data.setting.step}
                     valueLabelFormat={this.valuetext}
                 />
-                <CallBtn onClick={() => null}>
-                    <Typography style={styles.text}>{t('call')}</Typography>
-                    <Typography style={styles.sub}>24.00</Typography>
-                </CallBtn>
-                <FoldBtn onClick={() => null}>
-                    <Typography style={styles.text}>{t('fold')}</Typography>
-                    <Typography style={styles.sub}>X</Typography>
-                </FoldBtn>
-
+                <RaiseBtn onClick={() => this.actionIs('raise')}>
+                    <Typography style={styles.text}>{t('raise')}</Typography>
+                    <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
+                </RaiseBtn>
             </Grid >
         )
     }

@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Position from './Position';
 import Action from './Action';
 import { t } from 'locales';
+import Loading from 'component/component/Loading';
 
 class Table extends Component {
     static contextType = Context;
@@ -43,7 +44,7 @@ class Table extends Component {
         this.context.game.getAvailableRooms((rooms) => {
             let roomId = 'poker';
             for (let item of rooms) {
-                if (!('metadata' in item))
+                if (!('metadata' in item) || typeof item.metadata == 'undefined')
                     continue;
                 if (item.metadata.id == this.roomId) {
                     roomId = item.roomId;
@@ -75,7 +76,7 @@ class Table extends Component {
 
     render() {
         if (this.state.loading)
-            return (<div>Loading</div>)
+            return (<Loading />)
         return (
             <div style={styles.root}>
                 <Position state={this.state} Room={this.Room} />

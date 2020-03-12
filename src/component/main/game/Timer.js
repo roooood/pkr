@@ -31,14 +31,11 @@ export default class Timer extends Component {
     }
 
     render() {
-        if (!this.context.state.started) {
-            return null;
-        }
         if ('border' in this.props) {
             if (this.state.completed == 100)
                 return null;
             return (
-                <CircularProgress style={styles.progress} thickness={3} mode="determinate" color="secondary" variant="determinate" value={this.state.completed} />
+                <CircularProgress style={{...styles.progress,...(this.props.big == true ?styles.big:styles.small )}} thickness={3} mode="determinate" color="secondary" variant="determinate" value={this.state.completed} />
             )
         }
         return (
@@ -53,9 +50,15 @@ const styles = {
         width: '100%',
         height: 5
     },
-    progress: {
+    big: {
+        width: 60,
+        height: 60,
+    },
+    small: {
         width: 50,
         height: 50,
+    },
+    progress: {
         position: 'absolute',
         zIndex: 9
     },

@@ -3,6 +3,7 @@ const Sound = {
     win: new Audio(require('assets/sound/win.mp3')),
     lose: new Audio(require('assets/sound/lose.mp3')),
     message: new Audio(require('assets/sound/message.mp3')),
+    turn: new Audio(require('assets/sound/turn.mp3')),
 }
 let Vulume = true;
 export default function play(key) {

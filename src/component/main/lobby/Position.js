@@ -16,29 +16,49 @@ class Position extends Component {
     }
 
     render() {
-        const sit = this.props.state.player;
+        let { player } = this.props.state;
         return (
-            <div style={styles.root} class="mini-table">
-                <div class="pocker-desc">
-                    <div class="leather">
-                        <div class="wood">
-                            <div class="top positions">
-                                <Item align="up" state={this.props.state} sit={1} />
+            <div style={styles.root} className="mini-table">
+                <div className="pocker-desc">
+                    <div className="leather">
+                        <div className={"wood p" + player}>
+                            <div className="top positions">
+                                {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
+                                    <Item align="up" state={this.props.state} sit={1} />
+                                }
                                 <img src={Milf} style={styles.milf} />
-                                <Item align="up" state={this.props.state} sit={7} />
+                                {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
+                                    <Item align="up" state={this.props.state} sit={9} />
+                                }
                             </div>
-                            <div class="left positions">
-                                <Item align="left" state={this.props.state} sit={6} />
+                            <div className="left positions">
+                                {[9, 8, 7, 6, 5].includes(player) &&
+                                    <Item align="left" state={this.props.state} sit={7} />
+                                }
+                                {[8, 9, 2].includes(player) &&
+                                    <Item align="left" state={this.props.state} sit={8} />
+                                }
                             </div>
-                            <div class="bottom positions">
-                                <Item align="down" state={this.props.state} sit={5} />
-                                <Item align="down" state={this.props.state} sit={4} />
-                                <Item align="down" state={this.props.state} sit={3} />
+                            <div className="bottom positions">
+                                {[9, 8, 7, 6, 4].includes(player) &&
+                                    <Item align="down" state={this.props.state} sit={6} />
+                                }
+                                {[5, 7, 9, 3].includes(player) &&
+                                    <Item align="down" state={this.props.state} sit={5} />
+                                }
+                                {[9, 8, 7, 6, 4].includes(player) &&
+                                    <Item align="down" state={this.props.state} sit={4} />
+                                }
                             </div>
-                            <div class="right positions">
-                                <Item align="right" state={this.props.state} sit={2} />
+                            <div className="right positions">
+                                {[9, 8, 7, 6, 5].includes(player) &&
+                                    <Item align="right" state={this.props.state} sit={2} />
+                                }
+                                {[8, 9, 2].includes(player) &&
+                                    <Item align="right" state={this.props.state} sit={3} />
+                                }
                             </div>
-                            <div class="board">
+                            <div className="board">
                             </div>
                         </div>
                     </div>
@@ -85,7 +105,8 @@ const styles = {
     },
     milf: {
         marginTop: '-2vw',
-        width: '10vw'
+        width: '8vw',
+        maxWidth: 50
     },
     money: {
         color: '#fff',

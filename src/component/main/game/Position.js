@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import Grid from '@material-ui/core/Grid';
+import CountUp from 'react-countup';
 import { createMuiTheme } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import AccountBalance from '@material-ui/icons/AccountBalance';
 import AttachMoney from '@material-ui/icons/AttachMoney';
 import Item from './Seat';
 import autoBind from 'react-autobind';
@@ -83,39 +80,76 @@ class Position extends Component {
         }
     }
     render() {
-        const { sit, mySit } = this.state;
-        console.log(this.props.state);
-        const { deck } = this.props.state;
+        const { deck, bank } = this.props.state;
+        let decks = deck || [];
+        if (decks.length > 0) {
+            let size = 5 - decks.length;
+            for (let i = 0; i < size; i++)
+                decks.push('')
+        }
+        const { player } = this.Room.data;
         return (
             <div style={styles.root}>
-                <div class="pocker-desc">
-                    <div class="leather">
-                        <div class="wood">
-                            <div class="top positions">
-                                <Item align="up" Room={this.Room} state={this.props.state} sit={1} />
+                <div className="pocker-desc">
+                    <div className="leather">
+                        <div className={"wood p" + player}>
+                            <div className="top positions">
+                                {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
+                                    <Item align="up" Room={this.Room} state={this.props.state} sit={1} />
+                                }
                                 <img src={Milf} style={styles.milf} />
-                                <Item align="up" Room={this.Room} state={this.props.state} sit={7} />
+                                {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
+                                    <Item align="up" Room={this.Room} state={this.props.state} sit={9} />
+                                }
                             </div>
-                            <div class="left positions">
-                                <Item align="left" Room={this.Room} state={this.props.state} sit={6} />
+                            <div className="left positions">
+                                {[9, 8, 7, 6, 5].includes(player) &&
+                                    <Item align="left" Room={this.Room} state={this.props.state} sit={7} />
+                                }
+                                {[8, 9, 2].includes(player) &&
+                                    <Item align="left" Room={this.Room} state={this.props.state} sit={8} />
+                                }
                             </div>
-                            <div class="bottom positions">
-                                <Item align="down" Room={this.Room} state={this.props.state} sit={5} />
-                                <Item align="down" Room={this.Room} state={this.props.state} sit={4} />
-                                <Item align="down" Room={this.Room} state={this.props.state} sit={3} />
+                            <div className="bottom positions">
+                                {[9, 8, 7, 6, 4].includes(player) &&
+                                    <Item align="down" Room={this.Room} state={this.props.state} sit={6} />
+                                }
+                                {[5, 7, 9, 3].includes(player) &&
+                                    <Item align="down" Room={this.Room} state={this.props.state} sit={5} />
+                                }
+                                {[9, 8, 7, 6, 4].includes(player) &&
+                                    <Item align="down" Room={this.Room} state={this.props.state} sit={4} />
+                                }
                             </div>
-                            <div class="right positions">
-                                <Item align="right" Room={this.Room} state={this.props.state} sit={2} />
+                            <div className="right positions">
+                                {[9, 8, 7, 6, 5].includes(player) &&
+                                    <Item align="right" Room={this.Room} state={this.props.state} sit={2} />
+                                }
+                                {[8, 9, 2].includes(player) &&
+                                    <Item align="right" Room={this.Room} state={this.props.state} sit={3} />
+                                }
                             </div>
-                            <div class="board">
-                                <div class="board-line">
-                                    <AttachMoney style={styles.money} />
-                                    <div class="bet-value">1,000</div>
-                                </div>
-                                <div class="board-cards">
+                            <div className="board">
+                                {bank > 0 &&
+                                    <div className="board-line">
+                                        <AttachMoney style={styles.money} />
+                                        <div className="bet-value">
+                                            {bank > 0
+                                                ? <CountUp
+                                                    start={0}
+                                                    end={bank}
+                                                    decimals={amountLen(bank)}
+                                                    {...(isFloat(bank) ? undefined : { formattingFn: e => toMoney(e) })}
+                                                />
+                                                : 0
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                <div className="board-cards">
                                     {
-                                        (deck || []).map((card, i) => (
-                                            <div key={i} class={"card anim _" + card}></div>
+                                        (decks).map((card, i) => (
+                                            <div key={i} className={"card anim _" + card}></div>
                                         ))
                                     }
                                 </div>
@@ -128,7 +162,8 @@ class Position extends Component {
         );
     }
 }
-let theme = createMuiTheme()
+
+let theme = createMuiTheme();
 
 const styles = {
     root: {
@@ -163,7 +198,8 @@ const styles = {
     },
     milf: {
         marginTop: '-2vw',
-        width: '10vw'
+        width: '10vw',
+        maxWidth: 70
     },
     money: {
         color: '#fff',

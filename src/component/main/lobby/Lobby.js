@@ -22,6 +22,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Position from './Position';
+import Loading from 'component/component/Loading';
+import play from 'library/Sound';
 
 const StyledCard = withStyles(theme => ({
     root: {
@@ -30,11 +32,12 @@ const StyledCard = withStyles(theme => ({
         height: '97%'
     },
 }))(Card);
+
 const StyledCardHeader = withStyles(theme => ({
     root: {
-        color: '#fff',
+        color: '#dbb316',
         textAlign: 'center',
-        backgroundColor: '#2c3e62',
+        backgroundColor: '#2c3762',
     },
     title: {
         fontSize: '1.1rem',
@@ -46,7 +49,7 @@ const StyledCardHeader = withStyles(theme => ({
 
 const StyledTableCell = withStyles(theme => ({
     head: {
-        backgroundColor: '#2c3e62',
+        backgroundColor: '#2c3762',
         color: '#fff',
         border: 0,
         padding: 15
@@ -102,8 +105,10 @@ class ListTable extends Component {
         super(props);
         this.state = {
             rooms: [],
-            active: {},
+            active: 0,
             table: {},
+            onlines: 0,
+            loading: true
         };
         autoBind(this);
         this.timer = null;
@@ -115,11 +120,10 @@ class ListTable extends Component {
     }
     getTableList() {
         request('tableList', rooms => {
-            this.connectToGame()
-            this.setState({
-                rooms: rooms,
-                active: rooms[0]
-            })
+            if (rooms.length > 0) {
+                this.connectToGame()
+                this.setState({ rooms })
+            }
         });
     }
     connectToGame() {
@@ -136,12 +140,18 @@ class ListTable extends Component {
         this.getList();
     }
     conected() {
+        this.getList();
         this.timer = setInterval(() => {
-            this.getList()
+            this.getList();
         }, 5000);
+
+        setTimeout(() => {
+            this.setState({ loading: false })
+        }, 200);
     }
     getList() {
         this.context.game.getAvailableRooms((rooms) => {
+            let onlines = 0;
             for (let room of this.state.rooms) {
                 room.live = false;
                 room.ready = 0;
@@ -150,13 +160,14 @@ class ListTable extends Component {
                 room.users = {};
             }
             for (let item of rooms) {
-                if (!('metadata' in item))
+                if (!('metadata' in item) || typeof item.metadata == 'undefined')
                     continue;
                 let id = item.metadata.id;
                 for (let room of this.state.rooms) {
+                    onlines += item.clients || 0;
                     if (room.id == id) {
                         room.ready = item.metadata.ready;
-                        room.clients = item.metadata.clients;
+                        room.clients = item.clients;
                         room.users = item.metadata.users;
                         room.live = true;
                         room.roomId = item.roomId;
@@ -164,6 +175,7 @@ class ListTable extends Component {
                     }
                 }
             }
+            this.setState({ onlines })
         });
     }
 
@@ -179,16 +191,20 @@ class ListTable extends Component {
 
     }
     addTab({ id, name, type }) {
+        play('click')
         this.props.dispatch(TabbarAdd({
             key: 't' + id,
             value: { id, name, type, }
         }));
     }
     setActive(active) {
+        play('click')
         this.setState({ active })
     }
     render() {
         const { rooms, active } = this.state;
+        if (this.state.loading)
+            return (<Loading />)
         return (
             <div style={styles.root} >
                 <div style={styles.lobby} className="lobby">
@@ -208,14 +224,14 @@ class ListTable extends Component {
                                 </StyledTableRow>
                             </TableHead>
                             <TableBody>
-                                {rooms.map(row => {
+                                {rooms.map((row, i) => {
                                     return (
                                         <StyledTableRow
                                             hover
                                             onDoubleClick={() => this.addTab(row)}
-                                            onClick={() => this.setActive(row)}
+                                            onClick={() => this.setActive(i)}
                                             tabIndex={-1}
-                                            style={row.id == active.id ? styles.active : {}}
+                                            style={row.id == rooms[active].id ? styles.active : {}}
                                             key={row.id}>
                                             {columns.map(column => {
                                                 const value = row[column.id] || null;
@@ -238,18 +254,18 @@ class ListTable extends Component {
                         </div>
                         <div style={styles.space}>
                             <Typography style={styles.text} display="inline">{t('onlineUsers')} :</Typography>
-                            <Typography style={styles.xtext} display="inline">{this.context.state.onlines || 0}</Typography>
+                            <Typography style={styles.xtext} display="inline">{this.state.onlines}</Typography>
                         </div>
                     </div>
                 </div>
-                <div style={styles.preview} className="preview">
+                <div className="preview">
                     <StyledCard >
                         <StyledCardHeader
-                            title={active.name}
+                            title={rooms[active].name}
                         // subheader={active.type}
                         />
                         <CardContent style={styles.prew}>
-                            <Position state={this.state.active} />
+                            <Position state={rooms[active]} />
                         </CardContent>
                         <CardActions disableSpacing>
 
@@ -277,10 +293,6 @@ const styles = {
     prew: {
         paddingTop: '25%'
     },
-    preview: {
-        display: 'flex',
-        height: '100%',
-    },
     table: {
         borderRadius: 5,
         overflow: 'hidden',
@@ -300,15 +312,15 @@ const styles = {
         flex: 1
     },
     text: {
-        fontSize: '.9rem'
+        fontSize: '.85rem'
     },
     xtext: {
-        color: 'rgb(116, 219, 110)',
+        color: '#dbb316',
         marginRight: 10,
         marginLeft: 10
     },
     active: {
-        background: 'rgba(100, 99, 94, 0.19)'
+        background: 'rgba(50, 98, 60, 0.18)'
     }
 }
 export default connect(state => state)(ListTable);
