@@ -49,6 +49,7 @@ class Item extends Component {
         autoBind(this);
     }
     reset() {
+        clearTimeout(this.timer);
         this.setState({
             timer: false,
             winner: [],
@@ -63,6 +64,17 @@ class Item extends Component {
         this.context.game.register(this.Room, 'newLevel', this.newLevel);
         this.context.game.register(this.Room, 'gameResult', this.gameResult);
         this.context.game.register(this.Room, 'reset', this.reset);
+        this.context.game.register(this.Room, 'guest', this.guest);
+        this.context.game.register(this.Room, 'actionIs', this.actionIs);
+    }
+    actionIs([sit, type]) {
+        if (sit == this.props.sit) {
+            if (type == 'fold')
+                this.reset();
+        }
+    }
+    guest() {
+        window.ee.emit('notify', { message: t('needLogin'), type: 'error' })
     }
     mySit(mySit) {
         if (this.props.sit == mySit) {
@@ -73,10 +85,11 @@ class Item extends Component {
         }
     }
     myCards(cards) {
+        console.log(this.state.mySit, this.props.sit)
         if (this.state.mySit == this.props.sit)
             this.setState({ cards })
         else
-            this.setState({ cards: ['back', 'back'] })
+            this.setState({ cards: new Array(cards.length).fill('back') })
     }
     newLevel(level) {
         this.hideTimer();
@@ -158,19 +171,19 @@ class Item extends Component {
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
                                 {(cards.length > 0 && players[sit].state != 'fold') &&
-                                    <div class="hand-card" style={this.cdir[align]} >
+                                    <div className={"hand-card c" + cards.length} style={this.cdir[align]} >
                                         {
                                             cards.map((card, i) => (
                                                 <div key={card}>
-                                                    <div class={'card hand _' + card + ' card-anim' + (i + 1) + (mySit == sit ? '  my-hand' : '')} />
+                                                    <div className={'card hand _' + card + ' card-anim' + (i + 1) + (mySit == sit ? '  my-hand' : '')} />
                                                 </div>
                                             ))
                                         }
                                     </div>
                                 }
                                 {('bet' in players[sit] && players[sit].state != 'fold') &&
-                                    <Box style={{ ...styles.amount, ...this.adir[align] }} display="flex" alignItems="center" className="focus-in-expand">
-                                        <div class="bet-chip">&nbsp;</div>
+                                    <Box style={{ ...styles.amount, ...this.adir[align] }} display="flex" alignItems="center" classNameName="focus-in-expand">
+                                        <div className="bet-chip">&nbsp;</div>
                                         <Typography variant="body2" style={styles.amountText}>
                                             {players[sit].bet > 0
                                                 ? <CountUp
@@ -191,7 +204,7 @@ class Item extends Component {
             }
         }
         return (
-            <Grid className="scale-in-center" style={{ animationDelay: '.' + sit/3 + 's' }} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
+            <Grid className="scale-in-center" style={{ animationDelay: '.' + sit / 3 + 's' }} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
                 <Grid item style={styles.info} direction={this.dir[align]} >
                     <div style={styles.xinfo}>
                         <Typography style={styles.name}>&nbsp;</Typography>

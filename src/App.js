@@ -20,6 +20,9 @@ import 'assets/css/cards.css';
 let EventEmitter = require('events')
 window.ee = new EventEmitter();
 
+const lang = getQuery('lang') || 'fa';
+const dir = lang == 'fa' ? 'rtl' : 'ltr'
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +30,7 @@ class App extends Component {
       userKey: getQuery('token') || '-',
       user: {},
       isMobile: window.innerWidth <= 900,
+      dir: dir
     };
     this.game = new GameServer('poker');
     autoBind(this);

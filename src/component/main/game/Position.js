@@ -47,12 +47,12 @@ class Position extends Component {
 
     }
     reset() {
-        this.state.start = 0;
-        this.state.end = 0;
-        // this.setState({
-        //     start: 0,
-        //     end: 0,
-        // })
+        // this.state.start = 0;
+        // this.state.end = 0;
+        this.setState({
+            start: 0,
+            end: 0,
+        })
     }
     gameResult(res) {
         let winer = res.win;
@@ -197,9 +197,8 @@ const styles = {
         margin: 4
     },
     milf: {
-        marginTop: '-2vw',
-        width: '10vw',
-        maxWidth: 70
+        marginTop: -50,
+        width: 150,
     },
     money: {
         color: '#fff',

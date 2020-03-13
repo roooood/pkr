@@ -131,13 +131,12 @@ class Action extends Component {
     componentDidMount() {
         this.context.game.register(this.Room, 'mySit', this.mySit);
         this.context.game.register(this.Room, 'takeAction', this.takeAction);
-        this.context.game.register(this.Room, 'newLevel', this.newLevel);
+        this.context.game.register(this.Room, 'newLevel', this.reset);
         this.context.game.register(this.Room, 'reset', this.reset);
+        this.context.game.register(this.Room, 'actionIs', this.reset);
     }
     reset() {
-        this.setState({
-            canTake: false,
-        });
+        this.setState({ canTake: false });
     }
     mySit(mySit) {
         this.setState({
@@ -150,9 +149,6 @@ class Action extends Component {
     }
     valuetext(value) {
         return toMoney(value);
-    }
-    newLevel(level) {
-        this.setState({ canTake: false });
     }
     takeAction(sit) {
         if (this.state.mySit == sit) {
@@ -211,7 +207,6 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 10
     },
     text: {
         fontSize: '.8em'

@@ -152,6 +152,7 @@
   box-sizing: border-box;
   margin: 0 3px;
   background-size: cover;
+  box-shadow: -1px 0px 8px #555;
 }
 
 .hand{
@@ -173,12 +174,24 @@
   display: flex;
   flex-direction: row;
 }
-
-.hand-card>div:first-child{
+.hand-card.c2>div:first-child{
   transform: rotate(-10deg) translateX(5px);
 }
-.hand-card>div:last-child{
+.hand-card.c2>div:last-child{
   transform: rotate(10deg) translateX(-5px);
+}
+
+.hand-card.c4>div:nth-child(1){
+  transform: rotate(10deg) translateX(34px);
+}
+.hand-card.c4>div:nth-child(2){
+  transform: rotate(2deg) translateX(11px) translateX(-2px) translateY(9px);
+}
+.hand-card.c4>div:nth-child(3){
+  transform: rotate(-2deg) translateX(6px) translateX(-19px) translateY(9px);
+}
+.hand-card.c4>div:nth-child(4){
+  transform: rotate(-10deg) translateX(-21px) translateX(-12px) translateY(0px);
 }
 
 .ref .card { animation: none; }
@@ -210,3 +223,10 @@
 }
 .btn-grad {background-image: linear-gradient(to right, #6441A5 0%, #2a0845 51%, #6441A5 100%)}
 .btn-grad:hover { background-position: right center; } 
+
+@media only screen and (max-width: 950px) {
+  .pocker-desc {
+    width: 70%;
+    height: 70%;
+  }
+}

@@ -1,7 +1,13 @@
 export default {
     needLogin: 'For joining the game you should login the system.',
     networkError: 'Network Error ! please check your connection',
+
     guest: 'Guest',
+    send: 'Send',
+    guestCantchat: 'Guest player can not send chat message',
+    writeSomething: 'Write something',
+    delete: 'Delete',
+    mute: 'Mute',
 
     lobby: 'LOBBY',
     name: 'Name',

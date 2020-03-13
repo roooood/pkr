@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import autoBind from 'react-autobind';
 import Context from 'library/Context';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
-import Close from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
 import Position from './Position';
 import Action from './Action';
 import { t } from 'locales';
 import Loading from 'component/component/Loading';
+import Chat from 'component/chat/Chat';
 
 class Table extends Component {
     static contextType = Context;
@@ -79,14 +77,22 @@ class Table extends Component {
             return (<Loading />)
         return (
             <div style={styles.root}>
-                <Position state={this.state} Room={this.Room} />
-                <Action state={this.state} Room={this.Room} />
+                <Chat state={this.state} Room={this.Room} />
+                <div style={styles.main}>
+                    <Position state={this.state} Room={this.Room} />
+                    <Action state={this.state} Room={this.Room} />
+                </div>
             </div>
         )
     }
 }
 const styles = {
     root: {
+        display: 'flex',
+        flex: 1,
+        position: 'relative',
+    },
+    main: {
         display: 'flex',
         flex: 1,
         position: 'relative',

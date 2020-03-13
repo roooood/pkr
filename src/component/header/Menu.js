@@ -19,7 +19,7 @@ class Menu extends Component {
     }
     render() {
         return (
-            <img style={{ width: 120 }} src={require('assets/img/logo.png')} />
+            <img style={{ width: 70 }} src={require('assets/img/logo.png')} />
         );
     }
 }
