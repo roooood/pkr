@@ -14,6 +14,7 @@ import { t } from 'locales';
 import play from 'library/Sound';
 import CountUp from 'react-countup';
 import { toMoney, getOffset, amountLen, isFloat, add } from 'library/Helper';
+import avatars from 'library/Avatar';
 
 class Item extends Component {
     static contextType = Context;
@@ -167,7 +168,10 @@ class Item extends Component {
                                 {this.state.timer &&
                                     <Timer border time={this.Room.data.setting.timer} big={mySit == sit} />
                                 }
-                                <Avatar className={mySit == sit ? "my-avatar" : "avatar"} style={{ ...styles.avatar, backgroundColor: 'rgb(27, 26, 30)' }} >
+                                <Avatar
+                                    src={avatars[this.context.state.user.avatar || null]}
+                                    className={mySit == sit ? "my-avatar" : "avatar"}
+                                    style={{ ...styles.avatar, backgroundColor: 'rgb(27, 26, 30)' }} >
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
                                 {(cards.length > 0 && players[sit].state != 'fold') &&

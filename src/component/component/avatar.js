@@ -17,8 +17,9 @@ class Avatar extends React.Component {
     }
     pick(avatar) {
         request('avatar/' + avatar + '/' + this.context.state.userKey, res => {
-
         });
+        this.context.state.user.avatar = avatar;
+        window.ee.emit('hideModal')
     }
     render() {
         return (

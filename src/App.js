@@ -42,17 +42,13 @@ class App extends Component {
         if (typeof res == 'object') {
           if (res.result == 'ok') {
             if (res.data.avatar == null) {
-              this.modal.show()
+              this.modal.show(<Avatar />)
             }
             this.setState({ user: res.data })
           }
         }
       });
     }
-    setTimeout(() => {
-      // let Avatar = React.lazy(() => import('component/component/Avatar'));
-      this.modal.show(<Avatar />)
-    }, 2000);
   }
   changeState(obj) {
     this.setState(obj)

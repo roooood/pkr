@@ -15,8 +15,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const StyledModal = withStyles(theme => ({
     paper: {
-        backgroundColor: '#25272b',
+        backgroundColor: '#262539',
         color: ' #fff',
+        boxShadow: '0 0 40px #373737'
     },
 }))(Dialog);
 const StyledModal2 = withStyles(theme => ({
