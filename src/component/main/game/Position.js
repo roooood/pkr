@@ -7,6 +7,16 @@ import autoBind from 'react-autobind';
 import Context from 'library/Context';
 import { toMoney, getOffset, amountLen, isFloat, add } from 'library/Helper';
 import { t } from 'locales';
+import Tooltip from '@material-ui/core/Tooltip';
+
+const LightTooltip = withStyles(theme => ({
+    tooltip: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}))(Tooltip);
 
 import play from 'library/Sound';
 import Milf from 'assets/img/milf.png';
@@ -88,6 +98,8 @@ class Position extends Component {
                 decks.push('')
         }
         const { player } = this.Room.data;
+        let commission = (Number(this.Room.data.setting.commission) * this.props.state.bank) / 100;
+
         return (
             <div style={styles.root}>
                 <div className="pocker-desc">
@@ -97,7 +109,9 @@ class Position extends Component {
                                 {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
                                     <Item align="up" Room={this.Room} state={this.props.state} sit={1} />
                                 }
-                                <img src={Milf} className="milf" />
+                                <LightTooltip title={t('commission') +': '+commission}>
+                                    <img src={Milf} className="milf" />
+                                </LightTooltip>
                                 {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
                                     <Item align="up" Room={this.Room} state={this.props.state} sit={9} />
                                 }

@@ -17,6 +17,7 @@ import { toMoney, getOffset, amountLen, isFloat, add } from 'library/Helper';
 import avatars from 'library/Avatar';
 import chip from 'assets/img/chip.png';
 
+
 class Item extends Component {
     static contextType = Context;
     constructor(props) {
@@ -190,7 +191,7 @@ class Item extends Component {
                                     <div className={"hand-card c" + cards.length} style={this.cdir[align]} >
                                         {
                                             cards.map((card, i) => (
-                                                <div key={card}>
+                                                <div key={card} style={{zIndex: 10}}>
                                                     <div className={'card hand _' + card + ' card-anim' + (i + 1) + (mySit == sit ? '  my-hand' : '')} />
                                                 </div>
                                             ))

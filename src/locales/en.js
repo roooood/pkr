@@ -23,4 +23,5 @@ export default {
     call: 'CALL',
     raise: 'RAISE',
     check: 'Check',
+    commission:'Commission'
 }
