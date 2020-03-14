@@ -12,7 +12,8 @@ class Table extends Component {
     constructor(props, context) {
         super(props);
         this.state = {
-            loading: true
+            loading: true,
+            players: {},
         };
         this.Room = null;
         this.roomId = this.props.parent.id;
@@ -77,8 +78,10 @@ class Table extends Component {
             return (<Loading />)
         return (
             <div style={styles.root}>
-                <Chat state={this.state} Room={this.Room} />
-                <div style={styles.main}>
+                {!this.context.state.isMobile &&
+                    <Chat state={this.state} Room={this.Room} />
+                }
+                <div style={this.context.state.isMobile ? styles.mmain : styles.main}>
                     <Position state={this.state} Room={this.Room} />
                     <Action state={this.state} Room={this.Room} />
                 </div>
@@ -97,6 +100,11 @@ const styles = {
         flex: 1,
         position: 'relative',
         flexDirection: 'column',
+    },
+    mmain: {
+        display: 'flex',
+        flex: 1,
+        position: 'relative',
     },
     action: {
         position: 'absolute',

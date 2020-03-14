@@ -164,7 +164,7 @@ background:rgb(90, 90, 90);
   display: inline-block;
   border-radius: 50px;
   background:rgb(26, 23, 38);
-  color: rgb(219, 179, 22);
+  color: #fafafac7;
   cursor: pointer;
   transition: all 0.2s linear;
   text-align: center;

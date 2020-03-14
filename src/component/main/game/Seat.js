@@ -167,7 +167,7 @@ class Item extends Component {
                                 {this.state.timer &&
                                     <Timer border time={this.Room.data.setting.timer} big={mySit == sit} />
                                 }
-                                <Avatar style={{ ...(mySit == sit ? styles.myAvatar : styles.avatar), backgroundColor: 'rgb(27, 26, 30)' }} >
+                                <Avatar className={mySit == sit ? "my-avatar" : "avatar"} style={{ ...styles.avatar, backgroundColor: 'rgb(27, 26, 30)' }} >
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
                                 {(cards.length > 0 && players[sit].state != 'fold') &&
@@ -212,7 +212,7 @@ class Item extends Component {
                             <Typography  >&nbsp;</Typography>
                         </Box>
                     </div>
-                    <Avatar style={{ ...styles.avatar, backgroundColor: '#332c44' }} onClick={this.sit}>
+                    <Avatar className={"avatar"} style={{ ...styles.avatar, backgroundColor: '#332c44' }} onClick={this.sit}>
                         <PersonAdd />
                     </Avatar>
                 </Grid>
@@ -243,15 +243,11 @@ const styles = {
         position: 'relative'
     },
     avatar: {
-        width: 50,
-        height: 50,
         color: '#faa001',
         border: '1px solid #ddd',
         cursor: 'pointer',
     },
     myAvatar: {
-        width: 60,
-        height: 60,
         color: '#faa001',
         border: '1px solid #faa001',
         cursor: 'pointer',

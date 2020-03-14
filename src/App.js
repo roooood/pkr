@@ -40,6 +40,9 @@ class App extends Component {
       request('info/' + this.state.userKey, res => {
         if (typeof res == 'object') {
           if (res.result == 'ok') {
+            if (res.data.avatar == null) {
+              this.modal.show()
+            }
             this.setState({ user: res.data })
           }
         }

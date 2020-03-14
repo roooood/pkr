@@ -75,6 +75,52 @@ class Setting extends Component {
         this.context.setState({ mute: act });
     }
     render() {
+        if (this.context.state.isMobile)
+            return (
+                <div style={styles.root} >
+                    <div>
+                        {this.props.tab.active == 'lobby'
+                            ? <>
+                                < IconButton onClick={() => null}  >
+                                    <Refresh style={styles.icon} />
+                                </IconButton>
+                                < IconButton onClick={() => null}  >
+                                    <FilterList style={styles.icon} />
+                                </IconButton>
+                            </>
+                            : <>
+                                < IconButton onClick={this.leave} color="secondary" >
+                                    <Close />
+                                </IconButton>
+                                <IconButton onClick={this.standUp} >
+                                    <ArrowUpward style={styles.icon} />
+                                </IconButton>
+                                <IconButton onClick={this.toggleSound} >
+                                    {('mute' in this.context.state) && this.context.state.mute
+                                        ? <VolumeOff style={styles.icon} />
+                                        : <VolumeUp style={styles.icon} />}
+                                </IconButton>
+                            </>
+                        }
+                        <IconButton size="medium" onClick={this.changeScreen}>
+                            {this.state.fullscreen
+                                ? <FullscreenIcon style={styles.icon} />
+                                : <FullscreenExitIcon style={styles.icon} />
+                            }
+                        </IconButton>
+                    </div>
+                    {'name' in this.context.state.user &&
+                        <ColorButton disabled onClick={this.openMenu} variant="contained" color="primary" >
+                            <Typography component="div" style={styles.account}>
+                                {this.context.state.user.name}
+                                <Typography component="div" align="left" style={styles.accountSub}  >
+                                    $ {toMoney(this.context.state.user.balance * 10000000 / 10000000)}
+                                </Typography>
+                            </Typography>
+                        </ColorButton>
+                    }
+                </ div>
+            );
         return (
             <>
                 {this.props.tab.active == 'lobby'
@@ -121,6 +167,11 @@ class Setting extends Component {
     }
 }
 const styles = {
+    root: {
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'space-between',
+    },
     icon: {
         color: '#fff'
     },

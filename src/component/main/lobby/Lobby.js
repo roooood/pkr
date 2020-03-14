@@ -206,9 +206,9 @@ class ListTable extends Component {
         if (this.state.loading)
             return (<Loading />)
         return (
-            <div style={styles.root} >
+            <div style={{ ...styles.root, padding: this.context.state.isMobile ? 5 : 20 }} >
                 <div style={styles.lobby} className="lobby">
-                    <Scrollbars style={{ direction: 'ltr', height: '82vh', overflow: 'hidden' }} ref="scroll" className="scrollbar">
+                    <Scrollbars style={{ direction: 'ltr', height: this.context.state.isMobile ? '100vh' : '82vh', overflow: 'hidden' }} ref="scroll" className="scrollbar">
                         <Table stickyHeader style={styles.table}>
                             <TableHead>
                                 <StyledTableRow>
@@ -247,7 +247,7 @@ class ListTable extends Component {
                             </TableBody>
                         </Table>
                     </Scrollbars>
-                    <div container style={styles.bottom}>
+                    <div style={styles.bottom}>
                         <div style={styles.space}>
                             <Typography style={styles.text} display="inline">{t('tableCount')} :</Typography>
                             <Typography style={styles.xtext} display="inline">{this.state.rooms.length}</Typography>
@@ -282,7 +282,6 @@ const styles = {
         width: '100%',
         display: 'flex',
         height: '100%',
-        padding: 20,
         justifyContent: 'space-between',
     },
     lobby: {

@@ -78,7 +78,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  padding-right:5px;
+  padding-right:10px;
 }
 
 #content>.center{
@@ -112,6 +112,18 @@ body {
     display:none;
   }
 }
+.avatar{
+  width:60px!important;
+  height:60px!important;
+}
+.my-avatar{
+  width: 70px!important;
+  height:70px!important;
+}
+.btn-act{
+  padding:3px !important
+}
+
 @media only screen and (max-width: 950px) {
   #content>.top{
     height: 56px;
@@ -131,6 +143,10 @@ body {
   }
   #content>.top{
     display: none;
+  }
+  .avatar{
+    width:40px!important;
+    height:40px!important;
   }
 }
 

@@ -62,6 +62,59 @@ const IOSSlider = withStyles({
     },
 })(Slider);
 
+const IOSSliderV = withStyles({
+    root: {
+        color: '#d58328',
+        height: 4,
+        margin: '5px 1% 20px 3%',
+
+        padding: 0
+    },
+    vertical: {
+        height: '30% !important',
+    },
+    thumb: {
+        height: 28,
+        width: 28,
+        backgroundColor: '#d58328',
+        boxShadow: iOSBoxShadow,
+        marginTop: -14,
+        marginRight: -15,
+        '&:focus,&:hover,&$active': {
+            boxShadow: '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
+            '@media (hover: none)': {
+                boxShadow: iOSBoxShadow,
+            },
+        },
+    },
+    active: {},
+    valueLabel: {
+        top: 'calc(-50% + 22px)',
+        left: -26,
+        '& *': {
+            background: 'transparent',
+            color: '#fff',
+        },
+    },
+    track: {
+        height: 4,
+    },
+    rail: {
+        height: 4,
+        opacity: 0.5,
+        backgroundColor: '#bfbfbf',
+    },
+    mark: {
+        backgroundColor: '#bfbfbf',
+        height: 8,
+        width: 1,
+        marginTop: -3,
+    },
+    markActive: {
+        backgroundColor: 'currentColor',
+    },
+})(Slider);
+
 const FoldBtn = withStyles(theme => ({
     root: {
         padding: '10px 0',
@@ -173,26 +226,39 @@ class Action extends Component {
         if (this.state.canTake == false)
             return null;
         return (
-            <Grid className="scale-in-center" style={styles.box} container >
-                <CallBtn onClick={() => this.actionIs('call')}>
-                    <Typography style={styles.text}>{this.props.state.bet == players[this.state.mySit].bet ? t('check') : t('call')}</Typography>
+            <Grid className="scale-in-center" style={this.context.state.isMobile ? styles.mbox : styles.box} container >
+                <CallBtn className="btn-act" onClick={() => this.actionIs('call')}>
+                    <Typography style={styles.text}>{this.props.state.bet == ((players[this.state.mySit] || {}).bet || '') ? t('check') : t('call')}</Typography>
                     <Typography style={styles.sub}>{toMoney(this.props.state.bet)}</Typography>
                 </CallBtn>
-                <FoldBtn onClick={() => this.actionIs('fold')}>
+                <FoldBtn className="btn-act" onClick={() => this.actionIs('fold')}>
                     <Typography style={styles.text}>{t('fold')}</Typography>
                     <Typography style={styles.sub}>X</Typography>
                 </FoldBtn>
-                <IOSSlider
-                    track={false}
-                    value={this.state.bet}
-                    onChange={this.changeBet}
-                    valueLabelDisplay="on"
-                    min={'bet' in this.props.state ? this.props.state.bet : this.Room.data.min}
-                    max={this.context.state.user.balance > this.Room.data.max ? this.Room.data.max : this.context.state.user.balance}
-                    step={this.Room.data.setting.step}
-                    valueLabelFormat={this.valuetext}
-                />
-                <RaiseBtn onClick={() => this.actionIs('raise')}>
+                {!this.context.state.isMobile
+                    ? <IOSSlider
+                        track={false}
+                        value={this.state.bet}
+                        onChange={this.changeBet}
+                        valueLabelDisplay="on"
+                        min={'bet' in this.props.state ? this.props.state.bet : this.Room.data.min}
+                        max={this.context.state.user.balance > this.Room.data.max ? this.Room.data.max : this.context.state.user.balance}
+                        step={this.Room.data.setting.step}
+                        valueLabelFormat={this.valuetext}
+                    />
+                    : <IOSSliderV
+                        track={false}
+                        orientation="vertical"
+                        value={this.state.bet}
+                        onChange={this.changeBet}
+                        valueLabelDisplay="on"
+                        min={'bet' in this.props.state ? this.props.state.bet : this.Room.data.min}
+                        max={this.context.state.user.balance > this.Room.data.max ? this.Room.data.max : this.context.state.user.balance}
+                        step={this.Room.data.setting.step}
+                        valueLabelFormat={this.valuetext}
+                    />
+                }
+                <RaiseBtn className="btn-act" onClick={() => this.actionIs('raise')}>
                     <Typography style={styles.text}>{t('raise')}</Typography>
                     <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
                 </RaiseBtn>
@@ -207,6 +273,14 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    mbox: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        width: 100,
+        height: '100%'
     },
     text: {
         fontSize: '.8em'

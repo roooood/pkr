@@ -97,7 +97,7 @@ class Position extends Component {
                                 {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
                                     <Item align="up" Room={this.Room} state={this.props.state} sit={1} />
                                 }
-                                <img src={Milf} style={styles.milf} />
+                                <img src={Milf} className="milf" />
                                 {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
                                     <Item align="up" Room={this.Room} state={this.props.state} sit={9} />
                                 }
@@ -195,10 +195,6 @@ const styles = {
         color: 'rgb(247, 224, 7)',
         fontSize: 15,
         margin: 4
-    },
-    milf: {
-        marginTop: -50,
-        width: 150,
     },
     money: {
         color: '#fff',

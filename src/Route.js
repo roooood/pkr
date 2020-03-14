@@ -24,6 +24,15 @@ class Route extends Component {
 
     }
     render() {
+        if (this.context.state.isMobile)
+            return (
+                <div id="content" className={"container mobile theme-default"} >
+                    <div style={styles.top}>
+                        <Setting />
+                    </div>
+                    <Tabbar />
+                </div>
+            )
         return (
             <div id="content" className={"container column theme-default"} >
                 <div className="container top" >
@@ -54,6 +63,12 @@ const styles = {
         borderRadius: 10,
         position: 'relative',
     },
+    top: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        width: '100%'
+    }
 }
 
 export default connect(state => state)(Route);
