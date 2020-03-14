@@ -170,7 +170,7 @@ class Item extends Component {
                                 }
                                 <Avatar
                                     src={avatars[this.context.state.user.avatar || null]}
-                                    className={mySit == sit ? "my-avatar" : "avatar"}
+                                    className={mySit == sit ? "animation my-avatar" : "animation avatar"}
                                     style={{ ...styles.avatar, backgroundColor: 'rgb(27, 26, 30)' }} >
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
