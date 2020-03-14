@@ -242,8 +242,8 @@ class Action extends Component {
                         onChange={this.changeBet}
                         valueLabelDisplay="on"
                         min={'bet' in this.props.state ? this.props.state.bet : this.Room.data.min}
-                        max={this.context.state.user.balance > this.Room.data.max ? this.Room.data.max : this.context.state.user.balance}
-                        step={this.Room.data.setting.step}
+                        max={this.context.state.user.balance}
+                        step={this.Room.data.min}
                         valueLabelFormat={this.valuetext}
                     />
                     : <IOSSliderV
@@ -253,8 +253,8 @@ class Action extends Component {
                         onChange={this.changeBet}
                         valueLabelDisplay="on"
                         min={'bet' in this.props.state ? this.props.state.bet : this.Room.data.min}
-                        max={this.context.state.user.balance > this.Room.data.max ? this.Room.data.max : this.context.state.user.balance}
-                        step={this.Room.data.setting.step}
+                        max={this.context.state.user.balance}
+                        step={this.Room.data.min}
                         valueLabelFormat={this.valuetext}
                     />
                 }

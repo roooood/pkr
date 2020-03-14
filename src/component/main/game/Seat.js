@@ -15,6 +15,7 @@ import play from 'library/Sound';
 import CountUp from 'react-countup';
 import { toMoney, getOffset, amountLen, isFloat, add } from 'library/Helper';
 import avatars from 'library/Avatar';
+import chip from 'assets/img/chip.png';
 
 class Item extends Component {
     static contextType = Context;
@@ -181,7 +182,7 @@ class Item extends Component {
                                 }
                                 <Avatar
                                     src={avatars[players[sit].avatar || null]}
-                                    className={started ? (turn == sit ? "animation my-avatar" : "animation avatar") : (mySit == sit ? "animation my-avatar" : "animation avatar")}
+                                    className={started ? (turn == sit ? "avatar active" : "avatar") : (mySit == sit ? "avatar active" : "avatar")}
                                     style={{ ...styles.avatar, backgroundColor: 'rgb(27, 26, 30)' }} >
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
@@ -198,7 +199,7 @@ class Item extends Component {
                                 }
                                 {('bet' in players[sit] && players[sit].state != 'fold') &&
                                     <Box style={{ ...styles.amount, ...this.adir[align] }} display="flex" alignItems="center" classNameName="focus-in-expand">
-                                        <div className="bet-chip">&nbsp;</div>
+                                        <img className="bet-chip" src={chip} />
                                         <Typography variant="body2" style={styles.amountText}>
                                             {players[sit].bet > 0
                                                 ? <CountUp
@@ -259,12 +260,7 @@ const styles = {
     },
     avatar: {
         color: '#faa001',
-        border: '1px solid #ddd',
-        cursor: 'pointer',
-    },
-    myAvatar: {
-        color: '#faa001',
-        border: '1px solid #faa001',
+        boxShadow: '1px 2px 2px 1px #00000066',
         cursor: 'pointer',
     },
     moneyIcon: {

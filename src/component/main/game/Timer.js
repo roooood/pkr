@@ -35,7 +35,7 @@ export default class Timer extends Component {
             if (this.state.completed == 100)
                 return null;
             return (
-                <CircularProgress style={{...styles.progress,...(this.props.big == true ?styles.big:styles.small )}} thickness={3} mode="determinate" color="secondary" variant="determinate" value={this.state.completed} />
+                <CircularProgress className="avatar active" style={styles.progress} thickness={3} mode="determinate" color="secondary" variant="determinate" value={this.state.completed} />
             )
         }
         return (
@@ -49,10 +49,6 @@ const styles = {
         flexGrow: 1,
         width: '100%',
         height: 5
-    },
-    big: {
-        width: 60,
-        height: 60,
     },
     small: {
         width: 50,
