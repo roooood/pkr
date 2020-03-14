@@ -67,6 +67,18 @@ class Item extends Component {
         this.context.game.register(this.Room, 'reset', this.reset);
         this.context.game.register(this.Room, 'guest', this.guest);
         this.context.game.register(this.Room, 'actionIs', this.actionIs);
+        this.context.game.register(this.Room, 'balance', this.balance);
+    }
+    balance(value) {
+        const [balance, amount] = value;
+        let end = add(balance, amount);
+        this.context.state.user.balance = end;
+        // this.forceUpdate();
+        // this.setState({
+        //     balance: true,
+        //     start: balance,
+        //     end: end
+        // })
     }
     actionIs([sit, type]) {
         if (sit == this.props.sit) {
@@ -86,7 +98,6 @@ class Item extends Component {
         }
     }
     myCards(cards) {
-        console.log(this.state.mySit, this.props.sit)
         if (this.state.mySit == this.props.sit)
             this.setState({ cards })
         else
@@ -150,7 +161,7 @@ class Item extends Component {
     render() {
         const { align, sit } = this.props;
         const { winner, loser, cards, mySit } = this.state;
-        const { players } = this.props.state;
+        const { players, turn, started } = this.props.state;
 
         if (players != undefined) {
             if (sit in players) {
@@ -170,7 +181,7 @@ class Item extends Component {
                                 }
                                 <Avatar
                                     src={avatars[this.context.state.user.avatar || null]}
-                                    className={mySit == sit ? "animation my-avatar" : "animation avatar"}
+                                    className={started ? (turn == sit ? "animation my-avatar" : "animation avatar") : (mySit == sit ? "animation my-avatar" : "animation avatar")}
                                     style={{ ...styles.avatar, backgroundColor: 'rgb(27, 26, 30)' }} >
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
