@@ -171,6 +171,7 @@ const styles = {
         display: 'flex',
         width: '100%',
         justifyContent: 'space-between',
+        zIndex: 9999
     },
     icon: {
         color: '#fff'

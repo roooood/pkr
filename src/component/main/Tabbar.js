@@ -30,7 +30,7 @@ class Tabbar extends Component {
         const tab = this.props.tab.data || {};
         if (this.context.state.isMobile)
             return (
-                <SwipeableViews index={this.state.mobile} enableMouseEvents slideStyle={{ width: '100vw', height: '100vh' }}>
+                <SwipeableViews index={this.props.tab.active} enableMouseEvents slideStyle={{ width: '100vw', height: '100vh' }}>
                     {Object.keys(tab).map((item) => {
                         return (
                             <div key={item} className="puff-in-center" style={{ ...styles.root, direction: this.context.state.dir }} >

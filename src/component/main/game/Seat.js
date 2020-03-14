@@ -180,7 +180,7 @@ class Item extends Component {
                                     <Timer border time={this.Room.data.setting.timer} big={mySit == sit} />
                                 }
                                 <Avatar
-                                    src={avatars[this.context.state.user.avatar || null]}
+                                    src={avatars[players[sit].avatar || null]}
                                     className={started ? (turn == sit ? "animation my-avatar" : "animation avatar") : (mySit == sit ? "animation my-avatar" : "animation avatar")}
                                     style={{ ...styles.avatar, backgroundColor: 'rgb(27, 26, 30)' }} >
                                     {players[sit].name[0].toUpperCase()}
