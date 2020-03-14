@@ -67,7 +67,8 @@ const styles = {
         position: 'absolute',
         top: 5,
         right: 5,
-        width: '100%'
+        width: '100%',
+        zIndex: 999999
     }
 }
 

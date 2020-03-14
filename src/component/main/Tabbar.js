@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import SwipeableViews from 'react-swipeable-views';
 import Lobby from './lobby/Lobby';
 import Game from './game/Game';
+import { TabbarRemove, TabbarActive, TabbarAdd } from 'redux/action/tab';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -26,14 +27,31 @@ class Tabbar extends Component {
     componentDidMount() {
 
     }
+    changeIndex(index) {
+        let a = 0;
+        for (let i in this.props.tab.data) {
+            if (a++ == index) {
+                this.props.dispatch(TabbarActive(i));
+            }
+        }
+
+    }
     render() {
         const tab = this.props.tab.data || {};
+        const tabs = Object.keys(tab);
+        let index = -1;
+        for (let i in this.props.tab.data) {
+            index++;
+            if (this.props.tab.active == i) {
+                break;
+            }
+        }
         if (this.context.state.isMobile)
             return (
-                <SwipeableViews index={this.props.tab.active} enableMouseEvents slideStyle={{ width: '100vw', height: '100vh' }}>
-                    {Object.keys(tab).map((item) => {
+                <SwipeableViews index={index} onChangeIndex={this.changeIndex} enableMouseEvents slideStyle={{ width: '100vw', height: '100vh' }}>
+                    {tabs.map((item) => {
                         return (
-                            <div key={item} className="puff-in-center" style={{ ...styles.root, direction: this.context.state.dir }} >
+                            <div key={item} className="puff-in-center" style={{ ...styles.root }} >
                                 {item == 'lobby'
                                     ? <Lobby />
                                     : <Game parent={tab[item]} inView={this.props.tab.active == item} />
@@ -45,7 +63,7 @@ class Tabbar extends Component {
             )
         return (
             <>
-                {Object.keys(tab).map((item) => {
+                {tabs.map((item) => {
                     return (
                         <TabPanel key={item} className="puff-in-center" value={this.props.tab.active} index={item}>
                             <div style={styles.root} >
