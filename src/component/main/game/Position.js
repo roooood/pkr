@@ -47,9 +47,9 @@ class Position extends Component {
         this.context.game.register(this.Room, 'balance', this.balance);
     }
     balance(value) {
-        console.log(value)
         const [balance, amount] = value;
         let end = add(balance, amount);
+        console.log(balance, amount,end)
         this.context.state.user.balance = end;
         this.context.update();
         // this.setState({
@@ -141,7 +141,7 @@ class Position extends Component {
                                     <Item align="up" Room={this.Room} state={this.props.state} sit={1} />
                                 }
                                 <LightTooltip title={t('commission') +': '+commission}>
-                                    <img src={Milf} className="milf" />
+                                    <img src={Milf} className="milf" style={player==2 ?{ maxWidth:70} : {}} />
                                 </LightTooltip>
                                 {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
                                     <Item align="up" Room={this.Room} state={this.props.state} sit={9} />

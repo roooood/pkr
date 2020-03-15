@@ -229,7 +229,7 @@ class Action extends Component {
                 </StyledBtn>
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('allin')}>
                     <Typography style={styles.text}>{t('allin')}</Typography>
-                    <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
+                    <Typography style={styles.sub}>{this.valuetext(this.context.state.user.balance)}</Typography>
                 </StyledBtn>
             </Grid >
         )
