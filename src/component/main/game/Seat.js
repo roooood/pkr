@@ -195,9 +195,11 @@ class Item extends Component {
                 return (
                     <Grid className={"scale-in-center " + players[sit].state} style={styles.info} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
                         <div style={styles.xinfo}>
-                            <Box style={styles.type} display="flex" alignItems="center" className="focus-in-expand">
-                                <Typography variant="body" >D</Typography>
-                            </Box>
+                            {'type' in players[sit] &&
+                                <Box style={styles.type} display="flex" alignItems="center" className="focus-in-expand">
+                                <Typography variant="body" >{players[sit].type}</Typography>
+                                </Box>
+                            }
                             <Typography variant="body2" className="focus-in-expand" style={styles.name}>{players[sit].name}</Typography>
                             <Box style={styles.balance} display="flex" alignItems="center" className="focus-in-expand">
                                 <AttachMoney style={styles.moneyIcon} />

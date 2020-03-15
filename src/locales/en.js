@@ -8,8 +8,14 @@ export default {
     writeSomething: 'Write something',
     delete: 'Delete',
     mute: 'Mute',
+    exit: 'Exit',
+    standUp: 'Stand Up',
+    fullscreen: 'Fullscreen',
+    filter: 'Filter',
+    refresh: 'Refresh',
     pickavatar: 'Pick your favorites avatar',
-
+    cantStand: 'Please make Fold then click on stand',
+    
     lobby: 'LOBBY',
     name: 'Name',
     type: 'Type',

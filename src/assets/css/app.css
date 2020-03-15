@@ -130,10 +130,7 @@ body {
 .avatar.active{
   width: 70px!important;
   height:70px!important;
-}
-.btn-act{
-  padding:3px !important
-}
+
 
 @media only screen and (max-width: 950px) {
   #content>.top{
@@ -158,6 +155,9 @@ body {
   .avatar{
     width:40px!important;
     height:40px!important;
+  }
+  .btn-act{
+    padding:3px !important
   }
 }
 
