@@ -28,7 +28,7 @@ class Avatar extends React.Component {
                 {
                     Object.keys(avatars).map((src, i) => (
                         <IconButton key={i} onClick={() => this.pick(src)}>
-                            <img src={avatars[src]} />
+                            <img src={avatars[src]} style={styles.img} />
                         </IconButton>
                     ))
 
@@ -42,7 +42,11 @@ var styles = {
     title: {
         textAlign: 'center',
         paddingBottom: 10,
+        marginTop: -10,
         borderBottom: '1px solid #555'
+    },
+    img: {
+        width:60
     }
 
 }

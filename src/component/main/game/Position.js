@@ -37,12 +37,22 @@ class Position extends Component {
         autoBind(this);
     }
     componentDidMount() {
+        this.context.game.register(this.Room, 'win', this.win);
+        this.context.game.register(this.Room, 'lose', this.lose);
         this.context.game.register(this.Room, 'mySit', this.mySit);
         this.context.game.register(this.Room, 'actionResult', this.actionResult);
         this.context.game.register(this.Room, 'gameResult', this.result);
         this.context.game.register(this.Room, 'reset', this.reset);
         this.context.game.register(this.Room, 'cantStandErr', this.cantStandErr);
 
+    }
+    lose() {
+        play('lose');
+        this.alert(t('loseMsg'))
+    }
+    win() {
+        play('win');
+        this.alert(t('winMsg'),'success')
     }
     mySit(mySit) {
         this.setState({ mySit })

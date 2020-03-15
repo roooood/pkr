@@ -13,7 +13,7 @@ export default {
     fullscreen: 'Fullscreen',
     filter: 'Filter',
     refresh: 'Refresh',
-    pickavatar: 'Pick your favorites avatar',
+    pickavatar: 'Please pick your favorite avatar',
     cantStandErr: 'Please make Fold then click on stand',
     
     lobby: 'LOBBY',
@@ -34,5 +34,7 @@ export default {
     id: 'Id',
     myCards: 'My Cards',
     board: 'Board',
-    pot:'Pot'
+    pot: 'Pot',
+    winMsg: 'You have won! # added to your balance',
+    loseMsg: 'You have lost! # decreased from your balance',
 }

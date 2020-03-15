@@ -56,6 +56,9 @@ class App extends Component {
   app(obj) {
     return this[obj];
   }
+  update() {
+    this.forceUpdate();
+  }
   renderLoading() {
     return null;
   }
@@ -63,7 +66,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor} loading={this.renderLoading()}>
-          <Context.Provider value={{ game: this.game, state: this.state, app: this.app, setState: this.changeState }}>
+          <Context.Provider value={{ game: this.game, state: this.state, app: this.app, update: this.update, setState: this.changeState }}>
             <Snack />
             <Modal ref={r => this.modal = r} />
             <Route />

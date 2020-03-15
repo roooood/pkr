@@ -3,6 +3,7 @@ import autoBind from 'react-autobind';
 import Context from 'library/Context';
 import Position from './Position';
 import Action from './Action';
+import Hand from './Hand';
 import { t } from 'locales';
 import Loading from 'component/component/Loading';
 import Chat from 'component/chat/Chat';
@@ -79,7 +80,8 @@ class Table extends Component {
         return (
             <div style={styles.root}>
                 {!this.context.state.isMobile &&
-                    <div style={styles.main}>
+                    <div style={styles.left}>
+                        <Hand state={this.state} Room={this.Room} />
                         <Chat state={this.state} Room={this.Room} />
                     </div>
                 }
@@ -96,6 +98,13 @@ const styles = {
         display: 'flex',
         flex: 1,
         position: 'relative',
+    },
+    left: {
+        display: 'flex',
+        flex: 1,
+        position: 'relative',
+        flexDirection: 'column',
+        flex:.2
     },
     main: {
         display: 'flex',
