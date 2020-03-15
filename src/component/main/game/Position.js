@@ -44,15 +44,27 @@ class Position extends Component {
         this.context.game.register(this.Room, 'gameResult', this.result);
         this.context.game.register(this.Room, 'reset', this.reset);
         this.context.game.register(this.Room, 'cantStandErr', this.cantStandErr);
-
+        this.context.game.register(this.Room, 'balance', this.balance);
     }
-    lose() {
+    balance(value) {
+        console.log(value)
+        const [balance, amount] = value;
+        let end = add(balance, amount);
+        this.context.state.user.balance = end;
+        this.context.update();
+        // this.setState({
+        //     balance: true,
+        //     start: balance,
+        //     end: end
+        // })
+    }
+    lose(amount) {
         play('lose');
-        this.alert(t('loseMsg'))
+        this.alert(t('loseMsg').replace('#', amount))
     }
-    win() {
+    win(amount) {
         play('win');
-        this.alert(t('winMsg'),'success')
+        this.alert(t('winMsg').replace('#', amount),'success')
     }
     mySit(mySit) {
         this.setState({ mySit })

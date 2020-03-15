@@ -94,20 +94,8 @@ class Item extends Component {
         this.context.game.register(this.Room, 'reset', this.reset);
         this.context.game.register(this.Room, 'guest', this.guest);
         this.context.game.register(this.Room, 'actionIs', this.actionIs);
-        this.context.game.register(this.Room, 'balance', this.balance);
     }
-    balance(value) {
-        console.log(value)
-        const [balance, amount] = value;
-        let end = add(balance, amount);
-        this.context.state.user.balance = end;
-        // this.forceUpdate();
-        // this.setState({
-        //     balance: true,
-        //     start: balance,
-        //     end: end
-        // })
-    }
+
     actionIs([sit, type]) {
         if (sit == this.props.sit) {
             if (type == 'fold')
