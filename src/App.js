@@ -30,7 +30,7 @@ class App extends Component {
     this.state = {
       userKey: getQuery('token') || '-',
       user: {},
-      isMobile: window.innerWidth <= 900,
+      isMobile: window.innerWidth <= 950,
       dir: dir
     };
     this.game = new GameServer('poker');

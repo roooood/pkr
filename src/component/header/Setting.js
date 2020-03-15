@@ -18,6 +18,17 @@ import { connect } from 'react-redux';
 import Context from 'library/Context';
 import play from 'library/Sound';
 
+import Tooltip from '@material-ui/core/Tooltip';
+
+const LightTooltip = withStyles(theme => ({
+    tooltip: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}))(Tooltip);
+
 const ColorButton = withStyles(theme => ({
     root: {
         background: 'transparent',
@@ -81,17 +92,23 @@ class Setting extends Component {
             return (
                 <div style={styles.root} >
                     <div>
+                        <LightTooltip title={t('exit')} >
                         < IconButton onClick={this.leave} color="secondary" >
                             <Close />
-                        </IconButton>
+                            </IconButton>
+                        </LightTooltip>
+                        <LightTooltip title={t('standUp')} >
                         <IconButton onClick={this.standUp} >
                             <ArrowUpward style={styles.icon} />
                         </IconButton>
+                        </LightTooltip>
+                        <LightTooltip title={t('mute')} >
                         <IconButton onClick={this.toggleSound} >
                             {('mute' in this.context.state) && this.context.state.mute
                                 ? <VolumeOff style={styles.icon} />
                                 : <VolumeUp style={styles.icon} />}
-                        </IconButton>
+                            </IconButton>
+                        </LightTooltip>
                     </div>
                     {'name' in this.context.state.user &&
                         <ColorButton disabled onClick={this.openMenu} variant="contained" color="primary" >
@@ -110,33 +127,45 @@ class Setting extends Component {
             <>
                 {this.props.tab.active == 'lobby'
                     ? <>
+                        <LightTooltip title={t('refresh')} >
                         < IconButton onClick={() => null}  >
                             <Refresh style={styles.icon} />
-                        </IconButton>
-                        < IconButton onClick={() => null}  >
-                            <FilterList style={styles.icon} />
-                        </IconButton>
+                            </IconButton>
+                        </LightTooltip>
+                        <LightTooltip title={t('filter')} >
+                            < IconButton onClick={() => null}  >
+                                <FilterList style={styles.icon} />
+                            </IconButton>
+                        </LightTooltip>
                     </>
                     : <>
-                        < IconButton onClick={this.leave} color="secondary" >
-                            <Close />
-                        </IconButton>
-                        <IconButton onClick={this.standUp} >
-                            <ArrowUpward style={styles.icon} />
-                        </IconButton>
-                        <IconButton onClick={this.toggleSound} >
-                            {('mute' in this.context.state) && this.context.state.mute
-                                ? <VolumeOff style={styles.icon} />
-                                : <VolumeUp style={styles.icon} />}
-                        </IconButton>
+                        <LightTooltip title={t('exit')} >
+                            < IconButton onClick={this.leave} color="secondary" >
+                                <Close />
+                            </IconButton>
+                        </LightTooltip>
+                        <LightTooltip title={t('standUp')} >
+                            <IconButton onClick={this.standUp} >
+                                <ArrowUpward style={styles.icon} />
+                            </IconButton>
+                        </LightTooltip>
+                        <LightTooltip title={t('mute')} >
+                            <IconButton onClick={this.toggleSound} >
+                                {('mute' in this.context.state) && this.context.state.mute
+                                    ? <VolumeOff style={styles.icon} />
+                                    : <VolumeUp style={styles.icon} />}
+                            </IconButton>
+                        </LightTooltip>
                     </>
                 }
-                <IconButton size="medium" onClick={this.changeScreen}>
+                <LightTooltip title={t('fullscreen')} >
+                    <IconButton size="medium" onClick={this.changeScreen}>
                     {this.state.fullscreen
                         ? <FullscreenIcon style={styles.icon} />
                         : <FullscreenExitIcon style={styles.icon} />
                     }
-                </IconButton>
+                    </IconButton>
+                </LightTooltip>
                 {'name' in this.context.state.user &&
                     <ColorButton disabled onClick={this.openMenu} variant="contained" color="primary" >
                         <Typography component="div" style={styles.account}>

@@ -14,7 +14,7 @@ export default {
     filter: 'Filter',
     refresh: 'Refresh',
     pickavatar: 'Pick your favorites avatar',
-    cantStand: 'Please make Fold then click on stand',
+    cantStandErr: 'Please make Fold then click on stand',
     
     lobby: 'LOBBY',
     name: 'Name',

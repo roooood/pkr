@@ -7,11 +7,11 @@ import autoBind from 'react-autobind';
 import Context from 'library/Context';
 import { toMoney, getOffset, amountLen, isFloat, add } from 'library/Helper';
 import { t } from 'locales';
-import Tooltip from '@material-ui/core/Tooltip';
-import { withStyles } from '@material-ui/core/styles';
 import play from 'library/Sound';
 import Milf from 'assets/img/milf.png';
 
+import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles } from '@material-ui/core/styles';
 const LightTooltip = withStyles(theme => ({
     tooltip: {
         backgroundColor: theme.palette.common.white,
@@ -41,10 +41,17 @@ class Position extends Component {
         this.context.game.register(this.Room, 'actionResult', this.actionResult);
         this.context.game.register(this.Room, 'gameResult', this.result);
         this.context.game.register(this.Room, 'reset', this.reset);
+        this.context.game.register(this.Room, 'cantStandErr', this.cantStandErr);
 
     }
     mySit(mySit) {
         this.setState({ mySit })
+    }
+    cantStandErr() {
+        this.alert(t('cantStandErr'))
+    }
+    alert(message,type='error') {
+        window.ee.emit('notify', { message, type })
     }
     company() {
         setTimeout(() => {

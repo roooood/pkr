@@ -37,7 +37,7 @@ class Table extends Component {
         this.join()
     }
     disconnected() {
-
+        this.setState({ loading:true})
     }
     join() {
         this.context.game.getAvailableRooms((rooms) => {
