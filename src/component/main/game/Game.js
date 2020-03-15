@@ -79,7 +79,9 @@ class Table extends Component {
         return (
             <div style={styles.root}>
                 {!this.context.state.isMobile &&
-                    <Chat state={this.state} Room={this.Room} />
+                    <div style={styles.main}>
+                        <Chat state={this.state} Room={this.Room} />
+                    </div>
                 }
                 <div style={this.context.state.isMobile ? styles.mmain : styles.main}>
                     <Position state={this.state} Room={this.Room} />

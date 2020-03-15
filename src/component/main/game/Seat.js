@@ -97,6 +97,7 @@ class Item extends Component {
         this.context.game.register(this.Room, 'balance', this.balance);
     }
     balance(value) {
+        console.log(value)
         const [balance, amount] = value;
         let end = add(balance, amount);
         this.context.state.user.balance = end;

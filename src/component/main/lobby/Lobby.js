@@ -29,7 +29,7 @@ const StyledCard = withStyles(theme => ({
     root: {
         backgroundColor: 'rgba(0,0,0,.3)',
         width: '100%',
-        height: '97%'
+        height: '100%'
     },
 }))(Card);
 

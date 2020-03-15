@@ -115,12 +115,12 @@ const IOSSliderV = withStyles({
     },
 })(Slider);
 
-const FoldBtn = withStyles(theme => ({
+const StyledBtn = withStyles(theme => ({
     root: {
         padding: '10px 0',
         margin: 5,
         fontSize: '.9rem',
-        background: 'linear-gradient(0deg,#ae1e1e 0%, #c81515 100%)',
+        background: 'linear-gradient(0deg,#2b3365 0%, #171f3a 100%)',
         transition: 'all 0.3s ease-out',
         '&:hover': {
             opacity: .8,
@@ -129,45 +129,10 @@ const FoldBtn = withStyles(theme => ({
     label: {
         display: 'flex',
         flexDirection: 'column',
-        color: '#040404'
+        color: '#616994'
     }
 }))(Button);
 
-const CallBtn = withStyles(theme => ({
-    root: {
-        padding: '10px 0',
-        margin: 5,
-        fontSize: '.9rem',
-        background: 'linear-gradient(0deg,#1b8212 0%, #429713 100%)',
-        transition: 'all 0.3s ease-out',
-        '&:hover': {
-            opacity: .8,
-        },
-    },
-    label: {
-        display: 'flex',
-        flexDirection: 'column',
-        color: '#040404'
-    }
-}))(Button);
-
-const RaiseBtn = withStyles(theme => ({
-    root: {
-        padding: '10px 0',
-        margin: 5,
-        fontSize: '.9rem',
-        background: 'linear-gradient(0deg,#b58310 0%, #f9bd0a 100%)',
-        transition: 'all 0.3s ease-out',
-        '&:hover': {
-            opacity: .8,
-        },
-    },
-    label: {
-        display: 'flex',
-        flexDirection: 'column',
-        color: 'rgb(53, 52, 52)'
-    }
-}))(Button);
 
 class Action extends Component {
     static contextType = Context;
@@ -227,14 +192,14 @@ class Action extends Component {
             return null;
         return (
             <Grid className="scale-in-center" style={this.context.state.isMobile ? styles.mbox : styles.box} container >
-                <CallBtn className="btn-act" onClick={() => this.actionIs('call')}>
+                <StyledBtn className="btn-act" onClick={() => this.actionIs('call')}>
                     <Typography style={styles.text}>{this.props.state.bet == ((players[this.state.mySit] || {}).bet || '') ? t('check') : t('call')}</Typography>
                     <Typography style={styles.sub}>{toMoney(this.props.state.bet)}</Typography>
-                </CallBtn>
-                <FoldBtn className="btn-act" onClick={() => this.actionIs('fold')}>
+                </StyledBtn>
+                <StyledBtn className="btn-act" onClick={() => this.actionIs('fold')}>
                     <Typography style={styles.text}>{t('fold')}</Typography>
                     <Typography style={styles.sub}>X</Typography>
-                </FoldBtn>
+                </StyledBtn>
                 {!this.context.state.isMobile
                     ? <IOSSlider
                         track={false}
@@ -258,10 +223,14 @@ class Action extends Component {
                         valueLabelFormat={this.valuetext}
                     />
                 }
-                <RaiseBtn className="btn-act" onClick={() => this.actionIs('raise')}>
+                <StyledBtn className="btn-act" onClick={() => this.actionIs('raise')}>
                     <Typography style={styles.text}>{t('raise')}</Typography>
                     <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
-                </RaiseBtn>
+                </StyledBtn>
+                <StyledBtn className="btn-act" onClick={() => this.actionIs('allin')}>
+                    <Typography style={styles.text}>{t('allin')}</Typography>
+                    <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
+                </StyledBtn>
             </Grid >
         )
     }

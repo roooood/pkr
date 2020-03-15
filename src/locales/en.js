@@ -29,5 +29,10 @@ export default {
     call: 'CALL',
     raise: 'RAISE',
     check: 'Check',
-    commission:'Commission'
+    allin: 'All In',
+    commission: 'Commission',
+    id: 'Id',
+    myCards: 'My Cards',
+    board: 'Board',
+    pot:'Pot'
 }
