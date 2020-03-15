@@ -49,8 +49,8 @@ const StyledTableRow = withStyles(theme => ({
 const columns = [
     { id: 'id', label: t('id') },
     // { id: 'myCards', label: t('myCards') },
-    { id: 'board', label: t('board') },
-    { id: 'pot', label: t('pot') },
+    { id: 'cards', label: t('board') },
+    { id: 'bank', label: t('pot'), format: val =>toMoney(val) },
 ];
 
 class ListTable extends Component {
@@ -68,7 +68,7 @@ class ListTable extends Component {
     }
 
     render() {
-        const { list } = this.state;
+        const { history } = this.props.state;
         return (
             <div className="chat_window" >
                 <Scrollbars style={{ direction: 'ltr', height : '44vh', overflow: 'hidden' }} ref="scroll" className="scrollbar">
@@ -87,7 +87,7 @@ class ListTable extends Component {
                             </StyledTableRow>
                         </TableHead>
                         <TableBody>
-                            {list.map((row, i) => {
+                            {history.map((row, i) => {
                                 return (
                                     <StyledTableRow
                                         hover
