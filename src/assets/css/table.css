@@ -165,29 +165,39 @@
 }
 
 .hand{
-  width: 40px;
-  height: 54px;
+  width: 45px;
+  height: 64px;
 }
-.my-hand{
-  width: 46px;
-  height: 65px;
+.t-back .my-hand{
+  width: 36px;
+  height: 50px;
 }
 .card.anim{
   animation: cardshowing 0.2s linear;
   animation-fill-mode: both;
   opacity: 0;
 }
-
 .hand-card{
+  z-index: -1;
   position: absolute;
   display: flex;
   flex-direction: row;
 }
+
 .hand-card.c2>div:first-child{
   transform: rotate(-10deg) translateX(5px);
 }
 .hand-card.c2>div:last-child{
   transform: rotate(10deg) translateX(-5px);
+}
+
+.hand-card.t-back.c2>div:first-child{
+  z-index: 0;
+  transform: rotate(-10deg) translateX(5px);
+}
+.hand-card.t-back.c2>div:last-child{
+  z-index: -2;
+  transform: rotate(10deg) translateX(-13px) translateY(8px);
 }
 
 .hand-card.c4>div:nth-child(1){

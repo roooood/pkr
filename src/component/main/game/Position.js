@@ -8,6 +8,9 @@ import Context from 'library/Context';
 import { toMoney, getOffset, amountLen, isFloat, add } from 'library/Helper';
 import { t } from 'locales';
 import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles } from '@material-ui/core/styles';
+import play from 'library/Sound';
+import Milf from 'assets/img/milf.png';
 
 const LightTooltip = withStyles(theme => ({
     tooltip: {
@@ -18,8 +21,7 @@ const LightTooltip = withStyles(theme => ({
     },
 }))(Tooltip);
 
-import play from 'library/Sound';
-import Milf from 'assets/img/milf.png';
+
 
 class Position extends Component {
     static contextType = Context;

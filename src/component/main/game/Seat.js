@@ -25,16 +25,41 @@ class Item extends Component {
         this.Room = this.props.Room;
         this.state = {
             cards: [],
+            cardType: '',
             mySit: 0,
             timer: false,
             winner: [],
             loser: []
         };
         this.cdir = {
-            right: { top: -60 },
-            up: { left: -80 },
-            down: { right: -80 },
-            left: { bottom: -60 }
+            back: {
+                c2: {
+                    right: { top: -50 },
+                    up: { left: -60 },
+                    down: { right: -70},
+                    left: { bottom: -44 }
+                },
+                c4: {
+                    right: { top: -55 },
+                    up: { left: -125 },
+                    down: { right: -125 },
+                    left: { bottom: -42 }
+                }
+           }
+        ,front: {
+                c2: {
+                    right: { top: -50 },
+                    up: { left: -90 },
+                    down: { right: -90 },
+                    left: { bottom: -65 }
+                },
+                c4: {
+                    right: { top: -75 },
+                    up: { left: -165 },
+                    down: { right: -165 },
+                    left: { bottom: -70 }
+                }
+           }
         }
         this.adir = {
             right: { left: -80 },
@@ -101,9 +126,9 @@ class Item extends Component {
     }
     myCards(cards) {
         if (this.state.mySit == this.props.sit)
-            this.setState({ cards })
+            this.setState({ cards ,cardType:'front' })
         else
-            this.setState({ cards: new Array(cards.length).fill('back') })
+            this.setState({ cards: new Array(cards.length).fill('back'), cardType: 'back'})
     }
     newLevel(level) {
         this.hideTimer();
@@ -170,6 +195,9 @@ class Item extends Component {
                 return (
                     <Grid className={"scale-in-center " + players[sit].state} style={styles.info} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
                         <div style={styles.xinfo}>
+                            <Box style={styles.type} display="flex" alignItems="center" className="focus-in-expand">
+                                <Typography variant="body" >D</Typography>
+                            </Box>
                             <Typography variant="body2" className="focus-in-expand" style={styles.name}>{players[sit].name}</Typography>
                             <Box style={styles.balance} display="flex" alignItems="center" className="focus-in-expand">
                                 <AttachMoney style={styles.moneyIcon} />
@@ -188,10 +216,10 @@ class Item extends Component {
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
                                 {(cards.length > 0 && players[sit].state != 'fold') &&
-                                    <div className={"hand-card c" + cards.length} style={this.cdir[align]} >
+                                    <div className={"hand-card c" + cards.length + ' t-' + this.state.cardType} style={this.cdir[this.state.cardType]['c'+cards.length][align]} >
                                         {
                                             cards.map((card, i) => (
-                                                <div key={card} style={{zIndex: 10}}>
+                                                <div key={card} >
                                                     <div className={'card hand _' + card + ' card-anim' + (i + 1) + (mySit == sit ? '  my-hand' : '')} />
                                                 </div>
                                             ))
@@ -305,6 +333,13 @@ const styles = {
         background: '#1a283f',
         borderRadius: 20,
         padding: ' 0px 6px',
+        boxShadow: '0 0 4px #0e1635 inset',
+        alignItems: 'center',
+    },
+    type: {
+        background: 'rgba(47, 45, 44, 0.84) ',
+        borderRadius: 12,
+        padding: '0px 10px',
         boxShadow: '0 0 4px #0e1635 inset',
         alignItems: 'center',
     },
