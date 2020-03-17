@@ -16,6 +16,7 @@ class Table extends Component {
             loading: true,
             players: {},
             history:[],
+            deck : []
         };
         this.Room = null;
         this.roomId = this.props.parent.id;

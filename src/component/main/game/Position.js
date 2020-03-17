@@ -41,10 +41,13 @@ class Position extends Component {
         this.context.game.register(this.Room, 'lose', this.lose);
         this.context.game.register(this.Room, 'mySit', this.mySit);
         this.context.game.register(this.Room, 'actionResult', this.actionResult);
-        this.context.game.register(this.Room, 'gameResult', this.result);
+        this.context.game.register(this.Room, 'winner', this.result);
         this.context.game.register(this.Room, 'reset', this.reset);
         this.context.game.register(this.Room, 'cantStandErr', this.cantStandErr);
         this.context.game.register(this.Room, 'balance', this.balance);
+    }
+    result(winner) {
+        console.log(winner)
     }
     balance(value) {
         const [balance, amount] = value;

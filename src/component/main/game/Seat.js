@@ -12,11 +12,10 @@ import AttachMoney from '@material-ui/icons/AttachMoney';
 import Timer from './Timer';
 import { t } from 'locales';
 import play from 'library/Sound';
-import CountUp from 'react-countup';
+// import CountUp from 'react-countup';
 import { toMoney, getOffset, amountLen, isFloat, add } from 'library/Helper';
 import avatars from 'library/Avatar';
 import chip from 'assets/img/chip.png';
-
 
 class Item extends Component {
     static contextType = Context;
@@ -24,8 +23,8 @@ class Item extends Component {
         super(props);
         this.Room = this.props.Room;
         this.state = {
-            cards: [],
-            cardType: '',
+            cards: ['3c', 'Kd'],
+            cardType: 'front',
             mySit: 0,
             timer: false,
             winner: [],
@@ -63,8 +62,8 @@ class Item extends Component {
         }
         this.adir = {
             right: { left: -80 },
-            up: { bottom: -40 },
-            down: { top: -40 },
+            up: { bottom: -55 },
+            down: { top: -55 },
             left: { right: -80 }
         }
         this.dir = {
@@ -100,6 +99,7 @@ class Item extends Component {
         if (sit == this.props.sit) {
             if (type == 'fold')
                 this.reset();
+                this.move(sit)
         }
     }
     guest() {
@@ -144,20 +144,16 @@ class Item extends Component {
     hideTimer() {
         this.setState({ timer: false });
     }
-    company(sit) {
-        if (this.props.sit == sit) {
-            this.move(sit)
-        }
-    }
     move(sit) {
-        let sr = 'sit' + sit;
+        let sr = 'sit-' + sit;
         let ds = 'bet-value';
         let el = document.querySelector('.' + sr);
         let dl = document.querySelector('.' + ds);
-        if (dl) {
+        if (dl && el) {
             dl = dl.parentElement
             let spos = getOffset(el);
             let dpos = getOffset(dl);
+            console.log(dpos)
             let cl = el.cloneNode(true);
             document.body.appendChild(cl);
             cl.classList.remove(sr);
@@ -165,8 +161,8 @@ class Item extends Component {
             cl.setAttribute("style", 'position: absolute;left:' + spos.left + 'px;top:' + spos.top + 'px;');
             setTimeout(() => {
                 cl.classList.add('blur-out-contract-bck');
-                cl.style.left = dpos.left + 10 + 'px';
-                cl.style.top = dpos.top + 'px';
+                cl.style.left = dpos.left + 200 + 'px';
+                cl.style.top = dpos.top +5 + 'px';
             }, 100);
         }
     }
@@ -186,13 +182,13 @@ class Item extends Component {
                         <div style={styles.xinfo}>
                             {'type' in players[sit] &&
                                 <Box style={styles.type} display="flex" alignItems="center" className="focus-in-expand">
-                                <Typography variant="body" >{players[sit].type}</Typography>
+                                <Typography variant="body"  >{players[sit].type}</Typography>
                                 </Box>
                             }
                             <Typography variant="body2" className="focus-in-expand" style={styles.name}>{players[sit].name}</Typography>
                             <Box style={styles.balance} display="flex" alignItems="center" className="focus-in-expand">
                                 <AttachMoney style={styles.moneyIcon} />
-                                <Typography variant="body2" className={"sit" + sit}>{toMoney(players[sit].balance)}</Typography>
+                                <Typography variant="body2" >{toMoney(players[sit].balance)}</Typography>
                             </Box>
                         </div>
                         <div style={styles.dAvatar} className={winner.includes(sit) ? "pulsate-fwd" : ""}>
@@ -218,20 +214,21 @@ class Item extends Component {
                                     </div>
                                 }
                                 {('bet' in players[sit] && players[sit].state != 'fold') &&
-                                    <Box style={{ ...styles.amount, ...this.adir[align] }} display="flex" alignItems="center" classNameName="focus-in-expand">
+                                <div style={{ ...styles.box, ...this.adir[align] }}>
+                                    <Box style={styles.amount} display="flex" alignItems="center" className={"focus-in-expand sit-" + sit}>
                                         <img className="bet-chip" src={chip} />
-                                        <Typography variant="body2" style={styles.amountText}>
-                                            {players[sit].bet > 0
-                                                ? <CountUp
-                                                    start={0}
-                                                    end={players[sit].bet}
-                                                    decimals={amountLen(players[sit].bet)}
-                                                    {...(isFloat(players[sit].bet) ? undefined : { formattingFn: e => toMoney(e) })}
-                                                />
-                                                : 0
-                                            }
+                                        <Typography variant="body2" style={styles.Text}>
+                                            {toMoney(players[sit].bet)}
                                         </Typography>
                                     </Box>
+                                    {players[sit].state != 'new' &&
+                                        <Box style={styles.state} display="flex" alignItems="center" className="focus-in-expand">
+                                            <Typography variant="body2" style={styles.Text}>
+                                                {t(players[sit].state)}
+                                            </Typography>
+                                        </Box>
+                                    }
+                                    </div>
                                 }
                             </div>
                         </div>
@@ -302,6 +299,9 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
     },
+    chip: {
+        position: 'absolute',
+    },
     content: {
         display: 'flex',
         alignItems: 'center',
@@ -333,6 +333,14 @@ const styles = {
         padding: '0px 10px',
         boxShadow: '0 0 4px #0e1635 inset',
         alignItems: 'center',
+        position: 'absolute',
+        top: '-10%'
+    },
+    box: {
+        flexDirection: 'column',
+        position: 'absolute',
+        display: 'flex',
+        alignItems: 'center',
     },
     amount: {
         display: 'flex',
@@ -340,12 +348,22 @@ const styles = {
         justifyContent: 'center',
         border: '1px solid rgba(87, 87, 87, 0.3)',
         borderRadius: 20,
-        alignItems: 'center',
-        position: 'absolute',
+        
     },
-    amountText: {
+    state: {
+        background: '#b17d42',
+        borderRadius: 20,
+        margin:5
+    },
+    Text: {
+        color: '#fff',
         padding: ' 0px 6px',
-    }
+    },
+    stateText: {
+        fontSize:12,
+        color: '#fff',
+        padding: ' 0px 6px',
+    },
 }
 
 export default Item;

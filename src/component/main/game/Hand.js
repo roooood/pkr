@@ -92,7 +92,7 @@ class ListTable extends Component {
                                     <StyledTableRow
                                         hover
                                         tabIndex={-1}
-                                        key={row.id}>
+                                        key={i}>
                                         {columns.map(column => {
                                             const value = row[column.id] || null;
                                             return (

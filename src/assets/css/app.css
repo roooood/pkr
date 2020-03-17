@@ -113,6 +113,11 @@ body {
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
+.moving{
+  -webkit-transition: all 0.8s ease; 
+  -moz-transition: all 0.8s ease; 
+  transition:  all 0.8s ease;
+}
 @media only screen and (orientation:portrait) {
   #content {
     display:none;

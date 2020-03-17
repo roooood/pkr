@@ -24,6 +24,26 @@ import CardActions from '@material-ui/core/CardActions';
 import Position from './Position';
 import Loading from 'component/component/Loading';
 import play from 'library/Sound';
+import Button from '@material-ui/core/Button';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
+
+
+const StyledBtn = withStyles(theme => ({
+    root: {
+        padding: '10px 0',
+        width:'100%',
+        margin: 5,
+        fontSize: '.9rem',
+        background: '#19460c',
+        transition: 'all 0.3s ease-out',
+        '&:hover': {
+            background:'#357b21'
+        },
+    },
+    label: {
+        color: '#fff'
+    }
+}))(Button);
 
 const StyledCard = withStyles(theme => ({
     root: {
@@ -179,17 +199,6 @@ class ListTable extends Component {
         });
     }
 
-    join(id) {
-        if (this.inGame) {
-            let xalert = this.context.app('alert');
-            xalert.show({ message: t('inGameLimit'), type: 'error' });
-        }
-        else {
-            const key = this.context.state.userKey || '';
-            this.context.game.join(id, { key });
-        }
-
-    }
     addTab({ id, name, type }) {
         play('click')
         this.props.dispatch(TabbarAdd({
@@ -268,7 +277,10 @@ class ListTable extends Component {
                             <Position state={rooms[active]} />
                         </CardContent>
                         <CardActions disableSpacing>
-
+                            <StyledBtn onClick={() => this.addTab(rooms[active])}> 
+                                <LibraryAddIcon style={{marginLeft:10,marginRight:10}} />
+                                <Typography style={styles.join}>join</Typography>
+                            </StyledBtn>    
                         </CardActions>
 
                     </StyledCard>
