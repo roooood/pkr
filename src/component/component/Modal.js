@@ -59,7 +59,7 @@ class Modal extends React.Component {
                 maxWidth={'md'}
                 open={this.state.open}
                 TransitionComponent={Transition}
-                onClose={this.hide}
+                // onClose={this.hide}
                 className="modal"
             >
                 {/* <DialogTitle id="max-width-dialog-title">Optional sizes</DialogTitle> */}

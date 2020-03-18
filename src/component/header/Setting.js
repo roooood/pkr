@@ -52,6 +52,9 @@ class Setting extends Component {
         };
         autoBind(this);
     }
+    refreshList() {
+        window.ee.emit('refreshList')
+    }
     leave() {
         window.ee.emit('leave' + this.props.tab.active)
         window.ee.emit('removeTab', this.props.tab.active)
@@ -95,7 +98,7 @@ class Setting extends Component {
                         <LightTooltip title={t('exit')} >
                         < IconButton onClick={this.leave} color="secondary" >
                             <Close />
-                            </IconButton>
+                        </IconButton>
                         </LightTooltip>
                         <LightTooltip title={t('standUp')} >
                         <IconButton onClick={this.standUp} >
@@ -128,15 +131,15 @@ class Setting extends Component {
                 {this.props.tab.active == 'lobby'
                     ? <>
                         <LightTooltip title={t('refresh')} >
-                        < IconButton onClick={() => null}  >
+                        < IconButton onClick={() => this.refreshList}  >
                             <Refresh style={styles.icon} />
                             </IconButton>
                         </LightTooltip>
-                        <LightTooltip title={t('filter')} >
+                        {/* <LightTooltip title={t('filter')} >
                             < IconButton onClick={() => null}  >
                                 <FilterList style={styles.icon} />
                             </IconButton>
-                        </LightTooltip>
+                        </LightTooltip> */}
                     </>
                     : <>
                         <LightTooltip title={t('exit')} >

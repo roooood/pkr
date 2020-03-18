@@ -33,18 +33,21 @@ class Position extends Component {
             mySit: 0,
             start: 0,
             end: 0,
+            hand : [],
+            seat: null,
+            seatCards: null
         };
         autoBind(this);
     }
-    componentDidMount() {
+    componentDidMount() {       
         this.context.game.register(this.Room, 'win', this.win);
         this.context.game.register(this.Room, 'lose', this.lose);
         this.context.game.register(this.Room, 'mySit', this.mySit);
-        this.context.game.register(this.Room, 'actionResult', this.actionResult);
         this.context.game.register(this.Room, 'winner', this.result);
         this.context.game.register(this.Room, 'reset', this.reset);
         this.context.game.register(this.Room, 'cantStandErr', this.cantStandErr);
         this.context.game.register(this.Room, 'balance', this.balance);
+        this.context.game.register(this.Room, 'gameResult', this.gameResult);
     }
     result(winner) {
         console.log(winner)
@@ -78,53 +81,64 @@ class Position extends Component {
     alert(message,type='error') {
         window.ee.emit('notify', { message, type })
     }
-    company() {
-        setTimeout(() => {
-            play('company')
-            this.setState({
-                start: this.state.end,
-                end: add(this.state.end, this.context.state.bet),
-            })
-        }, 900);
-    }
-    actionResult() {
-
-    }
     reset() {
-        // this.state.start = 0;
-        // this.state.end = 0;
         this.setState({
             start: 0,
             end: 0,
         })
     }
     gameResult(res) {
-        let winer = res.win;
+        let winer = res.wins;
+        this.move(winer);
+        let c = 0;
+        for (let i in winer) {
+            ((winer, i)=> {
+                setTimeout(()=>{
+                    this.setState({
+                        hand: winer[i][0],
+                        seat: i,
+                        seatCards: winer[i][1]
+                    })
+                }, c*3000);
+            })(winer, i);
+            c++;
+        }
+        setTimeout(() => {
+            this.setState({
+                hand: [],
+                seat: null,
+                seatCards: null
+            })
+        }, c * 3000);
+    }
+    move(winer) {
         let sr = 'bet-value';
         let el = document.querySelector('.' + sr);
         if (el) {
             let spos = getOffset(el);
             el.innerText = '0';
+            let c = 0;
             for (let i of winer) {
                 let cl = el.cloneNode(true);
-                cl.innerText = toMoney(this.state.end / winer.length)
+                cl.innerText = toMoney(this.props.state.bank / winer.length)
                 document.body.appendChild(cl);
                 cl.classList.add('moving');
                 cl.setAttribute("style", 'position: absolute;left:' + spos.left + 'px;top:' + spos.top + 'px;');
                 (function (cl, sit) {
                     setTimeout(function () {
-                        let dl = document.querySelector('.sit' + sit);
+                        let dl = document.querySelector('.sit-' + sit);
                         let dpos = getOffset(dl);
                         cl.classList.add('blur-out-contract-bck');
                         cl.style.left = dpos.left + 'px';
                         cl.style.top = dpos.top + 'px';
-                    }, 100);
+                    }, c*3000);
                 })(cl, i);
+                c++;
             }
         }
     }
     render() {
-        const { deck, bank } = this.props.state;
+        let { deck, bank } = this.props.state;
         let decks = deck || [];
         if (decks.length > 0) {
             let size = 5 - decks.length;
@@ -133,7 +147,8 @@ class Position extends Component {
         }
         const { player } = this.Room.data;
         let commission = (Number(this.Room.data.setting.commission) * this.props.state.bank) / 100;
-
+        const { hand} = this.state;
+        bank = 2000;
         return (
             <div style={styles.root}>
                 <div className="pocker-desc">
@@ -141,40 +156,40 @@ class Position extends Component {
                         <div className={"wood p" + player}>
                             <div className="top positions">
                                 {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
-                                    <Item align="up" Room={this.Room} state={this.props.state} sit={1} />
+                                    <Item align="up" Room={this.Room} state={this.props.state} parent={this.state} sit={1} />
                                 }
                                 <LightTooltip title={t('commission') +': '+commission}>
                                     <img src={Milf} className="milf" style={player==2 ?{ maxWidth:70} : {}} />
                                 </LightTooltip>
                                 {[9, 8, 7, 6, 5, 4, 3].includes(player) &&
-                                    <Item align="up" Room={this.Room} state={this.props.state} sit={9} />
+                                    <Item align="up" Room={this.Room} state={this.props.state} parent={this.state} sit={9} />
                                 }
                             </div>
                             <div className="left positions">
                                 {[9, 8, 7, 6, 5].includes(player) &&
-                                    <Item align="left" Room={this.Room} state={this.props.state} sit={7} />
+                                    <Item align="left" Room={this.Room} state={this.props.state} parent={this.state} sit={7} />
                                 }
                                 {[8, 9, 2].includes(player) &&
-                                    <Item align="left" Room={this.Room} state={this.props.state} sit={8} />
+                                    <Item align="left" Room={this.Room} state={this.props.state} parent={this.state} sit={8} />
                                 }
                             </div>
                             <div className="bottom positions">
                                 {[9, 8, 7, 6, 4].includes(player) &&
-                                    <Item align="down" Room={this.Room} state={this.props.state} sit={6} />
+                                    <Item align="down" Room={this.Room} state={this.props.state} parent={this.state} sit={6} />
                                 }
                                 {[5, 7, 9, 3].includes(player) &&
-                                    <Item align="down" Room={this.Room} state={this.props.state} sit={5} />
+                                    <Item align="down" Room={this.Room} state={this.props.state} parent={this.state} sit={5} />
                                 }
                                 {[9, 8, 7, 6, 4].includes(player) &&
-                                    <Item align="down" Room={this.Room} state={this.props.state} sit={4} />
+                                    <Item align="down" Room={this.Room} state={this.props.state} parent={this.state} sit={4} />
                                 }
                             </div>
                             <div className="right positions">
                                 {[9, 8, 7, 6, 5].includes(player) &&
-                                    <Item align="right" Room={this.Room} state={this.props.state} sit={2} />
+                                    <Item align="right" Room={this.Room} state={this.props.state} parent={this.state} sit={2} />
                                 }
                                 {[8, 9, 2].includes(player) &&
-                                    <Item align="right" Room={this.Room} state={this.props.state} sit={3} />
+                                    <Item align="right" Room={this.Room} state={this.props.state} parent={this.state} sit={3} />
                                 }
                             </div>
                             <div className="board">
@@ -196,9 +211,15 @@ class Position extends Component {
                                 }
                                 <div className="board-cards">
                                     {
-                                        (decks).map((card, i) => (
-                                            <div key={i} className={"card anim _" + card}></div>
-                                        ))
+                                        (decks).map((card, i) => {
+                                            let cls = '';
+                                            if (hand.length > 0) {
+                                                cls = hand.includes(card) ? '' :'card-blur'
+                                            }
+                                            return (
+                                                <div key={i} className={"card anim _" + card + ' '+cls}></div>
+                                            )
+                                        })
                                     }
                                 </div>
                                 <div></div>

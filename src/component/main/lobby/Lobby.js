@@ -133,6 +133,7 @@ class ListTable extends Component {
         autoBind(this);
         this.timer = null;
         this.Room = {};
+        window.ee.on('refreshList', this.refresh)
     }
     componentDidMount() {
         this.getTableList();

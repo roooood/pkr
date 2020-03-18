@@ -23,8 +23,8 @@ class Item extends Component {
         super(props);
         this.Room = this.props.Room;
         this.state = {
-            cards: ['3c', 'Kd'],
-            cardType: 'front',
+            cards: [],
+            cardType: '',
             mySit: 0,
             timer: false,
             winner: [],
@@ -131,12 +131,12 @@ class Item extends Component {
         }
     }
     gameResult(res) {
-        let winner = res.win;
+        let winner = Object.keys(res.win);
         let loser = res.lose;
         this.setState({ winner, loser });
-        setTimeout(() => {
-            this.setState({ winner: [], loser: [] });
-        }, 4900)
+        // setTimeout(() => {
+        //     this.setState({ winner: [], loser: [] });
+        // }, 4900)
     }
     showTimer() {
         this.setState({ timer: true });
@@ -161,20 +161,28 @@ class Item extends Component {
             cl.setAttribute("style", 'position: absolute;left:' + spos.left + 'px;top:' + spos.top + 'px;');
             setTimeout(() => {
                 cl.classList.add('blur-out-contract-bck');
-                cl.style.left = dpos.left + 200 + 'px';
+                cl.style.left = dpos.left + 330 + 'px';
                 cl.style.top = dpos.top +5 + 'px';
             }, 100);
         }
     }
     sit() {
         play('click');
-        this.context.game.send(this.Room, { sit: this.props.sit })
+        if ('id' in this.context.state.user) {
+            this.context.game.send(this.Room, { sit: this.props.sit })
+        }
+        else {
+            this.guest();
+        }
     }
     render() {
         const { align, sit } = this.props;
-        const { winner, loser, cards, mySit } = this.state;
+        let { winner, loser, cards, mySit, cardType} = this.state;
         const { players, turn, started } = this.props.state;
-
+        if (this.props.parent.seat == sit) {
+            cards = this.props.parent.seatCards;
+            cardType = 'front';
+        }
         if (players != undefined) {
             if (sit in players) {
                 return (
@@ -203,13 +211,19 @@ class Item extends Component {
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
                                 {(cards.length > 0 && players[sit].state != 'fold') &&
-                                    <div className={"hand-card c" + cards.length + ' t-' + this.state.cardType} style={this.cdir[this.state.cardType]['c'+cards.length][align]} >
+                                    <div className={"hand-card c" + cards.length + ' t-' + cardType} style={this.cdir[cardType]['c'+cards.length][align]} >
                                         {
-                                            cards.map((card, i) => (
+                                        cards.map((card, i) => {
+                                            let cls = '';
+                                            if (this.props.parent.hand.length > 0) {
+                                                cls = this.props.parent.hand.includes(card) ? '' : 'card-blur'
+                                            }
+                                            return(
                                                 <div key={card} >
-                                                    <div className={'card hand _' + card + ' card-anim' + (i + 1) + (mySit == sit ? '  my-hand' : '')} />
+                                                    <div className={'card hand _' + card + ' card-anim' + (i + 1) + (mySit == sit ? '  my-hand' : '')+ ' '+cls} />
                                                 </div>
-                                            ))
+                                            )
+                                        } )
                                         }
                                     </div>
                                 }

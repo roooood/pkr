@@ -183,7 +183,9 @@
   display: flex;
   flex-direction: row;
 }
-
+.card-blur{
+  filter: opacity(.1) ;
+}
 .hand-card.c2>div:first-child{
   transform: rotate(-10deg) translateX(5px);
 }
