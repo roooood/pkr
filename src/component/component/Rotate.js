@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 export default () => (
     <div className="rotate">
-        <div class="phone"></div>
-        <div class="message">
+        <div className="phone"></div>
+        <div className="message">
             Please rotate your device!
         </div>
     </div>

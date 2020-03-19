@@ -63,11 +63,11 @@ class Position extends Component {
     }
     lose(amount) {
         play('lose');
-        this.alert(t('loseMsg').replace('#', amount))
+        // this.alert(t('loseMsg').replace('#', amount))
     }
     win(amount) {
         play('win');
-        this.alert(t('winMsg').replace('#', amount),'success')
+        // this.alert(t('winMsg').replace('#', amount),'success')
     }
     mySit(mySit) {
         this.setState({ mySit })
@@ -123,7 +123,7 @@ class Position extends Component {
                 cl.setAttribute("style", 'position: absolute;left:' + spos.left + 'px;top:' + spos.top + 'px;');
                 (function (cl, sit) {
                     setTimeout(function () {
-                        let dl = document.querySelector('.sit-' + sit);
+                        let dl = document.querySelector('.user-' + sit);
                         let dpos = getOffset(dl);
                         cl.classList.add('blur-out-contract-bck');
                         cl.style.left = dpos.left + 'px';

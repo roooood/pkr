@@ -131,6 +131,7 @@ class Item extends Component {
         }
     }
     gameResult(wins) {
+        clearTimeout(this.timer);
         this.setState({ winner: Object.keys(wins) });
     }
     showTimer() {
@@ -176,6 +177,7 @@ class Item extends Component {
             cards = this.props.parent.seatCards;
             cardType = 'front';
         }
+        console.log(winner)
         if (players != undefined) {
             if (sit in players) {
                 return (
@@ -192,14 +194,14 @@ class Item extends Component {
                                 <Typography variant="body2" >{toMoney(players[sit].balance)}</Typography>
                             </Box>
                         </div>
-                        <div style={styles.dAvatar} className={winner.includes(sit) ? "pulsate-fwd" : ""}>
+                        <div style={styles.dAvatar}>
                             <div style={styles.cinfo}>
                                 {this.state.timer &&
                                     <Timer border time={this.Room.data.setting.timer} big={mySit == sit} />
                                 }
                                 <Avatar
                                     src={avatars[players[sit].avatar || null]}
-                                    className={started ? (turn == sit ? "avatar active" : "avatar") : (mySit == sit ? "avatar active" : "avatar")}
+                                    className={(started ? (turn == sit ? "avatar active" : "avatar") : (mySit == sit ? "avatar active" : "avatar")) + (" user-" + sit) + (winner.includes(sit+'') ? " pulsate-fwd" : "")}
                                     style={{ ...styles.avatar, backgroundColor: 'rgb(27, 26, 30)' }} >
                                     {players[sit].name[0].toUpperCase()}
                                 </Avatar>
@@ -220,14 +222,21 @@ class Item extends Component {
                                         }
                                     </div>
                                 }
-                                {('bet' in players[sit] && players[sit].state != 'fold') &&
-                                <div style={{ ...styles.box, ...this.adir[align] }}>
-                                    <Box style={styles.amount} display="flex" alignItems="center" className={"focus-in-expand sit-" + sit}>
-                                        <img className="bet-chip" src={chip} />
-                                        <Typography variant="body2" style={styles.Text}>
-                                            {toMoney(players[sit].bet)}
-                                        </Typography>
-                                    </Box>
+                                {((('bet' in players[sit] && players[sit].state != 'fold')) || winner.includes(sit + '')) &&
+                                    <div style={{ ...styles.box, ...this.adir[align] }}>
+                                    {winner.includes(sit + '')
+                                        ?< Box style={styles.win} display="flex" alignItems="center" className={"focus-in-expand"}>
+                                            <Typography variant="body2" style={styles.Text}>
+                                                {t('winner')}
+                                            </Typography>
+                                        </Box>
+                                        :< Box style={styles.amount} display="flex" alignItems="center" className={"focus-in-expand sit-" + sit}>
+                                            <img className="bet-chip" src={chip} />
+                                            <Typography variant="body2" style={styles.Text}>
+                                                {toMoney(players[sit].bet)}
+                                            </Typography>
+                                        </Box>
+                                    }
                                     {players[sit].state != 'new' &&
                                         <Box style={styles.state} display="flex" alignItems="center" className="focus-in-expand">
                                             <Typography variant="body2" style={styles.sText}>
@@ -245,7 +254,7 @@ class Item extends Component {
         }
         return (
             <Grid className="scale-in-center" style={{ animationDelay: '.' + sit / 3 + 's' }} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
-                <Grid item style={styles.info} direction={this.dir[align]} >
+                <div style={{ ...styles.info, flexDirection: this.dir[align]}} >
                     <div style={styles.xinfo}>
                         <Typography style={styles.name}>&nbsp;</Typography>
                         <Box display="flex" alignItems="center">
@@ -255,7 +264,7 @@ class Item extends Component {
                     <Avatar className={"avatar"} style={{ ...styles.avatar, backgroundColor: '#332c44' }} onClick={this.sit}>
                         <PersonAdd />
                     </Avatar>
-                </Grid>
+                </div>
                 <Grid item style={styles.content} >
 
                 </Grid>
@@ -356,6 +365,13 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         border: '1px solid rgba(87, 87, 87, 0.3)',
+        borderRadius: 20,
+    },
+    win: {
+        display: 'flex',
+        background: '#459518',
+        alignItems: 'center',
+        justifyContent: 'center',
         borderRadius: 20,
         
     },

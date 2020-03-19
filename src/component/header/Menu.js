@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import autoBind from 'react-autobind';
 
 import { t } from 'locales';
-import { connect } from 'react-redux';
 import Context from 'library/Context';
 
 
@@ -27,4 +26,4 @@ const styles = {
 
 }
 
-export default connect(state => state)(Menu);
+export default Menu;

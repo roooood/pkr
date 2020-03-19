@@ -14,8 +14,6 @@ import TableRow from '@material-ui/core/TableRow';
 import request from 'library/Fetch';
 import ArrowRight from '@material-ui/icons/ArrowRight';
 import ArrowLeft from '@material-ui/icons/ArrowLeft';
-import { connect } from 'react-redux';
-import { TabbarAdd } from 'redux/action/tab';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -172,7 +170,6 @@ class ListTable extends Component {
     }
     getList() {
         this.context.game.getAvailableRooms((rooms) => {
-            console.log(rooms)
             let onlines = 0;
             for (let room of this.state.rooms) {
                 room.live = false;
@@ -202,11 +199,12 @@ class ListTable extends Component {
     }
 
     addTab({ id, name, type }) {
-        play('click')
-        this.props.dispatch(TabbarAdd({
-            key: 't' + id,
-            value: { id, name, type, }
-        }));
+        play('click');
+
+        let key = 't' + id;
+        this.context.state.tab.data[key] = { id, name, type };
+        this.context.state.tab.active = key;
+        this.context.update();
     }
     setActive(active) {
         play('click')
@@ -334,7 +332,7 @@ const styles = {
         marginLeft: 10
     },
     active: {
-        background: 'rgba(50, 98, 60, 0.18)'
+        background: 'rgba(48, 44, 98, 0.59)'
     }
 }
-export default connect(state => state)(ListTable);
+export default ListTable;

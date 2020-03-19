@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import autoBind from 'react-autobind';
 
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "redux/store";
-
 import { getQuery } from 'library/Helper';
 import GameServer from 'library/Game';
 import Context from 'library/Context';
@@ -14,6 +10,7 @@ import Modal from 'component/component/Modal';
 import request from 'library/Fetch';
 import Avatar from 'component/component/Avatar';
 import Rotate from 'component/component/Rotate';
+import { t } from 'locales';
 
 import 'assets/css/app.css';
 import 'assets/css/table.css';
@@ -31,8 +28,12 @@ class App extends Component {
     this.state = {
       userKey: getQuery('token') || '-',
       user: {},
-      isMobile: window.innerWidth <= 950,
-      dir: dir
+      isMobile: window.innerWidth <= 900,
+      dir: dir,
+      tab: {
+        data: { lobby: { name: t('lobby') } },
+        active: 'lobby'
+      }
     };
     this.game = new GameServer('poker');
     autoBind(this);
@@ -65,16 +66,19 @@ class App extends Component {
   }
   render() {
     return (
-      <Provider store={store}>
-        <PersistGate persistor={persistor} loading={this.renderLoading()}>
-          <Context.Provider value={{ game: this.game, state: this.state, app: this.app, update: this.update, setState: this.changeState }}>
-            <Snack />
-            <Rotate />
-            <Modal ref={r => this.modal = r} />
-            <Route />
-          </Context.Provider>
-        </PersistGate>
-      </Provider >
+      <Context.Provider
+        value={{
+          game: this.game,
+          state: this.state,
+          app: this.app,
+          update: this.update,
+          setState: this.changeState
+        }}>
+        <Snack />
+        <Rotate />
+        <Modal ref={r => this.modal = r} />
+        <Route />
+      </Context.Provider>
     );
   }
 }

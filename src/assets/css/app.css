@@ -135,7 +135,7 @@ body {
   z-index: 9999999;
 }
 
-.phone {
+.rotate .phone {
   height: 50px;
   width: 100px;
   border: 3px solid white;
@@ -145,6 +145,7 @@ body {
   /* display: none; */
 }
 
+.rotate 
 .message {
   color: white;
   font-size: 1em;
@@ -317,7 +318,7 @@ body {
   height: 100vh;
   justify-content: center;
   align-items: center;
-  z-index: 99999;
+  z-index: 99;
  }
 
 .loading {
@@ -365,7 +366,7 @@ body {
 
 .scale-in-center{-webkit-animation:scale-in-center .5s cubic-bezier(.25,.46,.45,.94) both;animation:scale-in-center .5s cubic-bezier(.25,.46,.45,.94) both}
 .focus-in-expand{-webkit-animation:focus-in-expand .4s cubic-bezier(.25,.46,.45,.94) both;animation:focus-in-expand .4s cubic-bezier(.25,.46,.45,.94) both}
-.pulsate-fwd{-webkit-animation:pulsate-fwd .5s ease-in-out infinite both;animation:pulsate-fwd .5s ease-in-out infinite both}
+.pulsate-fwd{-webkit-animation:pulsate-fwd .9s ease-in-out infinite both;animation:pulsate-fwd .9s ease-in-out infinite both}
 .blur-out-contract-bck{-webkit-animation:blur-out-contract-bck .6s cubic-bezier(.55,.085,.68,.53) .5s both;animation:blur-out-contract-bck .6s cubic-bezier(.55,.085,.68,.53) .5s both}
 .slide-in-elliptic-top-fwd{-webkit-animation:slide-in-elliptic-top-fwd .7s cubic-bezier(.25,.46,.45,.94) both;animation:slide-in-elliptic-top-fwd .7s cubic-bezier(.25,.46,.45,.94) both}
 .card-anim1{-webkit-animation:swing-in-right-bck .6s cubic-bezier(.175,.885,.32,1.275) both;animation:swing-in-right-bck .6s cubic-bezier(.175,.885,.32,1.275) both}

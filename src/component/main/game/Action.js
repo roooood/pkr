@@ -17,7 +17,7 @@ const IOSSlider = withStyles({
     root: {
         color: '#d58328',
         height: 4,
-        margin: '20px 1% 0 3%',
+        margin: '20px 3% 0 2%',
         width: 300,
         padding: 0
     },
@@ -187,19 +187,21 @@ class Action extends Component {
         this.context.game.send(this.Room, { action: [type, this.state.bet] })
     }
     render() {
-        const { players } = this.props.state;
+        const { players ,bet} = this.props.state;
+        const player = players[this.state.mySit] || {};
+        const less = bet - (player.bet || 0);
         if (this.state.canTake == false)
             return null;
         return (
             <Grid className="scale-in-center" style={this.context.state.isMobile ? styles.mbox : styles.box} container >
-                {this.props.state.bet == (players[this.state.mySit] || {}).bet 
+                {bet == player.bet 
                     ? <StyledBtn className="btn-act" onClick={() => this.actionIs('check')}>
                         <Typography style={styles.text}>{t('check')}</Typography>
-                        <Typography style={styles.sub}>{toMoney(this.props.state.bet)}</Typography>
+                        <Typography style={styles.sub}>-</Typography>
                     </StyledBtn>
                     : <StyledBtn className="btn-act" onClick={() => this.actionIs('call')}>
                         <Typography style={styles.text}>{t('call')}</Typography>
-                        <Typography style={styles.sub}>{toMoney(this.props.state.bet)}</Typography>
+                        <Typography style={styles.sub}>{toMoney(less)}</Typography>
                     </StyledBtn>
                 }
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('fold')}>
@@ -212,8 +214,8 @@ class Action extends Component {
                         value={this.state.bet}
                         onChange={this.changeBet}
                         valueLabelDisplay="on"
-                        min={this.props.state.bet}
-                        max={this.context.state.user.balance}
+                        min={less+this.Room.data.min}
+                        max={player.balance}
                         step={this.Room.data.min}
                         valueLabelFormat={this.valuetext}
                     />
@@ -223,19 +225,19 @@ class Action extends Component {
                         value={this.state.bet}
                         onChange={this.changeBet}
                         valueLabelDisplay="on"
-                        min={this.props.state.bet }
-                        max={this.context.state.user.balance}
+                        min={less+this.Room.data.min }
+                        max={player.balance}
                         step={this.Room.data.min}
                         valueLabelFormat={this.valuetext}
                     />
                 }
-                <StyledBtn className="btn-act" onClick={() => this.actionIs('raise')}>
+                <StyledBtn className="btn-act" onClick={() => this.actionIs('raise')} disabled={player.balance < this.state.bet }>
                     <Typography style={styles.text}>{t('raise')}</Typography>
-                    <Typography style={styles.sub}>{this.valuetext(this.props.state.bet > this.state.bet ? this.props.state.bet : this.state.bet)}</Typography>
+                    <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
                 </StyledBtn>
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('allin')}>
                     <Typography style={styles.text}>{t('allin')}</Typography>
-                    <Typography style={styles.sub}>{this.valuetext(this.context.state.user.balance)}</Typography>
+                    <Typography style={styles.sub}>{this.valuetext(player.balance)}</Typography>
                 </StyledBtn>
             </Grid >
         )

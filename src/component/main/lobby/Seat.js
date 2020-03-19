@@ -59,7 +59,7 @@ class Item extends Component {
         }
         return (
             <Grid className="scale-in-center" style={{ animationDelay: '.' + sit/2 + 's' }} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
-                <Grid item style={styles.info} direction={this.dir[align]} >
+                <div style={{ ...styles.info, flexDirection: this.dir[align]}}  >
                     <div style={styles.xinfo}>
                         <Typography style={styles.name}>&nbsp;</Typography>
                         <Box display="flex" alignItems="center">
@@ -69,7 +69,7 @@ class Item extends Component {
                     <Avatar style={{ ...styles.avatar, backgroundColor: '#332c44' }} onClick={this.sit}>
                         <PersonAdd style={{ fontSize: 12 }} />
                     </Avatar>
-                </Grid>
+                </div>
                 <Grid item style={styles.content} >
 
                 </Grid>

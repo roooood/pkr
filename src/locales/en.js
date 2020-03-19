@@ -30,6 +30,7 @@ export default {
     raise: 'RAISE',
     check: 'Check',
     allin: 'All In',
+    winner:'Winner',
     commission: 'Commission',
     id: 'Id',
     myCards: 'My Cards',

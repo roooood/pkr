@@ -14,7 +14,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { toMoney } from 'library/Helper';
 import { t } from 'locales';
-import { connect } from 'react-redux';
 import Context from 'library/Context';
 import play from 'library/Sound';
 
@@ -58,12 +57,12 @@ class Setting extends Component {
     }
     leave() {
         play('click')
-        window.ee.emit('leave' + this.props.tab.active)
-        window.ee.emit('removeTab', this.props.tab.active)
+        window.ee.emit('leave' + this.context.state.tab.active)
+        window.ee.emit('removeTab', this.context.state.tab.active)
     }
     standUp() {
         play('click')
-        window.ee.emit('standUp' + this.props.tab.active)
+        window.ee.emit('standUp' + this.context.state.tab.active)
     }
     changeScreen() {
         play('click')
@@ -95,7 +94,7 @@ class Setting extends Component {
     }
     render() {
         if (this.context.state.isMobile) {
-            if (this.props.tab.active == 'lobby')
+            if (this.context.state.tab.active == 'lobby')
                 return null;
             return (
                 <div style={styles.root} >
@@ -133,7 +132,7 @@ class Setting extends Component {
         }
         return (
             <>
-                {this.props.tab.active == 'lobby'
+                {this.context.state.tab.active == 'lobby'
                     ? <>
                         <LightTooltip title={t('refresh')} >
                         < IconButton onClick={this.refreshList}  >
@@ -209,4 +208,4 @@ const styles = {
     },
 }
 
-export default connect(state => state)(Setting);
+export default Setting;

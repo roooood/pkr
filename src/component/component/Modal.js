@@ -14,19 +14,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const StyledModal = withStyles(theme => ({
+    root: {
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        zIndex: 99999
+    },
     paper: {
         backgroundColor: '#262539',
         color: ' #fff',
     },
 }))(Dialog);
-const StyledModal2 = withStyles(theme => ({
-    paper: {
-        backgroundColor: '#25272b',
-        color: ' #fff',
-        width: '100%',
-        margin: 10
-    },
-}))(Dialog);
+
 const StyledDialogContent = withStyles(theme => ({
     root: {
         padding: 10
@@ -52,9 +49,8 @@ class Modal extends React.Component {
         this.setState({ open: true, component })
     }
     render() {
-        const Modal = this.context.state.isPortrait ? StyledModal2 : StyledModal;
         return (
-            <Modal
+            <StyledModal
                 fullWidth={true}
                 maxWidth={'md'}
                 open={this.state.open}
@@ -71,7 +67,7 @@ class Modal extends React.Component {
                         Close
                     </Button>
                 </DialogActions> */}
-            </Modal>
+            </StyledModal>
         );
     }
 }

@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import autoBind from 'react-autobind';
-import { connect } from 'react-redux';
-import { TabbarRemove, TabbarActive, TabbarAdd } from 'redux/action/tab';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Context from 'library/Context';
-import Button from '@material-ui/core/Button';
 import { t } from 'locales';
-import IconButton from '@material-ui/core/IconButton';
 import GamepadIcon from '@material-ui/icons/GamepadOutlined';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsportsOutlined';
 
@@ -57,14 +53,14 @@ const StyledTab = withStyles(theme => ({
     selected: {}
 }))(props => <Tab {...props} />);
 
-function tabGenerator(id, props, onRemove, inList = false) {
+function tabGenerator(id, props) {
     return (
         <div style={styles.list}>
             {id == 'lobby'
                 ? <GamepadIcon />
                 : <SportsEsportsIcon />
             }
-            <div style={{ ...styles.listText, ...(inList ? { marginLeft: 10 } : {}) }}>
+            <div style={styles.listText}>
                 <Typography variant="subtitle1" display="block" style={{ fontSize: 13 }} >
                     {props.name}
                 </Typography>
@@ -72,14 +68,10 @@ function tabGenerator(id, props, onRemove, inList = false) {
                     {props.desc || ''}
                 </Typography>
             </div>
-            {/* {onRemove != null &&
-                <IconButton color="secondary" style={styles.listRemove} onClick={() => onRemove(id)}>
-                    <CloseRoundedIcon style={{ fontSize: 18, color: 'rgb(195, 68, 110)' }} />
-                </IconButton>
-            } */}
         </div>
     )
 }
+
 class Appbar extends Component {
     static contextType = Context;
     constructor(props, context) {
@@ -92,29 +84,20 @@ class Appbar extends Component {
     componentDidMount() {
 
     }
-    addTab({ id, symbol, display, type }) {
-        this.props.dispatch(TabbarAdd({
-            key: 't' + id,
-            value: {
-                id,
-                symbol,
-                name: display,
-                type,
-                resolution: this.context.state.setting.reolution,
-                chartType: this.context.state.setting.chartType
+    handleChangeList(e, active) {
+        const { tab } = this.context.state
+        if (active != tab.active) {
+            let keys = Object.keys(tab.data);
+            if (keys.includes(active)) {
+                this.context.state.tab.active = active;
+                this.context.update();
             }
-        }));
-    }
-    handleChangeList(e, tab) {
-        if (tab != this.context.state.tabbar) {
-            let keys = Object.keys(this.props.tab.data);
-            if (keys.includes(tab))
-                this.props.dispatch(TabbarActive(tab));
         }
     }
     removeTab(id) {
-        this.props.dispatch(TabbarRemove(id));
-        let keys = Object.keys(this.props.tab.data);
+        delete this.context.state.tab.data[id];
+        
+        let keys = Object.keys(this.context.state.tab.data);
         let index = keys.indexOf(id);
         if (keys[index + 1] != 'undefined') {
             this.handleChangeList(null, keys[index + 1])
@@ -124,7 +107,7 @@ class Appbar extends Component {
         }
     }
     render() {
-        const tab = this.props.tab.data || {};
+        const tab = this.context.state.tab.data;
         const keys = Object.keys(tab);
 
         if (keys.length === 0)
@@ -133,7 +116,7 @@ class Appbar extends Component {
             <div style={styles.root}>
                 <div style={{ ...styles.tabs }} >
                     <StyledTabs
-                        value={this.props.tab.active + ""}
+                        value={this.context.state.tab.active + ""}
                         onChange={this.handleChangeList}
                         variant="scrollable"
                         scrollButtons="on"
@@ -142,7 +125,7 @@ class Appbar extends Component {
                     >
                         {keys.map((item) => {
                             return (
-                                <StyledTab key={item} disableRipple={true} value={item} label={tabGenerator(item, tab[item], item == 'lobby' ? null : this.onRemove)} />
+                                <StyledTab key={item} disableRipple={true} value={item} label={tabGenerator(item, tab[item])} />
                             )
                         })
                         }
@@ -186,4 +169,4 @@ const styles = {
         borderRadius: 5
     }
 }
-export default connect(state => state)(Appbar);
+export default Appbar;

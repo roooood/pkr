@@ -11,7 +11,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import request from 'library/Fetch';
-import { connect } from 'react-redux';
 import play from 'library/Sound';
 
 
@@ -22,7 +21,8 @@ const StyledTableCell = withStyles(theme => ({
         backgroundColor: '#1c1a29',
         color: '#fff',
         border: 0,
-        padding: 12
+        padding: 12,
+        borderBottom: '1px solid rgba(255,255,255,.1)'
     },
     body: {
         fontSize: 11,
@@ -49,7 +49,7 @@ const StyledTableRow = withStyles(theme => ({
 const columns = [
     { id: 'id', label: t('id') },
     // { id: 'myCards', label: t('myCards') },
-    { id: 'cards', label: t('board') },
+    { id: 'cards', label: t('board'), format: val => val.replace(/d/g, '♦').replace(/h/g, '♥').replace(/c/g, '♣').replace(/s/g, '♠').replace(/,/g, ' ') },
     { id: 'bank', label: t('pot'), format: val =>toMoney(val) },
 ];
 
@@ -145,4 +145,4 @@ const styles = {
         background: 'rgba(50, 98, 60, 0.18)'
     }
 }
-export default connect(state => state)(ListTable);
+export default ListTable;

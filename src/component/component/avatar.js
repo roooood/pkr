@@ -42,6 +42,7 @@ var styles = {
     title: {
         textAlign: 'center',
         paddingBottom: 10,
+        fontSize: 20,
         marginTop: -10,
         borderBottom: '1px solid #555'
     },

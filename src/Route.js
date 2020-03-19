@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import autoBind from 'react-autobind';
-import { connect } from 'react-redux';
-import Hidden from '@material-ui/core/Hidden';
 
 import Context from './library/Context';
 import { t } from './locales';
@@ -72,4 +70,4 @@ const styles = {
     }
 }
 
-export default connect(state => state)(Route);
+export default Route;
