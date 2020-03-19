@@ -213,7 +213,7 @@ class Position extends Component {
                                                 cls = hand.includes(card) ? '' :'card-blur'
                                             }
                                             return (
-                                                <div key={i} className={"card anim _" + card + ' '+cls}></div>
+                                                <div key={i} className={"card  _" + card + ' ' + cls + (card == ''? '' :' anim-'+(i+1))}></div>
                                             )
                                         })
                                     }

@@ -225,25 +225,28 @@ class Item extends Component {
                                 {((('bet' in players[sit] && players[sit].state != 'fold')) || winner.includes(sit + '')) &&
                                     <div style={{ ...styles.box, ...this.adir[align] }}>
                                     {winner.includes(sit + '')
-                                        ?< Box style={styles.win} display="flex" alignItems="center" className={"focus-in-expand"}>
+                                        ?<Box style={styles.win} display="flex" alignItems="center" className={"focus-in-expand"}>
                                             <Typography variant="body2" style={styles.Text}>
                                                 {t('winner')}
                                             </Typography>
                                         </Box>
-                                        :< Box style={styles.amount} display="flex" alignItems="center" className={"focus-in-expand sit-" + sit}>
+                                        :<>
+                                        < Box style={styles.amount} display="flex" alignItems="center" className={"focus-in-expand sit-" + sit}>
                                             <img className="bet-chip" src={chip} />
                                             <Typography variant="body2" style={styles.Text}>
                                                 {toMoney(players[sit].bet)}
                                             </Typography>
                                         </Box>
+                                        {players[sit].state != 'new' &&
+                                            <Box style={styles.state} display="flex" alignItems="center" className="focus-in-expand">
+                                                <Typography variant="body2" style={styles.sText}>
+                                                    {t(players[sit].state)}
+                                                </Typography>
+                                            </Box>
+                                        }
+                                        </>
                                     }
-                                    {players[sit].state != 'new' &&
-                                        <Box style={styles.state} display="flex" alignItems="center" className="focus-in-expand">
-                                            <Typography variant="body2" style={styles.sText}>
-                                                {t(players[sit].state)}
-                                            </Typography>
-                                        </Box>
-                                    }
+                                   
                                     </div>
                                 }
                             </div>

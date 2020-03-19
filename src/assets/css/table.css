@@ -142,17 +142,6 @@
   flex-direction: row;
 }
 
-@keyframes cardshowing {
-  from {
-    opacity: 0;
-    transform: translateY(-150%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .card {
   width: 54px;
   height: 75px;
@@ -172,11 +161,88 @@
   width: 36px;
   height: 50px;
 }
-.card.anim{
+.card.anim-1{
   animation: cardshowing 0.2s linear;
   animation-fill-mode: both;
+  animation-delay: .2s;
   opacity: 0;
 }
+.card.anim-2{
+  animation: cardshowing2 0.2s linear;
+  animation-fill-mode: both;
+  animation-delay: .3s;
+  opacity: 0;
+}
+.card.anim-3{
+  animation: cardshowing3 0.2s linear;
+  animation-fill-mode: both;
+  animation-delay: .8s;
+  opacity: 0;
+}
+.card.anim-4{
+  animation: cardshowing3 0.2s linear;
+  animation-fill-mode: both;
+  animation-delay: .2s;
+  opacity: 0;
+}
+.card.anim-5{
+  animation: cardshowing3 0.2s linear;
+  animation-fill-mode: both;
+  animation-delay: .3s;
+  opacity: 0;
+}
+
+@keyframes cardshowing {
+  from {
+    opacity: .0;
+    transform: translateY(-280%) translateX(40px) skewY(15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0)  translateX(0) skewY(0);
+  }
+}
+@keyframes cardshowing2 {
+  from {
+    opacity: .0;
+    transform: translateY(-280%) translateX(20px) skewY(15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0)  translateX(0) skewY(0);
+  }
+}
+@keyframes cardshowing3 {
+  from {
+    opacity: .0;
+    transform: translateY(-280%) translateX(0px) skewY(15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0)  translateX(0) skewY(0);
+  }
+}
+@keyframes cardshowing4 {
+  from {
+    opacity: .0;
+    transform: translateY(-280%) translateX(-20px) skewY(-15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0)  translateX(0) skewY(0);
+  }
+}
+@keyframes cardshowing5 {
+  from {
+    opacity: .0;
+    transform: translateY(-280%) translateX(-40px) skewY(-15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0)  translateX(0) skewY(0);
+  }
+}
+
 .hand-card{
   z-index: -1;
   position: absolute;
