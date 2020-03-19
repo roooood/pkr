@@ -33,8 +33,8 @@ class Item extends Component {
             back: {
                 c2: {
                     right: { top: -50 },
-                    up: { left: -60 },
-                    down: { right: -70},
+                    up: { left: -70 },
+                    down: { right: -85},
                     left: { bottom: -44 }
                 },
                 c4: {
@@ -94,7 +94,7 @@ class Item extends Component {
     }
 
     actionIs([sit, type]) {
-        console.log(type)
+        play(type);
         if (sit == this.props.sit) {
             if (type == 'fold')
                 this.reset();

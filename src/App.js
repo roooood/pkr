@@ -13,6 +13,7 @@ import Snack from 'component/component/Snack';
 import Modal from 'component/component/Modal';
 import request from 'library/Fetch';
 import Avatar from 'component/component/Avatar';
+import Rotate from 'component/component/Rotate';
 
 import 'assets/css/app.css';
 import 'assets/css/table.css';
@@ -68,6 +69,7 @@ class App extends Component {
         <PersistGate persistor={persistor} loading={this.renderLoading()}>
           <Context.Provider value={{ game: this.game, state: this.state, app: this.app, update: this.update, setState: this.changeState }}>
             <Snack />
+            <Rotate />
             <Modal ref={r => this.modal = r} />
             <Route />
           </Context.Provider>

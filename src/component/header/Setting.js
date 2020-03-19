@@ -53,16 +53,20 @@ class Setting extends Component {
         autoBind(this);
     }
     refreshList() {
+        play('click')
         window.ee.emit('refreshList')
     }
     leave() {
+        play('click')
         window.ee.emit('leave' + this.props.tab.active)
         window.ee.emit('removeTab', this.props.tab.active)
     }
     standUp() {
+        play('click')
         window.ee.emit('standUp' + this.props.tab.active)
     }
     changeScreen() {
+        play('click')
         this.setState({ fullscreen: !this.state.fullscreen })
         if ((document.fullScreenElement && document.fullScreenElement !== null) ||
             (!document.mozFullScreen && !document.webkitIsFullScreen)) {
@@ -84,6 +88,7 @@ class Setting extends Component {
         }
     }
     toggleSound() {
+        play('click')
         let act = ('mute' in this.context.state) && this.context.state.mute ? false : true;
         play(!act);
         this.context.setState({ mute: act });

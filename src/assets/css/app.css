@@ -118,9 +118,76 @@ body {
   -moz-transition: all 0.8s ease; 
   transition:  all 0.8s ease;
 }
+
+.rotate {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+  width:100%;
+  right:100%;
+  background:#222;
+  z-index: 9999999;
+}
+
+.phone {
+  height: 50px;
+  width: 100px;
+  border: 3px solid white;
+  border-radius: 10px;
+  -webkit-animation: rotate 1.5s ease-in-out infinite alternate;
+          animation: rotate 1.5s ease-in-out infinite alternate;
+  /* display: none; */
+}
+
+.message {
+  color: white;
+  font-size: 1em;
+  margin-top: 40px;
+  /* display: none; */
+}
+
+@-webkit-keyframes rotate {
+  0% {
+		-webkit-transform: rotate(0deg);
+		        transform: rotate(0deg)
+	}
+	50% {
+		-webkit-transform: rotate(-90deg);
+		        transform: rotate(-90deg)
+	}
+	100% {
+		-webkit-transform: rotate(-90deg);
+		        transform: rotate(-90deg)
+	}
+}
+
+@keyframes rotate {
+  0% {
+		-webkit-transform: rotate(0deg);
+		        transform: rotate(0deg)
+	}
+	50% {
+		-webkit-transform: rotate(-90deg);
+		        transform: rotate(-90deg)
+	}
+	100% {
+		-webkit-transform: rotate(-90deg);
+		        transform: rotate(-90deg)
+	}
+}
+
 @media only screen and (orientation:portrait) {
-  #content {
-    display:none;
+  .rotate{
+    display: flex;
+  }
+  .phone, .message {
+    display: block;
   }
 }
 .avatar{

@@ -304,7 +304,8 @@ const styles = {
         flexDirection: 'column',
     },
     prew: {
-        paddingTop: '25%'
+        paddingTop: '25%',
+        height:'80%'
     },
     table: {
         borderRadius: 5,

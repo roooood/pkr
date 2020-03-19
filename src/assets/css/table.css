@@ -77,9 +77,9 @@
   flex-direction: column;
   justify-content: space-around;
 }
-.mobile .wood .right{
+/* .mobile .wood .right{
   right: 7px;
-}
+} */
 .wood.p9 .right{
   right: -115px;
 }
@@ -95,9 +95,9 @@
   flex-direction: column-reverse;
   justify-content: space-around;
 }
-.mobile .wood .left{
+/* .mobile .wood .left{
   left: 7px;
-}
+} */
 .wood.p9 .left{
   left: -115px;
 }

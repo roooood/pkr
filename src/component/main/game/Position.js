@@ -49,12 +49,10 @@ class Position extends Component {
         this.context.game.register(this.Room, 'balance', this.balance);
         this.context.game.register(this.Room, 'gameResult', this.gameResult);
     }
-    result(winner) {
-        console.log(winner)
-    }
     balance(value) {
         const [balance, amount] = value;
         let end = add(balance, amount);
+        console.log(end, balance, amount)
         this.context.state.user.balance = end;
         this.context.update();
         // this.setState({
