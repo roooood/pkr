@@ -131,7 +131,7 @@ class Setting extends Component {
                 {this.props.tab.active == 'lobby'
                     ? <>
                         <LightTooltip title={t('refresh')} >
-                        < IconButton onClick={() => this.refreshList}  >
+                        < IconButton onClick={this.refreshList}  >
                             <Refresh style={styles.icon} />
                             </IconButton>
                         </LightTooltip>

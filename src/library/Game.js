@@ -49,6 +49,8 @@ class Game {
         this.Client.close();
     }
     leave(Room) {
+        if (Room == null)
+            return;
         if ('inRoom' in Room && Room.inRoom == true)
             Room.leave();
     }

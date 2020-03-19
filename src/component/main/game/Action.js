@@ -192,10 +192,16 @@ class Action extends Component {
             return null;
         return (
             <Grid className="scale-in-center" style={this.context.state.isMobile ? styles.mbox : styles.box} container >
-                <StyledBtn className="btn-act" onClick={() => this.actionIs('call')}>
-                    <Typography style={styles.text}>{this.props.state.bet == ((players[this.state.mySit] || {}).bet || '') ? t('check') : t('call')}</Typography>
-                    <Typography style={styles.sub}>{toMoney(this.props.state.bet)}</Typography>
-                </StyledBtn>
+                {this.props.state.bet == (players[this.state.mySit] || {}).bet 
+                    ? <StyledBtn className="btn-act" onClick={() => this.actionIs('check')}>
+                        <Typography style={styles.text}>{t('check')}</Typography>
+                        <Typography style={styles.sub}>{toMoney(this.props.state.bet)}</Typography>
+                    </StyledBtn>
+                    : <StyledBtn className="btn-act" onClick={() => this.actionIs('call')}>
+                        <Typography style={styles.text}>{t('call')}</Typography>
+                        <Typography style={styles.sub}>{toMoney(this.props.state.bet)}</Typography>
+                    </StyledBtn>
+                }
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('fold')}>
                     <Typography style={styles.text}>{t('fold')}</Typography>
                     <Typography style={styles.sub}>X</Typography>
@@ -206,7 +212,7 @@ class Action extends Component {
                         value={this.state.bet}
                         onChange={this.changeBet}
                         valueLabelDisplay="on"
-                        min={'bet' in this.props.state ? this.props.state.bet : this.Room.data.min}
+                        min={this.props.state.bet}
                         max={this.context.state.user.balance}
                         step={this.Room.data.min}
                         valueLabelFormat={this.valuetext}
@@ -217,7 +223,7 @@ class Action extends Component {
                         value={this.state.bet}
                         onChange={this.changeBet}
                         valueLabelDisplay="on"
-                        min={'bet' in this.props.state ? this.props.state.bet : this.Room.data.min}
+                        min={this.props.state.bet }
                         max={this.context.state.user.balance}
                         step={this.Room.data.min}
                         valueLabelFormat={this.valuetext}
@@ -225,7 +231,7 @@ class Action extends Component {
                 }
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('raise')}>
                     <Typography style={styles.text}>{t('raise')}</Typography>
-                    <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
+                    <Typography style={styles.sub}>{this.valuetext(this.props.state.bet > this.state.bet ? this.props.state.bet : this.state.bet)}</Typography>
                 </StyledBtn>
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('allin')}>
                     <Typography style={styles.text}>{t('allin')}</Typography>

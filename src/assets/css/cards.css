@@ -22,7 +22,7 @@
 ._9h{
     background-image: url(../cards/9_hearts.png);
 }
-._Th{
+._10h{
     background-image: url(../cards/10_hearts.png);
 }
 ._Ah{
@@ -62,7 +62,7 @@
 ._9s{
     background-image: url(../cards/9_spades.png);
 }
-._Ts{
+._10s{
     background-image: url(../cards/10_spades.png);
 }
 ._As{
@@ -102,7 +102,7 @@
 ._9c{
     background-image: url(../cards/9_clubs.png);
 }
-._Tc{
+._10c{
     background-image: url(../cards/10_clubs.png);
 }
 ._Ac{
@@ -142,7 +142,7 @@
 ._9d{
     background-image: url(../cards/9_diamonds.png);
 }
-._Td{
+._10d{
     background-image: url(../cards/10_diamonds.png);
 }
 ._Ad{

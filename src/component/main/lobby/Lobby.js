@@ -164,7 +164,7 @@ class ListTable extends Component {
         this.getList();
         this.timer = setInterval(() => {
             this.getList();
-        }, 5000);
+        }, 15000);
 
         setTimeout(() => {
             this.setState({ loading: false })
@@ -172,6 +172,7 @@ class ListTable extends Component {
     }
     getList() {
         this.context.game.getAvailableRooms((rooms) => {
+            console.log(rooms)
             let onlines = 0;
             for (let room of this.state.rooms) {
                 room.live = false;
@@ -181,7 +182,7 @@ class ListTable extends Component {
                 room.users = {};
             }
             for (let item of rooms) {
-                if (!('metadata' in item) || typeof item.metadata == 'undefined')
+                if (!('metadata' in item) || typeof item.metadata == 'undefined' || item.metadata == null)
                     continue;
                 let id = item.metadata.id;
                 for (let room of this.state.rooms) {

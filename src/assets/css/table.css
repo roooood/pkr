@@ -154,19 +154,19 @@
 }
 
 .card {
-  width: 57px;
-  height: 80px;
+  width: 54px;
+  height: 75px;
   border-radius: 3px;
   background-color:rgba(0,0,0,.2);
   box-sizing: border-box;
   margin: 0 3px;
   background-size: cover;
-  box-shadow: -1px 0px 8px #555;
 }
 
 .hand{
   width: 45px;
   height: 64px;
+  box-shadow: -1px 0px 8px #333;
 }
 .t-back .my-hand{
   width: 36px;

@@ -55,7 +55,6 @@ class Position extends Component {
     balance(value) {
         const [balance, amount] = value;
         let end = add(balance, amount);
-        console.log(balance, amount,end)
         this.context.state.user.balance = end;
         this.context.update();
         // this.setState({
@@ -87,8 +86,8 @@ class Position extends Component {
             end: 0,
         })
     }
-    gameResult(res) {
-        let winer = res.wins;
+    gameResult(winer) {
+        console.log(winer)
         this.move(winer);
         let c = 0;
         for (let i in winer) {
@@ -99,7 +98,7 @@ class Position extends Component {
                         seat: i,
                         seatCards: winer[i][1]
                     })
-                }, c*3000);
+                }, c*5000);
             })(winer, i);
             c++;
         }
@@ -109,7 +108,7 @@ class Position extends Component {
                 seat: null,
                 seatCards: null
             })
-        }, c * 3000);
+        }, c * 5000);
     }
     move(winer) {
         let sr = 'bet-value';
@@ -118,9 +117,9 @@ class Position extends Component {
             let spos = getOffset(el);
             el.innerText = '0';
             let c = 0;
-            for (let i of winer) {
+            for (let i in winer) {
                 let cl = el.cloneNode(true);
-                cl.innerText = toMoney(this.props.state.bank / winer.length)
+                cl.innerText = toMoney(this.props.state.bank / Object.keys(winer).length)
                 document.body.appendChild(cl);
                 cl.classList.add('moving');
                 cl.setAttribute("style", 'position: absolute;left:' + spos.left + 'px;top:' + spos.top + 'px;');
@@ -131,7 +130,7 @@ class Position extends Component {
                         cl.classList.add('blur-out-contract-bck');
                         cl.style.left = dpos.left + 'px';
                         cl.style.top = dpos.top + 'px';
-                    }, c*3000);
+                    }, c*5000);
                 })(cl, i);
                 c++;
             }
@@ -148,7 +147,6 @@ class Position extends Component {
         const { player } = this.Room.data;
         let commission = (Number(this.Room.data.setting.commission) * this.props.state.bank) / 100;
         const { hand} = this.state;
-        bank = 2000;
         return (
             <div style={styles.root}>
                 <div className="pocker-desc">

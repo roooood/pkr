@@ -30,6 +30,8 @@ class Table extends Component {
         }
     }
     componentDidMount() {
+        console.log('connect to ' + this.roomId)
+
         this.context.game.on('connect', this.connected);
         this.context.game.on('disconnect', this.disconnected);
         if (this.context.game.isConnect) {
@@ -37,7 +39,9 @@ class Table extends Component {
         }
     }
     connected() {
-        this.join()
+        setTimeout(() => {
+           this.join() 
+        }, Math.round(Math.random() * 1000) + 1);
     }
     disconnected() {
         this.setState({ loading:true})

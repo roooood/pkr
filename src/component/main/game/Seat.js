@@ -28,7 +28,6 @@ class Item extends Component {
             mySit: 0,
             timer: false,
             winner: [],
-            loser: []
         };
         this.cdir = {
             back: {
@@ -80,7 +79,6 @@ class Item extends Component {
         this.setState({
             timer: false,
             winner: [],
-            loser: [],
             cards: []
         });
     }
@@ -96,9 +94,11 @@ class Item extends Component {
     }
 
     actionIs([sit, type]) {
+        console.log(type)
         if (sit == this.props.sit) {
             if (type == 'fold')
                 this.reset();
+            else if (['call', 'raise', 'allin'].includes(type))
                 this.move(sit)
         }
     }
@@ -130,13 +130,8 @@ class Item extends Component {
             this.showTimer();
         }
     }
-    gameResult(res) {
-        let winner = Object.keys(res.win);
-        let loser = res.lose;
-        this.setState({ winner, loser });
-        // setTimeout(() => {
-        //     this.setState({ winner: [], loser: [] });
-        // }, 4900)
+    gameResult(wins) {
+        this.setState({ winner: Object.keys(wins) });
     }
     showTimer() {
         this.setState({ timer: true });
@@ -150,10 +145,8 @@ class Item extends Component {
         let el = document.querySelector('.' + sr);
         let dl = document.querySelector('.' + ds);
         if (dl && el) {
-            dl = dl.parentElement
             let spos = getOffset(el);
             let dpos = getOffset(dl);
-            console.log(dpos)
             let cl = el.cloneNode(true);
             document.body.appendChild(cl);
             cl.classList.remove(sr);
@@ -161,8 +154,8 @@ class Item extends Component {
             cl.setAttribute("style", 'position: absolute;left:' + spos.left + 'px;top:' + spos.top + 'px;');
             setTimeout(() => {
                 cl.classList.add('blur-out-contract-bck');
-                cl.style.left = dpos.left + 330 + 'px';
-                cl.style.top = dpos.top +5 + 'px';
+                cl.style.left = dpos.left + 'px';
+                cl.style.top = dpos.top + 'px';
             }, 100);
         }
     }
@@ -177,7 +170,7 @@ class Item extends Component {
     }
     render() {
         const { align, sit } = this.props;
-        let { winner, loser, cards, mySit, cardType} = this.state;
+        let { winner, cards, mySit, cardType} = this.state;
         const { players, turn, started } = this.props.state;
         if (this.props.parent.seat == sit) {
             cards = this.props.parent.seatCards;
@@ -189,8 +182,8 @@ class Item extends Component {
                     <Grid className={"scale-in-center " + players[sit].state} style={styles.info} container direction={this.dir[align]} alignItems="center" wrap="nowrap" >
                         <div style={styles.xinfo}>
                             {'type' in players[sit] &&
-                                <Box style={styles.type} display="flex" alignItems="center" className="focus-in-expand">
-                                <Typography variant="body"  >{players[sit].type}</Typography>
+                                <Box style={{ ...styles.type,...( align=='down'?{bottom:'-15%'}:{top:'-12%'})}} display="flex" alignItems="center" className="focus-in-expand">
+                                    <Typography variant="body" style={styles.tText}>{players[sit].type}</Typography>
                                 </Box>
                             }
                             <Typography variant="body2" className="focus-in-expand" style={styles.name}>{players[sit].name}</Typography>
@@ -219,7 +212,7 @@ class Item extends Component {
                                                 cls = this.props.parent.hand.includes(card) ? '' : 'card-blur'
                                             }
                                             return(
-                                                <div key={card} >
+                                                <div key={i} >
                                                     <div className={'card hand _' + card + ' card-anim' + (i + 1) + (mySit == sit ? '  my-hand' : '')+ ' '+cls} />
                                                 </div>
                                             )
@@ -237,7 +230,7 @@ class Item extends Component {
                                     </Box>
                                     {players[sit].state != 'new' &&
                                         <Box style={styles.state} display="flex" alignItems="center" className="focus-in-expand">
-                                            <Typography variant="body2" style={styles.Text}>
+                                            <Typography variant="body2" style={styles.sText}>
                                                 {t(players[sit].state)}
                                             </Typography>
                                         </Box>
@@ -342,13 +335,15 @@ const styles = {
         alignItems: 'center',
     },
     type: {
-        background: 'rgba(47, 45, 44, 0.84) ',
-        borderRadius: 12,
+        background: 'rgba(74, 53, 104, 0.84)',
+        borderRadius: 10,
         padding: '0px 10px',
         boxShadow: '0 0 4px #0e1635 inset',
         alignItems: 'center',
         position: 'absolute',
-        top: '-10%'
+    },
+    sText: {
+        fontSize: 11
     },
     box: {
         flexDirection: 'column',
@@ -368,6 +363,12 @@ const styles = {
         background: '#b17d42',
         borderRadius: 20,
         margin:5
+    },
+    sText: {
+        color: '#fff',
+        padding: '0px 4px',
+        margin:0,
+        fontSize:12
     },
     Text: {
         color: '#fff',
