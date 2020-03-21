@@ -110,12 +110,15 @@ class Appbar extends Component {
             if (keys.includes(active)) {
                 this.context.state.tab.active = active;
                 this.context.update();
+                localStorage.setItem('tab', JSON.stringify(this.context.state.tab));
             }
         }
     }
     removeTab(id) {
         delete this.context.state.tab.data[id];
-        
+
+        localStorage.setItem('tab', JSON.stringify(this.context.state.tab));
+
         let keys = Object.keys(this.context.state.tab.data);
         let index = keys.indexOf(id);
         if (keys[index + 1] != 'undefined') {

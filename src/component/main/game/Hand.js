@@ -71,7 +71,7 @@ class ListTable extends Component {
         const { history } = this.props.state;
         return (
             <div className="chat_window" >
-                <Scrollbars style={{ direction: 'ltr', height : '44vh', overflow: 'hidden' }} ref="scroll" className="scrollbar">
+                <Scrollbars style={{ direction: 'ltr', height: '100%', overflow: 'hidden' }} ref="scroll" className="scrollbar">
                     <Table stickyHeader style={styles.table}>
                         <TableHead>
                             <StyledTableRow>

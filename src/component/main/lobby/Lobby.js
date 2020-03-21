@@ -207,6 +207,8 @@ class ListTable extends Component {
         this.context.state.tab.data[key] = { id, name, type };
         this.context.state.tab.active = key;
         this.context.update();
+
+        localStorage.setItem('tab', JSON.stringify(this.context.state.tab));
     }
     setActive(active) {
         play('click')

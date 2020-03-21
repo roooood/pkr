@@ -11,6 +11,8 @@ import IconButton from '@material-ui/core/IconButton';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
+import ListIcon from '@material-ui/icons/List';
+
 
 const StyledDrawer = withStyles({
     root: {
@@ -32,7 +34,8 @@ class Table extends Component {
             players: {},
             history:[],
             deck: [],
-            open: false
+            chat: false,
+            hand:false
         };
         this.Room = null;
         this.roomId = this.props.parent.id;
@@ -103,11 +106,17 @@ class Table extends Component {
     leave() {
         this.context.game.leave(this.Room);
     }
-    toggleDrawer(event) {
+    toggleChatDrawer(event) {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
-        this.setState({ open: !this.state.open });
+        this.setState({ chat: !this.state.chat });
+    }
+    toggleHandDrawer(event) {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+        this.setState({ hand: !this.state.hand });
     }
     render() {
         if (this.state.loading)
@@ -115,14 +124,20 @@ class Table extends Component {
         return (
             <div style={styles.root}>
                 {this.context.state.isMobile 
-                    ? <>
-                        <IconButton onClick={this.toggleDrawer} style={styles.fab} >
+                    ? <div style={styles.fab}>
+                        <IconButton onClick={this.toggleChatDrawer} style={styles.xfab} >
                             <ChatBubbleOutlineIcon style={{ color: '#fff' }} />
                         </IconButton>
-                        <StyledDrawer anchor={'right'} transitionDuration={300} open={this.state.open} onClose={this.toggleDrawer}>
+                        <IconButton onClick={this.toggleHandDrawer} style={styles.xfab} >
+                            <ListIcon style={{ color: '#fff' }} />
+                        </IconButton>
+                        <StyledDrawer anchor={'right'} transitionDuration={300} open={this.state.chat} onClose={this.toggleChatDrawer}>
                             <Chat state={this.state} Room={this.Room} />
                         </StyledDrawer>
-                    </>
+                        <StyledDrawer anchor={'right'} transitionDuration={300} open={this.state.hand} onClose={this.toggleHandDrawer}>
+                            <Hand state={this.state} Room={this.Room} />
+                        </StyledDrawer>
+                    </div>
                     :<div style={styles.left}>
                         <Hand state={this.state} Room={this.Room} />
                         <Chat state={this.state} Room={this.Room} />
@@ -165,10 +180,17 @@ const styles = {
         position: 'fixed',
         bottom: 10,
         left: 10,
-        background: '#201e1e',
         zIndex: 999,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    xfab: {
+        background: '#201e1e', 
         padding: 8,
-        boxShadow: 'rgba(0, 0, 0, 0.4) 1px 2px 2px 1px'
+        boxShadow: 'rgba(0, 0, 0, 0.4) 1px 2px 2px 1px',
+        marginRight: 5,
+        marginLeft: 5
     }
 }
 

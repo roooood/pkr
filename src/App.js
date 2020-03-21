@@ -40,6 +40,11 @@ class App extends Component {
     autoBind(this);
   }
   componentDidMount() {
+    let tabs = localStorage.getItem('tab');
+    if (tabs != null) {
+      let tab = JSON.parse(tabs);
+      this.setState({ tab})
+    }
     window.addEventListener('resize', (event)=> {
       let isMobile = window.innerWidth <= 950;
       if (isMobile != this.state.isMobile) {
