@@ -189,7 +189,7 @@ class Item extends Component {
                             }
                             <Typography variant="body2" className="focus-in-expand" style={styles.name}>{players[sit].name}</Typography>
                             <Box style={styles.balance} display="flex" alignItems="center" className="focus-in-expand">
-                                <AttachMoney style={styles.moneyIcon} />
+                                {/* <AttachMoney style={styles.moneyIcon} /> */}
                                 <Typography variant="body2" >{toMoney(players[sit].balance)}</Typography>
                             </Box>
                         </div>

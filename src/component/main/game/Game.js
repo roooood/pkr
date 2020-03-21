@@ -93,11 +93,13 @@ class Table extends Component {
     }
     waitStand(type) {
         let { standing } = this.context.state;
-        if (!type) {
-            standing = standing.filter(item => item != this.roomId)
-        }
-        else
+        if (type) {
             standing.push(this.roomId)
+        }
+        else {
+            standing = standing.filter(item => item != this.roomId);
+            this.context.state.standing = standing;
+        }
         this.context.update();
     }
     standUp() {

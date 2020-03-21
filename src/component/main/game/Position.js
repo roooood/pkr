@@ -53,7 +53,6 @@ class Position extends Component {
     balance(value) {
         const [balance, amount] = value;
         let end = add(balance, amount);
-        console.log(end, balance, amount)
         this.context.state.user.balance = end;
         this.context.update();
         // this.setState({
@@ -108,7 +107,7 @@ class Position extends Component {
                 seat: null,
                 seatCards: null
             })
-        }, c * 4500);
+        }, c * 4000);
     }
     move(winer) {
         let sr = 'bet-value';
