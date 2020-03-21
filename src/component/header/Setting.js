@@ -16,6 +16,7 @@ import { toMoney } from 'library/Helper';
 import { t } from 'locales';
 import Context from 'library/Context';
 import play from 'library/Sound';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -30,13 +31,12 @@ const LightTooltip = withStyles(theme => ({
 
 const ColorButton = withStyles(theme => ({
     root: {
-        background: 'transparent',
-        border: '1px solid rgba(185, 183, 183, 0.2)',
+        background: '#201e1e',
+        boxShadow: 'rgba(0, 0, 0, 0.4) 1px 2px 2px 1px',
         padding: ' 1px 10px',
         marginTop: 3,
         borderRadius: 5,
         minWidth: 60,
-        boxShadow: 'none',
         '&:hover': {
             background: 'transparent',
         },
@@ -48,6 +48,7 @@ class Setting extends Component {
     constructor(props) {
         super(props);
         this.state = {
+           
         };
         autoBind(this);
     }
@@ -93,6 +94,7 @@ class Setting extends Component {
         this.context.setState({ mute: act });
     }
     render() {
+        const { tab, standing } = this.context.state;
         if (this.context.state.isMobile) {
             if (this.context.state.tab.active == 'lobby')
                 return null;
@@ -100,17 +102,20 @@ class Setting extends Component {
                 <div style={styles.root} >
                     <div>
                         <LightTooltip title={t('exit')} >
-                        < IconButton onClick={this.leave} color="secondary" >
+                        < IconButton onClick={this.leave} color="secondary" style={styles.fab} >
                             <Close />
                         </IconButton>
                         </LightTooltip>
-                        <LightTooltip title={t('standUp')} >
-                        <IconButton onClick={this.standUp} >
-                            <ArrowUpward style={styles.icon} />
+                        <LightTooltip title={standing.includes(tab.data[tab.active].id) ? t('standing'):t('standUp')} >
+                            <IconButton onClick={this.standUp} style={styles.fab}>
+                                {standing.includes(tab.data[tab.active].id)
+                                    ?<CircularProgress size={23} color="secondary" />
+                                    :<ArrowUpward style={styles.icon} />
+                                }
                         </IconButton>
                         </LightTooltip>
                         <LightTooltip title={t('mute')} >
-                        <IconButton onClick={this.toggleSound} >
+                        <IconButton onClick={this.toggleSound} style={styles.fab}>
                             {('mute' in this.context.state) && this.context.state.mute
                                 ? <VolumeOff style={styles.icon} />
                                 : <VolumeUp style={styles.icon} />}
@@ -118,7 +123,7 @@ class Setting extends Component {
                         </LightTooltip>
                     </div>
                     {'name' in this.context.state.user &&
-                        <ColorButton disabled onClick={this.openMenu} variant="contained" color="primary" >
+                        <ColorButton onClick={this.openMenu} variant="contained" color="primary" >
                             <Typography component="div" style={styles.account}>
                                 {this.context.state.user.name}
                                 <Typography component="div" align="left" style={styles.accountSub}  >
@@ -153,7 +158,10 @@ class Setting extends Component {
                         </LightTooltip>
                         <LightTooltip title={t('standUp')} >
                             <IconButton onClick={this.standUp} >
-                                <ArrowUpward style={styles.icon} />
+                                {standing.includes(tab.data[tab.active].id )
+                                    ? <CircularProgress size={23} color="secondary" />
+                                    : <ArrowUpward style={styles.icon} />
+                                }
                             </IconButton>
                         </LightTooltip>
                         <LightTooltip title={t('mute')} >
@@ -203,9 +211,15 @@ const styles = {
     },
     accountSub: {
         fontSize: 17,
-        fontWeight: 'bold',
         color: '#dbb316',
     },
+    fab: {
+        background: '#201e1e',
+        padding: 6,
+        boxShadow: 'rgba(0, 0, 0, 0.4) 1px 2px 2px 1px',
+        borderRadius: 5,
+        margin:5
+    }
 }
 
 export default Setting;

@@ -10,6 +10,7 @@ export default {
     mute: 'Mute',
     exit: 'Exit',
     standUp: 'Stand Up',
+    standing: 'you will standUp in next game',
     fullscreen: 'Fullscreen',
     filter: 'Filter',
     refresh: 'Refresh',

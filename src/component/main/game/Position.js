@@ -34,6 +34,7 @@ class Position extends Component {
             start: 0,
             end: 0,
             hand : [],
+            type : null,
             seat: null,
             seatCards: null
         };
@@ -85,7 +86,6 @@ class Position extends Component {
         })
     }
     gameResult(winer) {
-        console.log(winer)
         this.move(winer);
         let c = 0;
         for (let i in winer) {
@@ -93,20 +93,22 @@ class Position extends Component {
                 setTimeout(()=>{
                     this.setState({
                         hand: winer[i][0],
+                        type: winer[i][2],
                         seat: i,
                         seatCards: winer[i][1]
                     })
-                }, c*5000);
+                }, c*4500);
             })(winer, i);
             c++;
         }
         setTimeout(() => {
             this.setState({
                 hand: [],
+                type: null,
                 seat: null,
                 seatCards: null
             })
-        }, c * 5000);
+        }, c * 4500);
     }
     move(winer) {
         let sr = 'bet-value';
@@ -114,6 +116,7 @@ class Position extends Component {
         if (el) {
             let spos = getOffset(el);
             el.innerText = '0';
+            el.style.display = 'none';
             let c = 0;
             for (let i in winer) {
                 let cl = el.cloneNode(true);
@@ -144,7 +147,7 @@ class Position extends Component {
         }
         const { player } = this.Room.data;
         let commission = (Number(this.Room.data.setting.commission) * this.props.state.bank) / 100;
-        const { hand} = this.state;
+        const { hand,type} = this.state;
         return (
             <div style={styles.root}>
                 <div className="pocker-desc">
@@ -206,6 +209,10 @@ class Position extends Component {
                                     </div>
                                 }
                                 <div className="board-cards">
+                                    {type != null &&
+                                        <div className="text">{type.type}</div>
+                                    }
+                                    <div className="cards">
                                     {
                                         (decks).map((card, i) => {
                                             let cls = '';
@@ -216,7 +223,8 @@ class Position extends Component {
                                                 <div key={i} className={"card  _" + card + ' ' + cls + (card == ''? '' :' anim-'+(i+1))}></div>
                                             )
                                         })
-                                    }
+                                        }
+                                    </div>
                                 </div>
                                 <div></div>
                             </div>

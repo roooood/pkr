@@ -28,6 +28,7 @@ class Route extends Component {
                     <div style={styles.top}>
                         <Setting />
                     </div>
+                    <Appbar />
                     <Tabbar />
                 </div>
             )
@@ -64,9 +65,9 @@ const styles = {
     top: {
         position: 'absolute',
         top: 5,
-        right: 5,
-        width: '100%',
-        zIndex: 999999
+        right: '2%',
+        width: '96%',
+        zIndex: 999
     }
 }
 

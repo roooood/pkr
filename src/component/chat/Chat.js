@@ -29,14 +29,17 @@ class SendButton extends Component {
   }
 }
 
+
 class MessageTextBoxContainer extends Component {
+  static contextType = Context;
   constructor(props) {
     super(props);
     this.getVal = this.getVal.bind(this)
     this.setVal = this.setVal.bind(this)
   }
   componentDidMount() {
-    new MeteorEmoji();
+    if (!this.context.state.isMobile )
+      new MeteorEmoji();
   }
   shouldComponentUpdate() {
     return true;
@@ -159,26 +162,15 @@ class ChatApp extends Component {
     autoBind(this);
   }
   componentDidMount() {
-    this.context.game.register(this.Room, 'leave', this.leave);
-    this.context.game.register(this.Room, 'welcome', this.welcome);
+
   }
 
-  welcome() {
-    this.setState({ inGame: true })
-  }
-  leave() {
-    this.setState({ inGame: false })
-  }
   alert(text) {
     window.ee.emit('notify', { message: text, type: 'error' })
   }
   addMessageBox(enter = true) {
     if (!('id' in this.context.state.user)) {
       this.alert(t('guestCantchat'))
-      return;
-    }
-    else if (!this.state.inGame) {
-      this.alert(t('inGamechat'))
       return;
     }
     let current_message = this.messageBox.getVal();
@@ -216,7 +208,7 @@ class ChatApp extends Component {
         <div className="bottom_wrapper clearfix">
           <MessageTextBoxContainer
             ref={ref => this.messageBox = ref}
-            login={(('id' in this.context.state.user) && this.state.inGame)}
+            login={('id' in this.context.state.user)}
             _handleKeyPress={this._handleKeyPress}
           />
           <SendButton ref={ref => this.btn = ref} handleClick={this.handleClick}></SendButton>

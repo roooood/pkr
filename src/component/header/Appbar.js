@@ -8,8 +8,25 @@ import Context from 'library/Context';
 import { t } from 'locales';
 import GamepadIcon from '@material-ui/icons/GamepadOutlined';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsportsOutlined';
+import Drawer from '@material-ui/core/Drawer';
+import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
 
-
+const StyledDrawer = withStyles({
+    root: {
+        zIndex: 999999
+    },
+    paper: {
+        backgroundColor: '#181b28',
+        padding: '5px 20px',
+        color:'#fff'
+    },
+})(props => <Drawer {...props} />);
 
 const StyledTabs = withStyles({
     root: {
@@ -77,6 +94,7 @@ class Appbar extends Component {
     constructor(props, context) {
         super(props);
         this.state = {
+            open: false
         };
         autoBind(this);
         window.ee.on('removeTab', this.removeTab)
@@ -85,6 +103,7 @@ class Appbar extends Component {
 
     }
     handleChangeList(e, active) {
+        this.setState({ open: false });
         const { tab } = this.context.state
         if (active != tab.active) {
             let keys = Object.keys(tab.data);
@@ -106,12 +125,39 @@ class Appbar extends Component {
             this.handleChangeList(null, keys[index - 1])
         }
     }
+    toggleDrawer(event) {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+        this.setState({open:!this.state.open });
+    }
     render() {
         const tab = this.context.state.tab.data;
         const keys = Object.keys(tab);
 
-        if (keys.length === 0)
-            return null;
+        if (this.context.state.isMobile)
+            return (
+                <>
+                {keys.length > 1 &&
+                <IconButton onClick={this.toggleDrawer}  style={styles.fab} >
+                    <DashboardIcon style={{ color: '#fff' }}/>
+                </IconButton>
+                }
+                <StyledDrawer anchor={'left'} transitionDuration={300} open={this.state.open} onClose={this.toggleDrawer}>
+                    <List>
+                        {keys.map((item, i) => (
+                            <ListItem button key={i} onClick={(e)=>this.handleChangeList(e,item)}>
+                                <ListItemIcon>{item == 'lobby'
+                                    ? <GamepadIcon style={{ color:'rgb(219, 151, 21)'}} />
+                                    : <SportsEsportsIcon style={{ color: 'rgb(219, 151, 21)' }} />
+                                }</ListItemIcon>
+                                <ListItemText style={{ marginLeft: -20 }} primary={tab[item].name} />
+                            </ListItem>
+                        ))}
+                    </List>
+                </StyledDrawer>
+                </>
+            )
         return (
             <div style={styles.root}>
                 <div style={{ ...styles.tabs }} >
@@ -167,6 +213,15 @@ const styles = {
         marginBottom: 5,
         border: '1px solid #444',
         borderRadius: 5
+    },
+    fab: {
+        position: 'fixed',
+        bottom: 10,
+        right: 10,
+        background:'#201e1e',
+        zIndex: 999,
+        padding:8,
+        boxShadow: 'rgba(0, 0, 0, 0.4) 1px 2px 2px 1px'
     }
 }
 export default Appbar;

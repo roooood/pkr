@@ -28,8 +28,9 @@ class App extends Component {
     this.state = {
       userKey: getQuery('token') || '-',
       user: {},
-      isMobile: window.innerWidth <= 900,
+      isMobile: window.innerWidth <= 950,
       dir: dir,
+      standing: [],
       tab: {
         data: { lobby: { name: t('lobby') } },
         active: 'lobby'
@@ -39,6 +40,12 @@ class App extends Component {
     autoBind(this);
   }
   componentDidMount() {
+    window.addEventListener('resize', (event)=> {
+      let isMobile = window.innerWidth <= 950;
+      if (isMobile != this.state.isMobile) {
+        this.setState({ isMobile})
+      }
+    });
     if (this.state.userKey != '-') {
       request('info/' + this.state.userKey, res => {
         if (typeof res == 'object') {

@@ -135,7 +135,6 @@ class ListTable extends Component {
     }
     componentDidMount() {
         this.getTableList();
-        // this.context.game.join('xxx', { create: true }); 
     }
     getTableList() {
         request('tableList', rooms => {
@@ -153,6 +152,9 @@ class ListTable extends Component {
                 },
                 () => setTimeout(() => { this.connectToGame() }, 5000)
             );
+        }
+        else {
+            this.conected()
         }
     }
     refresh() {
@@ -208,7 +210,10 @@ class ListTable extends Component {
     }
     setActive(active) {
         play('click')
-        this.setState({ active })
+        if (this.context.state.isMobile)
+            this.addTab(this.state.rooms[active])
+        else
+            this.setState({ active })
     }
     render() {
         const { rooms, active } = this.state;
@@ -217,7 +222,7 @@ class ListTable extends Component {
         return (
             <div style={{ ...styles.root, padding: this.context.state.isMobile ? 5 : 20 }} >
                 <div style={styles.lobby} className="lobby">
-                    <Scrollbars style={{ direction: 'ltr', height: this.context.state.isMobile ? '100vh' : '82vh', overflow: 'hidden' }} ref="scroll" className="scrollbar">
+                    <Scrollbars style={{ direction: 'ltr', height: this.context.state.isMobile ? '100vh' : '90vh', overflow: 'hidden' }} ref="scroll" className="scrollbar">
                         <Table stickyHeader style={styles.table}>
                             <TableHead>
                                 <StyledTableRow>
@@ -240,7 +245,7 @@ class ListTable extends Component {
                                             onDoubleClick={() => this.addTab(row)}
                                             onClick={() => this.setActive(i)}
                                             tabIndex={-1}
-                                            style={row.id == rooms[active].id ? styles.active : {}}
+                                            style={(row.id == rooms[active].id && !this.context.state.isMobile) ? styles.active : {}}
                                             key={row.id}>
                                             {columns.map(column => {
                                                 const value = row[column.id] || null;

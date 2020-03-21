@@ -10,6 +10,11 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import play from 'library/Sound';
 import { toMoney } from 'library/Helper';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+
+
 
 const iOSBoxShadow =
     '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
@@ -17,16 +22,16 @@ const IOSSlider = withStyles({
     root: {
         color: '#d58328',
         height: 4,
-        margin: '20px 3% 0 2%',
-        width: 300,
+        // margin: '20px 5% 0 2%',
+        width: '100%',
         padding: 0
     },
     thumb: {
-        height: 28,
-        width: 28,
+        height: 20,
+        width: 20,
         backgroundColor: '#d58328',
         boxShadow: iOSBoxShadow,
-        marginTop: -14,
+        marginTop: -9,
         '&:focus,&:hover,&$active': {
             boxShadow: '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
             '@media (hover: none)': {
@@ -38,59 +43,6 @@ const IOSSlider = withStyles({
     valueLabel: {
         left: 'calc(-50% + 11px)',
         top: -22,
-        '& *': {
-            background: 'transparent',
-            color: '#fff',
-        },
-    },
-    track: {
-        height: 4,
-    },
-    rail: {
-        height: 4,
-        opacity: 0.5,
-        backgroundColor: '#bfbfbf',
-    },
-    mark: {
-        backgroundColor: '#bfbfbf',
-        height: 8,
-        width: 1,
-        marginTop: -3,
-    },
-    markActive: {
-        backgroundColor: 'currentColor',
-    },
-})(Slider);
-
-const IOSSliderV = withStyles({
-    root: {
-        color: '#d58328',
-        height: 4,
-        margin: '5px 1% 20px 3%',
-
-        padding: 0
-    },
-    vertical: {
-        height: '30% !important',
-    },
-    thumb: {
-        height: 28,
-        width: 28,
-        backgroundColor: '#d58328',
-        boxShadow: iOSBoxShadow,
-        marginTop: -14,
-        marginRight: -15,
-        '&:focus,&:hover,&$active': {
-            boxShadow: '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
-            '@media (hover: none)': {
-                boxShadow: iOSBoxShadow,
-            },
-        },
-    },
-    active: {},
-    valueLabel: {
-        top: 'calc(-50% + 22px)',
-        left: -26,
         '& *': {
             background: 'transparent',
             color: '#fff',
@@ -162,6 +114,29 @@ class Action extends Component {
             canTake: false,
         })
     }
+    plusBet() {
+        const { players, bet } = this.props.state;
+        const player = players[this.state.mySit] || {};
+
+        let max = player.balance;
+        let newBet = this.state.bet + this.Room.data.min;
+        if (newBet > max) {
+            newBet = max;
+        }
+        this.setState({ bet: newBet })
+    }
+    minesBet() { 
+        const { players, bet } = this.props.state;
+        const player = players[this.state.mySit] || {};
+
+        let less = bet - (player.bet || 0);
+        let min = less + this.Room.data.min;
+        let newBet = this.state.bet - this.Room.data.min;
+        if (newBet < min) {
+            newBet = min;
+        }
+        this.setState({ bet: newBet})
+    }
     changeBet(e, bet) {
         this.setState({ bet })
     }
@@ -193,7 +168,7 @@ class Action extends Component {
         if (this.state.canTake == false)
             return null;
         return (
-            <Grid className="scale-in-center" style={this.context.state.isMobile ? styles.mbox : styles.box} container >
+            <Grid className="scale-up-bottom" style={this.context.state.isMobile ? styles.mbox : styles.box} container >
                 {bet == player.bet 
                     ? <StyledBtn className="btn-act" onClick={() => this.actionIs('check')}>
                         <Typography style={styles.text}>{t('check')}</Typography>
@@ -208,29 +183,24 @@ class Action extends Component {
                     <Typography style={styles.text}>{t('fold')}</Typography>
                     <Typography style={styles.sub}>X</Typography>
                 </StyledBtn>
-                {!this.context.state.isMobile
-                    ? <IOSSlider
-                        track={false}
-                        value={this.state.bet}
-                        onChange={this.changeBet}
-                        valueLabelDisplay="on"
-                        min={less+this.Room.data.min}
-                        max={player.balance}
-                        step={this.Room.data.min}
-                        valueLabelFormat={this.valuetext}
-                    />
-                    : <IOSSliderV
-                        track={false}
-                        orientation="vertical"
-                        value={this.state.bet}
-                        onChange={this.changeBet}
-                        valueLabelDisplay="on"
-                        min={less+this.Room.data.min }
-                        max={player.balance}
-                        step={this.Room.data.min}
-                        valueLabelFormat={this.valuetext}
-                    />
-                }
+                <div style={styles.slider} >
+                <IconButton onClick={this.minesBet} style={styles.fab} >
+                    <RemoveIcon style={{ color: '#fff'}} />
+                </IconButton>
+                <IOSSlider
+                    track={false}
+                    value={this.state.bet}
+                    onChange={this.changeBet}
+                    valueLabelDisplay="on"
+                    min={less+this.Room.data.min}
+                    max={player.balance}
+                    step={this.Room.data.min}
+                    valueLabelFormat={this.valuetext}
+                />
+                <IconButton onClick={this.plusBet} style={styles.fab} >
+                    <AddIcon style={{ color: '#fff' }} />
+                </IconButton>
+                </div>
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('raise')} disabled={player.balance < this.state.bet }>
                     <Typography style={styles.text}>{t('raise')}</Typography>
                     <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
@@ -255,15 +225,36 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'column',
-        width: 100,
-        height: '100%'
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        left: 0,
+        right: 0,
+        background: 'rgb(37, 39, 58)',
+        zIndex: 99999,
+        boxShadow: 'rgba(0, 0, 0, 0.4) 1px -4px 5px 4px',
+        borderRadius: '70px 70px 0 0',
+        height: 75,
+        padding:'1px 20px'
     },
     text: {
         fontSize: '.8em'
     },
     sub: {
         color: '#fff',
+    },
+    fab: {
+        background: '#ab7840',
+        borderRadius: 5,
+        padding: 5 ,
+        zIndex: 99
+    },
+    slider: {
+        margin: '0 10px',
+        width: '30%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 }
 

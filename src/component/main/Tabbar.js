@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import autoBind from 'react-autobind';
 import Context from 'library/Context';
 import Typography from '@material-ui/core/Typography';
-import SwipeableViews from 'react-swipeable-views';
+// import SwipeableViews from 'react-swipeable-views';
 import Lobby from './lobby/Lobby';
 import Game from './game/Game';
 
@@ -37,28 +37,28 @@ class Tabbar extends Component {
     render() {
         const tab = this.context.state.tab.data;
         const tabs = Object.keys(tab);
-        let index = -1;
-        for (let i in this.context.state.tab.data) {
-            index++;
-            if (this.context.state.tab.active == i) {
-                break;
-            }
-        }
-        if (this.context.state.isMobile)
-            return (
-                <SwipeableViews index={index} onChangeIndex={this.changeIndex} enableMouseEvents slideStyle={{ width: '100vw', height: '100vh' }}>
-                    {tabs.map((item) => {
-                        return (
-                            <div key={item} className="puff-in-center" style={{ ...styles.root }} >
-                                {item == 'lobby'
-                                    ? <Lobby />
-                                    : <Game parent={tab[item]} inView={this.context.state.tab.active == item} />
-                                }
-                            </div>
-                        )
-                    })}
-                </SwipeableViews>
-            )
+        // let index = -1;
+        // for (let i in this.context.state.tab.data) {
+        //     index++;
+        //     if (this.context.state.tab.active == i) {
+        //         break;
+        //     }
+        // }
+        // if (this.context.state.isMobile)
+        //     return (
+        //         <SwipeableViews index={index} onChangeIndex={this.changeIndex} enableMouseEvents slideStyle={{ width: '100vw', height: '100vh' }}>
+        //             {tabs.map((item) => {
+        //                 return (
+        //                     <div key={item} className="puff-in-center" style={{ ...styles.root }} >
+        //                         {item == 'lobby'
+        //                             ? <Lobby />
+        //                             : <Game parent={tab[item]} inView={this.context.state.tab.active == item} />
+        //                         }
+        //                     </div>
+        //                 )
+        //             })}
+        //         </SwipeableViews>
+        //     )
         return (
             <>
                 {tabs.map((item) => {

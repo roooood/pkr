@@ -7,6 +7,21 @@ import Hand from './Hand';
 import { t } from 'locales';
 import Loading from 'component/component/Loading';
 import Chat from 'component/chat/Chat';
+import IconButton from '@material-ui/core/IconButton';
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+
+const StyledDrawer = withStyles({
+    root: {
+        zIndex: 999999
+    },
+    paper: {
+        backgroundColor: '#181b28',
+        padding: 0,
+        color: '#fff'
+    },
+})(props => <Drawer {...props} />);
 
 class Table extends Component {
     static contextType = Context;
@@ -16,22 +31,23 @@ class Table extends Component {
             loading: true,
             players: {},
             history:[],
-            deck : []
+            deck: [],
+            open: false
         };
         this.Room = null;
         this.roomId = this.props.parent.id;
+
         autoBind(this);
         window.ee.on('standUpt' + this.roomId, this.standUp)
         window.ee.on('leavet' + this.roomId, this.leave)
     }
     afterConnect() {
         return {
-            welcome: [this.welcome]
+            welcome: [this.welcome],
+            waitStand: [this.waitStand]
         }
     }
     componentDidMount() {
-        console.log('connect to ' + this.roomId)
-
         this.context.game.on('connect', this.connected);
         this.context.game.on('disconnect', this.disconnected);
         if (this.context.game.isConnect) {
@@ -72,26 +88,47 @@ class Table extends Component {
             this.setState(state);
         });
     }
-
+    waitStand(type) {
+        let { standing } = this.context.state;
+        if (!type) {
+            standing = standing.filter(item => item != this.roomId)
+        }
+        else
+            standing.push(this.roomId)
+        this.context.update();
+    }
     standUp() {
         this.context.game.send(this.Room, { stand: true });
     }
     leave() {
         this.context.game.leave(this.Room);
     }
-
+    toggleDrawer(event) {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+        this.setState({ open: !this.state.open });
+    }
     render() {
         if (this.state.loading)
             return (<Loading />)
         return (
             <div style={styles.root}>
-                {!this.context.state.isMobile &&
-                    <div style={styles.left}>
+                {this.context.state.isMobile 
+                    ? <>
+                        <IconButton onClick={this.toggleDrawer} style={styles.fab} >
+                            <ChatBubbleOutlineIcon style={{ color: '#fff' }} />
+                        </IconButton>
+                        <StyledDrawer anchor={'right'} transitionDuration={300} open={this.state.open} onClose={this.toggleDrawer}>
+                            <Chat state={this.state} Room={this.Room} />
+                        </StyledDrawer>
+                    </>
+                    :<div style={styles.left}>
                         <Hand state={this.state} Room={this.Room} />
                         <Chat state={this.state} Room={this.Room} />
                     </div>
                 }
-                <div style={this.context.state.isMobile ? styles.mmain : styles.main}>
+                <div style={styles.main}>
                     <Position state={this.state} Room={this.Room} />
                     <Action state={this.state} Room={this.Room} />
                 </div>
@@ -118,16 +155,20 @@ const styles = {
         position: 'relative',
         flexDirection: 'column',
     },
-    mmain: {
-        display: 'flex',
-        flex: 1,
-        position: 'relative',
-    },
     action: {
         position: 'absolute',
         right: 0,
         display: 'flex',
         justifyContent: 'space-between',
+    },
+    fab: {
+        position: 'fixed',
+        bottom: 10,
+        left: 10,
+        background: '#201e1e',
+        zIndex: 999,
+        padding: 8,
+        boxShadow: 'rgba(0, 0, 0, 0.4) 1px 2px 2px 1px'
     }
 }
 

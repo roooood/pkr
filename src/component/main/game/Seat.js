@@ -131,7 +131,7 @@ class Item extends Component {
         }
     }
     gameResult(wins) {
-        clearTimeout(this.timer);
+        this.hideTimer();
         this.setState({ winner: Object.keys(wins) });
     }
     showTimer() {
@@ -177,7 +177,6 @@ class Item extends Component {
             cards = this.props.parent.seatCards;
             cardType = 'front';
         }
-        console.log(winner)
         if (players != undefined) {
             if (sit in players) {
                 return (
