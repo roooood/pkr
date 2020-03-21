@@ -169,42 +169,48 @@ class Action extends Component {
             return null;
         return (
             <Grid className="scale-up-bottom" style={this.context.state.isMobile ? styles.mbox : styles.box} container >
-                {bet == player.bet 
+                {player.balance > less 
+                ?bet == player.bet 
                     ? <StyledBtn className="btn-act" onClick={() => this.actionIs('check')}>
                         <Typography style={styles.text}>{t('check')}</Typography>
-                        <Typography style={styles.sub}>-</Typography>
+                        <Typography style={styles.sub}>✓</Typography>
                     </StyledBtn>
                     : <StyledBtn className="btn-act" onClick={() => this.actionIs('call')}>
                         <Typography style={styles.text}>{t('call')}</Typography>
                         <Typography style={styles.sub}>{toMoney(less)}</Typography>
                     </StyledBtn>
+                :null
                 }
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('fold')}>
                     <Typography style={styles.text}>{t('fold')}</Typography>
-                    <Typography style={styles.sub}>X</Typography>
+                    <Typography style={styles.sub}>✗</Typography>
                 </StyledBtn>
-                <div style={styles.slider} >
-                <IconButton onClick={this.minesBet} style={styles.fab} >
-                    <RemoveIcon style={{ color: '#fff'}} />
-                </IconButton>
-                <IOSSlider
-                    track={false}
-                    value={this.state.bet}
-                    onChange={this.changeBet}
-                    valueLabelDisplay="on"
-                    min={less+this.Room.data.min}
-                    max={player.balance}
-                    step={this.Room.data.min}
-                    valueLabelFormat={this.valuetext}
-                />
-                <IconButton onClick={this.plusBet} style={styles.fab} >
-                    <AddIcon style={{ color: '#fff' }} />
-                </IconButton>
-                </div>
-                <StyledBtn className="btn-act" onClick={() => this.actionIs('raise')} disabled={player.balance < this.state.bet }>
-                    <Typography style={styles.text}>{t('raise')}</Typography>
-                    <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
-                </StyledBtn>
+                {player.balance > less &&
+                    <div style={styles.slider} >
+                        <IconButton onClick={this.minesBet} style={styles.fab} >
+                            <RemoveIcon style={{ color: '#fff' }} />
+                        </IconButton>
+                        <IOSSlider
+                            track={false}
+                            value={this.state.bet}
+                            onChange={this.changeBet}
+                            valueLabelDisplay="on"
+                            min={less + this.Room.data.min}
+                            max={player.balance}
+                            step={this.Room.data.min}
+                            valueLabelFormat={this.valuetext}
+                        />
+                        <IconButton onClick={this.plusBet} style={styles.fab} >
+                            <AddIcon style={{ color: '#fff' }} />
+                        </IconButton>
+                    </div>
+                }
+                {player.balance > less &&
+                    <StyledBtn className="btn-act" onClick={() => this.actionIs('raise')} disabled={player.balance < this.state.bet}>
+                        <Typography style={styles.text}>{t('raise')}</Typography>
+                        <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
+                    </StyledBtn>
+                }
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('allin')}>
                     <Typography style={styles.text}>{t('allin')}</Typography>
                     <Typography style={styles.sub}>{this.valuetext(player.balance)}</Typography>
