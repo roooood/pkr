@@ -104,14 +104,26 @@ const columns = [
         format: value => value == null ? 0 : value,
     },
     {
-        id: 'min',
-        label: t('min'),
-        format: value => <div style={styles.center}><ArrowRight style={{ color: 'rgb(219, 110, 110)' }} />{toMoney(value)}</div>,
+        id: 'sb',
+        label: t('stakes'),
+        format: (value, row) => (
+            <div style={styles.center}>
+                <div style={styles.center} > <ArrowLeft style={{ color: 'rgb(219, 110, 110)' }} /><span style={styles.cl}>{toMoney(row.sb)}</span></div>
+                <span>/</span>
+                <div style={styles.center}><span style={styles.cl}>{toMoney(row.bb)}</span><ArrowRight style={{ color: 'rgb(116, 219, 110)' }} /></div>
+            </div>
+        ),
     },
     {
-        id: 'max',
-        label: t('max'),
-        format: value => <div style={styles.center}><ArrowLeft style={{ color: 'rgb(116, 219, 110)' }} />{toMoney(value)} </div>,
+        id: 'min',
+        label: t('buyIn'),
+        format: (value, row) => (
+            <div style={styles.center}>
+                <div style={styles.center} > <ArrowLeft style={{ color: 'rgb(219, 110, 110)' }} /><span style={styles.cll}>{toMoney(row.min)}</span></div>
+                <span>/</span>
+                <div style={styles.center}><span style={styles.cll}>{toMoney(row.max)}</span><ArrowRight style={{ color: 'rgb(116, 219, 110)' }} /></div>
+            </div>
+        ),
     },
 
 
@@ -253,7 +265,7 @@ class ListTable extends Component {
                                                 const value = row[column.id] || null;
                                                 return (
                                                     <StyledTableCell key={column.id} align={column.align}>
-                                                        {column.format ? column.format(value) : value}
+                                                        {column.format ? column.format(value, row) : value}
                                                     </StyledTableCell>
                                                 );
                                             })}
@@ -340,6 +352,14 @@ const styles = {
     },
     active: {
         background: 'rgba(48, 44, 98, 0.59)'
+    },
+    cl: {
+        minWidth: 25,
+        textAlign:'center'
+    },
+    cll: {
+        minWidth: 45,
+        textAlign:'center'
     }
 }
 export default ListTable;

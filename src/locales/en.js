@@ -22,6 +22,8 @@ export default {
     type: 'Type',
     player: 'Player',
     ready: 'Ready',
+    stakes: 'Stakes',
+    buyIn: 'Buy In',
     min: 'Min Bet',
     max: 'Max Bet',
     tableCount: 'Table Count',
