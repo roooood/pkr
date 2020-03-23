@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import autoBind from 'react-autobind';
-
+import PWAPrompt from 'react-ios-pwa-prompt';
 import { getQuery } from 'library/Helper';
 import GameServer from 'library/Game';
 import Context from 'library/Context';
@@ -79,17 +79,18 @@ class App extends Component {
   render() {
     return (
       <Context.Provider
-        value={{
-          game: this.game,
-          state: this.state,
-          app: this.app,
-          update: this.update,
-          setState: this.changeState
-        }}>
+      value={{
+        game: this.game,
+        state: this.state,
+        app: this.app,
+        update: this.update,
+        setState: this.changeState
+      }}>
         <Snack />
         <Rotate />
         <Modal ref={r => this.modal = r} />
         <Route />
+      <PWAPrompt promptOnVisit={1} timesToShow={3} permanentlyHideOnDismiss={false} />
       </Context.Provider>
     );
   }

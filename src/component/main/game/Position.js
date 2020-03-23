@@ -41,6 +41,7 @@ class Position extends Component {
         autoBind(this);
     }
     componentDidMount() {       
+        this.context.game.register(this.Room, 'error', this.error);
         this.context.game.register(this.Room, 'win', this.win);
         this.context.game.register(this.Room, 'lose', this.lose);
         this.context.game.register(this.Room, 'mySit', this.mySit);
@@ -49,6 +50,9 @@ class Position extends Component {
         this.context.game.register(this.Room, 'cantStandErr', this.cantStandErr);
         this.context.game.register(this.Room, 'balance', this.balance);
         this.context.game.register(this.Room, 'gameResult', this.gameResult);
+    }
+    error(type) {
+        this.alert(t('error'+type))
     }
     balance(value) {
         const [balance, amount] = value;

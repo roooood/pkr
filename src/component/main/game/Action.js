@@ -94,7 +94,7 @@ class Action extends Component {
         this.state = {
             mySit: 0,
             canTake: false,
-            bet: this.Room.data.min,
+            bet: this.Room.data.sb,
         };
         autoBind(this);
     }
@@ -119,7 +119,7 @@ class Action extends Component {
         const player = players[this.state.mySit] || {};
 
         let max = player.balance;
-        let newBet = this.state.bet + this.Room.data.min;
+        let newBet = this.state.bet + this.Room.data.sb;
         if (newBet > max) {
             newBet = max;
         }
@@ -130,8 +130,8 @@ class Action extends Component {
         const player = players[this.state.mySit] || {};
 
         let less = bet - (player.bet || 0);
-        let min = less + this.Room.data.min;
-        let newBet = this.state.bet - this.Room.data.min;
+        let min = less + this.Room.data.sb;
+        let newBet = this.state.bet - this.Room.data.sb;
         if (newBet < min) {
             newBet = min;
         }
@@ -165,6 +165,10 @@ class Action extends Component {
         const { players ,bet} = this.props.state;
         const player = players[this.state.mySit] || {};
         const less = bet - (player.bet || 0);
+        let max = player.balance >= this.Room.data.max ? this.Room.data.max + (player.profit || 0) : player.balance;
+        if (max > player.balance) { 
+            max = player.balance;
+        }
         if (this.state.canTake == false)
             return null;
         return (
@@ -195,9 +199,9 @@ class Action extends Component {
                             value={this.state.bet}
                             onChange={this.changeBet}
                             valueLabelDisplay="on"
-                            min={less + this.Room.data.min}
-                            max={player.balance}
-                            step={this.Room.data.min}
+                            min={less + this.Room.data.sb}
+                            max={max}
+                            step={this.Room.data.sb}
                             valueLabelFormat={this.valuetext}
                         />
                         <IconButton onClick={this.plusBet} style={styles.fab} >
@@ -206,14 +210,14 @@ class Action extends Component {
                     </div>
                 }
                 {player.balance > less &&
-                    <StyledBtn className="btn-act" onClick={() => this.actionIs('raise')} disabled={player.balance < this.state.bet}>
+                    <StyledBtn className="btn-act" onClick={() => this.actionIs('raise')} disabled={(less + this.Room.data.sb) >= this.state.bet}>
                         <Typography style={styles.text}>{t('raise')}</Typography>
                         <Typography style={styles.sub}>{this.valuetext(this.state.bet)}</Typography>
                     </StyledBtn>
                 }
                 <StyledBtn className="btn-act" onClick={() => this.actionIs('allin')}>
                     <Typography style={styles.text}>{t('allin')}</Typography>
-                    <Typography style={styles.sub}>{this.valuetext(player.balance)}</Typography>
+                    <Typography style={styles.sub}>{this.valuetext(max)}</Typography>
                 </StyledBtn>
             </Grid >
         )

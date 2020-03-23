@@ -39,4 +39,5 @@ export default {
     pot: 'Pot',
     winMsg: 'You have won! # added to your balance',
     loseMsg: 'You have lost! # decreased from your balance',
+    errorBalance:'Your balance is less than table minimum balance',
 }
